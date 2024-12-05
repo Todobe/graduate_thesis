@@ -1,103 +1,799 @@
-\chapter{关于本模板}
+\chapter{绪论}
 
-本模板根据浙江大学研究生院编写的《浙江大学研究生学位论文编写规则》~\cite{zjugradthesisrules}，
-在原有的 zjuthesis 模板~\cite{zjuthesis}基础上开发而来。
+\section{研究背景}
+\section{研究内容}
+\section{论文组织结构}
+\section{本章小结}
 
-本模板的本科生版本\cite{zjuthesisrules}得到了浙江大学本科生院老师的支持与审核，
-已经在本科生院网上公示。
-但当前的研究生版本并未经过研究生院老师的审核，
-同学们使用时要注意对照模板与要求，
-切不可盲目使用。
+\chapter{相关工作}
 
-作者本人并未编写过浙江大学研究生毕业论文，
-所以不清楚具体要求。
-如果有热心同学愿意帮忙，
-可以替我联系相关老师，我会配合审核并修改代码。
+\chapter{鲁棒}
 
-\section{Overleaf 使用注意事项}
+\chapter{多轮社交广告序列影响最大化推荐算法}
 
-如果你在Overleaf上编译本模板，请注意如下事项：
+\section{多轮社交广告序列影响最大化问题定义}
+\label{sec:def}
+用户对于广告的接受程度除了受用户本身兴趣的影响，也与他最近接触过的事物有关。对于广告推荐系统来说，最易利用的信息就是用户浏览或点击过哪些广告，例如，一个用户看到了羽毛球拍的广告并且购买了它，那么他很可能会需要一些羽毛球，这个用户接受羽毛球广告的概率就会大大提升；如果用户刚刚购买了一件衣服，之后向他推荐同风格的裤子就更有可能会被接受。用户在社交平台上是顺序浏览广告的，在一个广告序列中，用户看过前面的广告后，再浏览后面的相关广告，接受的可能也会增加。如果用户接受了一个广告，他购买和评价的信息可以通过社交网络传播，造成一定影响力，让更多的人有机会看到并接受该广告。广告推荐并不是一次性的过程，因此也要考虑到需要进行多轮推荐。
 
-\begin{itemize}
-    \item 删除根目录的 ``.latexmkrc'' 文件，否则编译失败且不报任何错误
-    \item 字体有版权所以本模板不能附带字体，请务必手动上传字体文件，并在各个专业模板下手动指定字体。
-        具体方法参照 GitHub 主页的说明。
-    \item 当前的Overleaf默认使用TexLive 2017进行编译，但一些伪粗体复制乱码的问题需要TexLive 2019版本来解决。
-        所以各位同学可以在Overleaf上编写论文时务必切换到TexLive 2019或更新版本来编译，以免产生查重相关问题。
-        具体说明参照 GitHub 主页。
-\end{itemize}
+多轮广告序列影响最大化问题的最终目标为，从广告推荐平台的角度，对于一组具有相似特性的特定用户，基于广告之间的关联，向他们推荐相同的多轮序列广告，经过社交网络传播，达到广告收益的最大化。
+
+用$U_S$表示需要推送广告的这组特定用户的集合。定义广告网络$N=(V,W)$，其中$V$代表可推荐的广告集合；$W\subseteq V \times V$为广告和广告之间的有向边（包括自环，自环的存在是为后文$w$函数的定义和算法的需要提供便利，不具有关系性的含义），除自环以外的其他边代表两个广告之间具有相关关系。例如，我们在同一个广告序列中先后向用户$u$推荐了广告$v_1$和$v_2$，并且$v_1$和$v_2$之间有一条有向边，那么如果用户接受了$v_1$，则会有更大的几率接受广告$v_2$。但是不同用户对于广告的接受程度，以及接受了一个广告对接受另一个广告的促进程度可能不尽相同，我们使用函数$w:U_S \times W \to \mathbb{R}$来衡量这一程度。 对于$U_S \times W$中的每个元素$(u,(v_1,v_2))$都有函数值$w(u,(v_1,v_2))$：
+
+当$v_1=v_2$时，$w(u,(v_1,v_2))=$无其他广告影响时用户$u$接受广告$v_2$的概率；
+
+当$v_1\ne v_2$时，$w(u,(v_1,v_2))=$ 用户$u$接受了广告$v_1$再看到广告$v_2$时接受概率提高的倍数。
 
 
-\section{节标题}
+例如，用户$u$接受广告$v_1$和广告$v_2$的概率分别为$w(u,(v_1,v_1))$和$w(u,(v_2,v_2))$，如果用户已经接受了$v_1$，并且$v_1$和$v_2$之间存在一条有向边$(v_1,v_2)$，那么用户$u$接受广告$v_2$的概率就会增加$w(u,(v_1,v_2)) \times w(u,(v2,v2))$。 当$v_2$有多个入边邻居被接受时，只会被增益幅度最大的边增益一次。这要求函数$w$至少满足以下两个性质:
+a. $ \forall u,v$ 有 $0\le w(u,(v,v))\le 1 $；
+b. $\forall u,v_1,v_2$ 有$w(u,(v_1,v_2))\le 1/w(u,(v_2,v_2))-1$。
 
-我们可以用includegraphics来插入现有的jpg等格式的图片，
-如\autoref{fig:zju-logo}所示。
+在影响力传播的研究中，IC模型和LT模型是较为常用的两种模型，都是触发模型的一种特例\cite{kempe2003maximizing}。为保证传播模型的全面性，本文将使用更为通用的触发模型作为传播模型的基础。定义社交网络$G=(U,E)$， 其中$U$代表社交网络$G$中用户的集合，每个用户为一个节点；$E\subseteq U\times U$ 为用户与用户之间的有向边，每一条边都关联一个概率$b_{u_1,u_2}$。信息的传播会在每个离散的时刻$\tau =0,1,2, ...$上进行。当$\tau = 0$时，在种子集合$S$中的节点将会被激活，并且每个$U$中的节点$u$会独立地根据据其入边关联的概率随机选择一个触发集合（triggering set）$T(u)$，$u$的入边邻居集合的一个子集。当$\tau \ge 1$时，对于每个未被激活的节点$u$，如果在$\tau -1$时刻，$T(u)$中有至少一个节点已被激活，那么该节点$u$将会被在$\tau$时刻激活。传播会不断进行，直到某一时刻，网络中没有任何新增激活节点，则传播结束。种子集合$S$的影响力为最终被激活点的期望数量。
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=.3\linewidth]{logo/zju}
-    \caption{\label{fig:zju-logo}浙江大学LOGO}
-\end{figure}
+触发模型可以用活跃边图（live-edge graph）上的方法等价表示。给定一组触发集合$\{T(u)\}_{u\in U}$，我们可以构造一个活跃边图$L=(U,E(L))$，其中$E(L)=\{(u_1,u_2)|u_2\in U, u_1\in T(u_2)\}$，每条边$(u_1,u_2)$都被称为一条活跃边（live-edge）。令$\Gamma(G,S)$代表图$G$中可以被$S$到达的点的集合。由于触发模型和活跃边图的等价性，触发模型中种子集合$S$的影响力等价于$\mathbb{E}[|\Gamma(L,S)|]$，该期望值取决于生成的活跃边图$L$的分布。
+\begin{definition}
+多轮广告序列推荐影响最大化问题是指，在给定用户网络$G=(U,E)$、生成触发集合的概率分布、广告网络$N = (V, W)$、用户组$U_S$、函数$w:U_S \times W \to \mathbb{R}$、轮数$T$、每轮的预算$k$、广告被接受的收益函数$revenue:V->\mathbb{R}$的情况下，找到$T$轮广告序列$\sigma_1^*,\sigma_2^*,...,\sigma_T^*$，每轮至多$k$个，使得平台推荐广告的总收益最大化，即：
+\begin{equation}
+\sigma^* = \bigcup _{t=1} ^T \{\sigma_t^*\} = \mathop{\arg\max}_{\sigma:|\sigma_t|\le k,\forall t \in[T]} \ \ \rho(\sigma)
+\end{equation}
+\noindent 其中$\rho(\sigma)$代表平台推荐广告带来的总收益。
+\end{definition}
+后续内容中会频繁使用一组解中的某个广告及广告之间的边，因此我们先定义如下符号来方便描述：
+用$\sigma_{t,i}$表示一组解$\sigma$中第$t$轮广告序列中的第$i$个广告。使用符号$E$来表示广告序列中包含的边，即
+\begin{equation}
+E(\sigma_t)=\{(\sigma_{t,i},\sigma_{t,j},t)|i \le j, (\sigma_{t,i},\sigma_{t,j})\in W\}
+\end{equation}
+\begin{equation}
+E(\sigma)= \bigcup_{t=1}^T E(\sigma_t)
+\end{equation}
+\noindent 则$\rho(\sigma)$可以等价地转化为边的函数:
+\begin{equation}
+\label{equ:def_h}
+\rho(\sigma) = h(E(\sigma)) = \sum_{v\in V}f(E(\sigma),v)\cdot revenue(v) 
+\end{equation}
+\noindent 其中，$revenue(v)$为每有一个用户接受了广告$v$，平台可以获得的广告收益；$f(E(\sigma),v)$代表经过T轮的推荐和传播后，用户网络中接受广告$v$的人数的期望值，即：
+\begin{equation}
+f(E(\sigma),v)=\mathbb{E}[|\bigcup_{t=1}^T\Gamma(L_t,S_{v,t})|]
+\end{equation}
+\noindent 其中$L_t$为在用户网络上随机生成的活跃边图，$S_{v,t}$是$U_S$的子集，为第$t$轮时用户组$U_S$中接受了广告$v$的用户集合。由于用户对于广告是概率接受的，因此$S_{v,t}$并不是确定的。所以$f(\sigma,v)$的值取决于$L_1,L_2,\ldots,L_T$以及$S_{v,1},S_{v,2},\ldots,S_{v,T}$的分布。
 
+为了得到$S_{v,t}$的分布，我们需要计算$U_S$中每个用户对于被推送的一组广告$\sigma_t$中每个广告接受的概率，使用$p_{u,v,t}$代表用户$u$在第$t$轮接受广告$v$的概率,则\label{sec:puvt}：
+\begin{equation}
+p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\in E(\sigma_t)}w(u,(v,v))\cdot w(u,(v',v))\cdot P_{\max}(u,v',v,t)
+\end{equation}
+\noindent 其中，$\mathbb{I}$的含义为如果满足括号内条件值为$1$，否则值为$0$；$P_{\max}(u,v',v,t)$代表$(v',v)$对$v$的增益是所有$v$的入边中最大那条的概率。$p_{u,v,t}$即为用户$u$自身愿意接受$v$的概率与其他广告对$v$的增益之和。如果多个广告同时对$v$有增益，则选择增益最大的广告。$P_{\max}$可以表示为
+\begin{equation}
+    P_{\max}(u,v',v,t)=p_{u,v',t}\cdot \prod_{(v_0,v,t)\in E(\sigma_t);v_0\neq v,v';w(u,(v_0,v))>w(u,(v',v))}(1-p_{u,v_0,t})
+\end{equation}
+\noindent 即入边$(v',v)$对$v$产生最大增益的概率。$(v',v)$能对$v$造成最大增益的前提是$v'$被用户$u$接受，并且与$v$有关联关系的其他增益大于$(v',v)$的广告没有被$u$接受。通过上述过程可以获取$S_{v,t}$的分布，进而求得$h(E(\sigma))$，即在选定广告序列$\sigma$后产生的期望收益$\rho(\sigma)$。
 
-\subsection{小节标题}
+多轮广告序列影响最大化问题的目标为找到最佳的广告序列$\sigma$使得推荐广告总收益$\rho(\sigma)$最大化。用户对广告的偏好、广告之间的促进作用和用户网络信息传递都会影响$\rho(\sigma)$，因此在设计算法时需要综合考虑这些因素。由于$\rho(\sigma)$可以等价地转化为边集合函数$h(E(\sigma))$，且为了边贪心策略的需要，接下来将使用$h$作为需要最大化的目标函数。
 
+\section{基于广告边的贪心策略}
+\label{sec:greedy}
+对于多轮广告序列影响最大化问题，\autoref{alg:edge_greedy}给出了基于边的贪心策略。在进行每一轮的广告选择时，相较于其他直接对广告节点进行选择的算法\cite{kempe2008ad1,tang2017robust,tang2018social}，\autoref{alg:edge_greedy}所示的边贪心策略更加注重广告边（即广告间的促进关系）的作用，在广告之间具有强增益作用的广告网络中，边贪心的算法可以有效挖掘出广告边的价值。同时，由于算法将用户对广告本身的接受程度设置为自环边的边权，与其他边一起竞争，也不会忽略掉节点本身的价值，即用户对广告的偏好。
 
-\par 如\autoref{tab:sample}所示，这是一张自动调节列宽的表格。
+算法\ref{alg:edge_greedy}将从空开始，逐轮选择每一轮的广告序列。用$\sigma_t$表示第$t$轮推荐的广告序列，初始使$\sigma_t$为空。$\mathcal{E}$表示尾部不在$\sigma_t$中的边的集合，$h((v_i,v_j,t)|E')=h(E'\cup{(v_i,v_j,t)})-h(E')$表示广告边$(v_i,v_j,t)$在经过用户网络传播后的边际收益。每次贪心地选择边际收益最高的一条边$(v_i,v_j)\in \mathcal{E}$，如果边的头部 不在$v_i$不在$\sigma_t$里，或者$v_i=v_j$，即该边是自环，则只把$v_j$加入到$\sigma_t$的末尾，否则就把$v_i$和$v_j$按顺序依次加入到$\sigma_t$的末尾，第\ref{alg:greedy_line1}和\ref{alg:greedy_line2}行中的$\oplus$代表将该符号右边的节点连接到左侧序列的末尾。将每轮选择的$\sigma_t$合并到$\sigma$中得到最终的结果。该结果具有合理的下界保证：
 
-\begin{table}[htbp]
-    \caption{\label{tab:sample}自动调节列宽的表格}
-    \begin{tabularx}{\linewidth}{c|X<{\centering}}
-        \hline
-        第一列 & 第二列 \\ \hline
-        xxx & xxx \\ \hline
-        xxx & xxx \\ \hline
-        xxx & xxx \\ \hline
-    \end{tabularx}
-\end{table}
+\begin{theorem}
+\label{thm:greedy}
+用$\sigma^*$表示多轮社交广告序列影响力最大化的最优解。如果函数$h$具有单调性和子模性，则边贪心算法满足：
+\begin{equation}
+\rho(\sigma)\ge (1-e^{-(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}})\rho(\sigma^*)
+\end{equation}
+\noindent 其中$d_{in}$为广告网络中节点的最大入度。
+\end{theorem}
+\begin{algorithm}[H]
+    \renewcommand{\algorithmcfname}{算法}
+    \caption{\label{alg:edge_greedy}边贪心算法} 
+    \begin{algorithmic}
+    \REQUIRE 用户网络， \(G(U,E)\); 广告网络, \(N(V,W)\);
+    时间轮, \(T\); 预算 \(k\);
+    函数 \(h:2^{|E|} \times T \to \mathbb{R} \)
+    \ENSURE \(\sigma\)
+    \STATE Let \(\sigma \gets \phi \)
+    \FOR{\(t=1\) to \(T\)}
+        \STATE \(\sigma_t \gets ( )\) \label{alg:greedy_line4}
+        \WHILE{\( |\sigma_t| \le k-2 \)}
+            \STATE \(\mathcal{E} = \{(v_i,v_j) \in W | v_j \notin \sigma_t \}\)
+            \IF{\(\mathcal{E} = \phi\)}
+                \STATE 跳出循环
+            \ENDIF
+            \STATE \(\forall (v_i,v_j) \in \mathcal{E}\) 计算 \(h((v_i,v_j,t)|E(\sigma \cup \{ \sigma_t\}))\) \label{alg:greedy_line3}
+            \STATE \((v_i,v_j) = \mathop{\arg\max}_{(v_i,v_j) \in \mathcal{E}}h ((v_i,v_j,t)|E(\sigma \cup \{ \sigma_t\})) \)
+            \IF{\(v_j=v_i\) 或 \(v_i \in \sigma_t\)}
+                \STATE \(\sigma_t = \sigma_t \oplus v_j\) \label{alg:greedy_line1}
+            \ELSE
+                \STATE \(\sigma_t = \sigma_t \oplus v_i \oplus v_j\) \label{alg:greedy_line2}
+            \ENDIF
+        \ENDWHILE \label{alg:greedy_line5}
+        \STATE \(\sigma = \sigma \cup \{\sigma_t\}\)
+    \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+证明:我们的算法可以看成对每个时间轮$t$，都贪心的选择一个的$\sigma_t$来最大化$\rho(\{\sigma_1\}\cup \{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}\cup\{\sigma_t\})-\rho(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\})$。每一轮内部再每次选择边际收益最大的边加入进来最终形成$\sigma_t$。由于$h$是单调子模的，那么每一轮内的目标函数$h_t(E')=h(E'|E(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}))$也是单调子模的。对于目标函数为单调子模函数的基于边的贪心算法，Marko Mitrovic等人在\parencite{mitrovic2018submodularity}中证明其近似比至少为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$。
 
+对于贪心的每一步，如果我们无法找到最优的答案，但是能够找到一个近似比至少为$\alpha$的答案，那么对于一个子模的问题来说，这样的贪心算法也可以达到$1-e^{-\alpha}$的近似比。这个结论在\parencite{mrim}和\parencite{goundan2007revisiting}中都已经被提及并使用，是\parencite{nemhauser1978analysis}中部分结论的延伸。应用该结论即可得到$\rho(\sigma)\ge (1-e^{-(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1})})\rho(\sigma^*)$。证明完毕。
 
-\par 如\autoref{equ:sample}，这是一个公式
+\section{多轮反向影响力采样}
+\label{sec:mrris}
+为了快速估算广告边在社交网络$G$中造成的影响力，即算法\ref{alg:edge_greedy}中第\ref{alg:greedy_line3}行中的步骤，本文设计了多轮反向影响力采样方法。
+
+对于社交网络$G$中的每条边$(u_1,u_2)$，将以$b_{u_1,u_2}$的概率被保留，以$1-b_{u_1,u_2}$的概率被删去，这样生成得到的子图$g$被称为$G$的一个采样。
+
+选择$G$中的一个节点$u$作为起始节点，$g$中所有能够到达$u$的点集被称为一个反向可达集，在多轮的情况下，每一轮都独立地随机生成一个$u$的反向可达集。定义多轮反向可达集$\mathcal{R}_u := \bigcup_{t=1}^{T}\mathcal{R}_{u,t}$，其中$\mathcal{R}_{u,t}$代表第$t$轮中$u$的反向可达集中的节点与时间$t$的二元组的集合。
+
+定义一个随机多轮反向可达集$\mathcal{R}$为一个随机选择一个$u$作为起始节点的多轮反向可达集。对于一个广告网络$N$以及一组广告序列$\sigma$，用$S_v =\{(u,t) | u\in S_{v,t}\}$来表示每个时间轮$t$中会接受并转发广告$v$的那些特定用户，其中$S_{v,t}$为上文提到的第$t$轮时用户组$U_S$中接受了广告$v$的用户集合。那么$S_v$的影响力$f(E(\sigma), v)$计算方法如下所示：
+
+\begin{lemma}
+对于任意的的$\sigma$和$v$，有
+\begin{equation}
+    \label{equ:fesigmav}
+    f(E(\sigma), v)=n_u \cdot\mathbb{E}[\mathbb{I}\{S_v\cap\mathcal{R}\ne \varnothing \}]
+\end{equation}
+\end{lemma}
+\noindent 其中$n_u=|U|$代表用户的数量。由公式\autoref{equ:fesigmav}可见，$f(E(\sigma),v)$的值取决于$S_v$和$\mathcal{R}$的分布。需要注意的是，对于$f$来说，$f(E(\sigma),t)$中的$E(\sigma)$并不需要一定是$\sigma$的生成边集，可以为任意地满足拓扑性质的边集，例如在算法进行过程中，需要计算$E(\sigma)$的某些子集的期望收益，后文中我们使用$E'$来表示这一参数，即：
 
 \begin{equation}
-    \label{equ:sample}
-    A=\overbrace{(a+b+c)+\underbrace{i(d+e+f)}_{\text{虚数}}}^{\text{复数}}
+    h(E')=\sum_{v \in V}f(E',v)\cdot revenue(v)
 \end{equation}
 
-\chapter{另一章}
 
+证明：
+\begin{align}
+    \mathbb{E}[\mathbb{I}\{S_v\cap \mathcal{R} \ne \varnothing  \}] &=\sum_{u \in U}\Pr\{ u=root(\mathcal{R})\}\cdot \mathbb{E}[\mathbb{I}\{S_v \cap \mathcal{R}\ne\varnothing \}|u=root(\mathcal{R})] \label{equ:1} \\ 
+    &= \frac{1}{n}\sum_{u \in U}\mathbb{E}[\mathbb{I}\{S_v \cap \mathcal{R}_u \ne \varnothing \}] \\ 
+    &=  \frac{1}{n}\sum_{u \in U}\mathbb{E}\left[\mathbb{I}\{u\in \bigcup_{t=1}^{T}\Gamma(L_t,S_{v,t})\}\right]  \label{equ:2}\\ 
+    &= \frac{1}{n} \mathbb{E}\left[\sum_{u \in U}\mathbb{I}\{u\in \bigcup_{t=1}^{T}\Gamma(L_t,S_{v,t})\}\right] \\ 
+    &= \frac{1}{n}\mathbb{E}\left[\left|\bigcup_{t=1}^T\Gamma(L_t,S_{v,t})\right|\right] \\ 
+    &=\ \frac{1}{n}\cdot f(E(\sigma),v)    
+\end{align}
+其中等式\ref{equ:1}中的$root(\mathcal{R})$代表多轮反向可达集$\mathcal{R}$的初始节点。等式\ref{equ:2}的成立是基于多轮反向可达集和活跃边图的等价性，这里的期望值基于$L_1,L_2,\ldots, L_T$的分布以及$S_{v,1},S_{v,2},\ldots,S_{v,T}$的分布。证明完毕。
+
+用多轮反向影响力采样方法估计$h$的值的过程如算法\ref{alg:mrris}所示。$S_v$的分布可以通过$p_{u,v,t}$得出。如第\ref{alg:mrrisline1}到\ref{alg:mrrisline2}行所示，对于生成的每一个多轮反向可达集$\mathcal{R}$，可以直接计算出$S_v \cap \mathcal{R} = \empty$的概率，进而得出$S_v \cap \mathcal{R} \neq \empty$的期望。
+
+Tang等人\cite{IMM}使用了鞅论的方法来分析反向可达集估计信息传播的的置信区间和置信度。多轮反向影响力采样方法的置信度分析也采用类似的方法。
+
+\begin{definition}
+\label{def:marginal}
+（鞅）一系列随机变量$X_1,X_2,X_3,\ldots$为鞅，当且仅当对于任意的$i\ge1$, 有$\mathbb{E}[|X_i|]<+\infty$，并且$\mathbb{E}[X_{i+1}|X_1,X_2,\ldots,X_i]=X_i$。
+\end{definition}
+
+\begin{lemma}
+\label{lem:mar}
+令 $X_1,X_2,X_3,\ldots$为鞅，满足$|X_1|\le a$,$|X_j-X_{j-1}|\le a$，并且对于任意的$j\in[1,i]$,$Var[X_1]+Var[X_j|X_1,X_2,\ldots,X_{j-1}]\le b$,其中$Var[\cdot]$表示随机变量的方差。那么对于任意的$\gamma > 0$，都有
+\begin{equation}
+\Pr\left[X_i-\mathbb{E}[X_i] \ge \gamma\right]\le \exp\left(-\frac{\gamma^2}{\frac{2}{3}a\gamma +2b}\right)
+\end{equation}
+\end{lemma}
+其中$\exp$代表自然常数$e$的指数函数。证明见\parencite{chung2006concentration}。
+
+
+\begin{algorithm}[H]
+    \renewcommand{\algorithmcfname}{算法}
+    \caption{多轮反向影响力采样方法\label{alg:mrris}}
+    \begin{algorithmic}
+    \REQUIRE 用户网络, $G(U,E)$;已选的边集, $E'$; 特殊用户组, $U_S$; 时间轮, $T$; 参数 $\varepsilon,\ell$; 收益函数，$revenue$;
+    \ $\tilde{h}$
+    \STATE 对所有 $u,v,t$ 计算 $p_{u,v,t}$;
+    \STATE $R = 0, LB = 0$;
+    \FOR{所有出现在$E'$的广告$v$}
+        \STATE $LB = LB + \sum_{u \in U_S}[1- \prod_{t=1}^{T}(1-p_{u,v,t})]\cdot revenue(v)$;
+        \STATE $R = \max\{R,revenue(v)\cdot Tk\}$;
+    \ENDFOR
+    \STATE $\theta=\frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+\ln(2T))R}{\varepsilon^2LB}$;
+    \STATE 生成 $\theta$ 个随机多轮反向可达集;
+    \FOR{所有出现在$E'$的广告$v$}
+        \FOR{$i=1$ to $\theta$}
+            \STATE $\mathcal{R} \leftarrow$ 第$i$个被生成的多轮反向可达集;
+            \STATE $prob = 1$;
+            \FOR{所有$(u,t) \in \mathcal{R}$ 并且 $u \in U_S$} \label{alg:mrrisline1}
+                \STATE $prob = prob*(1-p_{u,v,t})$;
+            \ENDFOR
+            \STATE $sum=sum+(1-prob)$;\label{alg:mrrisline2}
+        \ENDFOR
+        \STATE $f_v = sum \cdot n / \theta$;
+        \STATE $\tilde{h}= \tilde{h} + f_v\cdot revenue(v)$;
+    \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{lemma}
+\label{lem:ris}
+对于任意的$\varepsilon>0$和$\ell> 0$，如果$\theta \ge \frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+ln(2T))R}{\varepsilon^2h(E')} $,则
+\begin{equation}
+\Pr[|\tilde{h}(E')-h(E')|\ge \varepsilon h(E')] \le \frac{1}{n^{\ell}T}
+\end{equation}
+\end{lemma}
+\noindent 其中$R=Tk\cdot \max_{v \in V}\{revenue(V)\}$，代表每个采样值的上界。$h(E')$是我们所求，不能精准获取其值，但是我们可以找到一个尽可能大的下界，使得在能够保证$1-1/n^\ell T$的置信度的同时，使采样的次数尽可能少，提升时间效率。对于$U_S$中的用户，我们至少可以计算在没有传播的情况下接受广告$v$的人数期望，即
+\begin{equation}
+    h(E')=\sum_{v\in V}f(E',v)\cdot revenue(v)\ge\sum_{v\in V}\sum_{u \in U_S}[1-\prod_{t=1}^{T}(1-p_{u,v,t})]\cdot revenue(v)\triangleq LB
+\end{equation}
+在算法\ref{alg:mrris}中，我们将使用$LB$作为$h(E')$的一个下界计算$\theta$，并进行$\theta$次反向采样，结合对$S_v$分布的计算，最终有$1-1/n^\ell T$的概率，得出函数$h$的估计值的偏差与真实值相比不超过$\varepsilon$。
+
+证明：
+
+使用$\mathcal{R}_i(i\in[1,\theta])$代表生成的第$i$个多轮反向可达集，用$x_i=\sum_{v\in V}\mathbb{I}\{S_v\cap\mathcal{R}_i\ne \varnothing  \}\cdot revenue(v)$表示随机变量代表第$i$次采样的结果值。
+
+由$h(E')=\sum_{v \in V} n\cdot\mathbb{E}[\mathbb{I}\{S_v\cap \mathcal{R}\ne \varnothing \}]\cdot revenue(v)$可得：
+\begin{equation}
+h(E')=\frac{n}{\theta}\left[\sum_{i=1}^{\theta}x_i\right]
+\end{equation}
+\noindent 等式右侧的部分是对$h(E')$的无偏估计。
+
+每一个$\mathcal{R}_i$都是独立随机生成的，不依赖于$\mathcal{R}_1,\mathcal{R}_2,\ldots,\mathcal{R}_{i-1}$，那么$x_i$之间也是相互独立的，因此，对于任意的$i\in[1,\theta]$，有：
+\begin{equation}
+\mathbb{E}[x_i|x_1,x_2,\ldots,x_{i-1}]=\mathbb{E}[x_i]=h(E')/n
+\end{equation}
+
+任意的$x_i$都有上界，对于$R_i$的初始节点$u$，最多会被推送到$Tk$个广告，最好的情况下$u$恰好看到了所有的这些广告并且进行了点击动作，平台获取收益，每个广告的收益不同，我们取最大值，即
+\begin{equation}
+x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
+\end{equation}
+\noindent 我们用$R$来代表这个上界。
+
+令 $p=h(E')/nR$，$M_i=\sum_{j=1}^{i}(x_j-pR)$。则有$\mathbb{E}[M_i]=0$，$\mathbb{E}[M_i|M1,M2,\ldots,M_{i-1}]=M_{i-1}$，根据定义\ref{def:marginal}，$M_1,M2,\ldots,M_\theta$是鞅。
+
+鞅$M_1,M_2,\ldots,M_\theta$满足$|M_i|\le R$，对于任意的$j\in [2,\theta]$，$|M_j-M_{j-1}|\le R$，并且根据$x_i$本身的性质，有：
+
+\begin{equation}
+    Var[M_1]+\sum_{j=2}^{\theta}Var[M_j|M_1,M_2,\ldots,M_{j-1}]=\sum_{j=1}^{\theta}Var[M_j] \le \theta p(1-p)\cdot R^2
+\end{equation}
+
+将$M_\theta$代入到引理\ref{lem:mar}中，我们能得到如下结论:
+
+对于任意的$\varepsilon > 0$，有
+
+\begin{equation}
+\Pr\left[\sum_{i=1}^{\theta}x_i- \theta pR \ge \varepsilon \cdot \theta p R\right] \le \exp(-\frac{\varepsilon^2}{2+\frac{2}{3}\varepsilon}\cdot \theta p)
+\end{equation}
+
+同样地，$-M_1,-M_2,\ldots,-M_\theta$也是鞅，如果我们将引理\ref{lem:mar}应用于$-M_{\theta}$，则可以得到：
+
+对于任意的$\varepsilon>0$，有
+
+\begin{equation}
+\Pr\left[\sum_{i=1}^{\theta}x_i- \theta pR \le - \varepsilon \cdot \theta p R\right] \le \exp(-\frac{\varepsilon^2}{2+\frac{2}{3}\varepsilon}\cdot \theta p)
+\end{equation}
+
+两者结合起来则有：
+\begin{align}
+    \Pr[|\tilde{h}(E')-h(E')|\ge \varepsilon h(E')] 
+    &=\Pr\left[\left|\sum_{i=1}^{\theta}x_i- \theta pR \right|\ge \varepsilon \cdot \theta p R\right] \\ 
+    & \le 2\exp(-\frac{\varepsilon^2}{2+\frac{2}{3}\varepsilon}\cdot \theta p) \\
+    & \le \frac{1}{n^{\ell}T} \label{neq:line3}
+\end{align}
+
+若使不等式\ref{neq:line3}中的不等号成立，只需使
+\begin{equation}
+\theta \ge \frac{(2+\frac{2}{3}\varepsilon)(\ell\ln n+ln(2T))}{\varepsilon^2\cdot p}=\frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+ln(2T)) R}{\varepsilon^2f(E')}
+\end{equation}
+
+证明完毕。
+
+\section{三明治算法}
+\label{sec:sand}
+满足定理\ref{thm:greedy}的一个重要前提条件是函数$h$必须同时满足{\bfseries 单调性}和{\bfseries 子模性}。\cite{nemhauser1978analysis}
+
+函数具有{\bfseries 单调性}是指：一个集合函数$f:V\to \mathbb{R}$，对于任意的集合$A \subseteq V$和元素$v \in V\setminus A$，都有$f(A)\le f(A\cup\{v\})$。
+
+函数具有{\bfseries 子模性}是指：一个集合函数$f:V\to \mathbb{R}$，对于任意两个集合$A\subseteq B \subseteq V$和元素$v \in V \setminus B$，都有$f(A \cup \{v\})-f(A) \ge f(B\cup \{v\})-f(B)$。
+\begin{lemma}
+\label{lem:h_mon}
+公式\ref{equ:def_h}中定义的目标函数$h$具有单调性。
+\end{lemma}
+证明：
+直观上，加入一条边$(v_1,v_2,t_0)$后，只会改变第$t_0$轮中广告$v_2$被$U_S$中的用户接受的概率，而且边的作用只会使该广告被接受的概率增加，至少不会减少，并且不会对其他广告的接受程度产生影响。$U_S$中用户的更愿意接受$v_2$并分享出去，更有可能被更多的人看到，至少不会使平台的收益降低。因此函数$h$显然是单调的，具体理论证明如下：
+
+令$\mathcal{U}=U_S \times T$，$\mathcal{W}=W \times T$。
+
+要证明$h$的单调性，即证明：对于任意的集合$A \subseteq \mathcal{W}$和边$(v_1,v_2,t_0) \in \mathcal{W}\setminus A$，都有$h(A)\le h(A\cup\{(v_1,v_2,t_0)\})$。
+\begin{align}
+    h(A)&=\sum_{v \in V} f(A,v)\cdot revenue(v) \\ 
+    &=\sum_{v \in V} \mathbb{E}\left[\left|\bigcup_{t=1}^{T}\Gamma(L_t,S_{v,t})\right|\right]\cdot revenue(v) \\
+    &= \sum_{v\in V} \sum_{\mathcal{S}_v \subseteq \mathcal{U}} \left[\Pr(\mathcal{S}_v)\cdot g(\mathcal{S}_v)\cdot revenue(v)\right]\\ 
+    &=\sum_{v\in V}\sum_{\mathcal{S}_v \subseteq \mathcal{U}}\left[\left(\prod_{(u,t)\in \mathcal{S}_v}p_{u,v,t}\right)\cdot \left(\prod_{(u,t) \notin \mathcal{S}_v} (1-p_{u,v,t})\right) \cdot g(\mathcal{S}_v)\cdot revenue(v)\right]     
+\end{align}
+
+\noindent 其中$p_{u,v,t}$是\ref{sec:puvt}节中定义的在选择边集$E'$的条件下，用户$u$在第$t$轮接受$v$的概率；$g(\mathcal{S}_v)=\mathbb{E}\left[\left|\bigcup_{t=1}^{T}\Gamma(L_t,\mathcal{S}_{v,t})\right|\right] $，$g(\mathcal{S}_v)$中的$\mathcal{S}_{v,t}$与上式中的$S_{v,t}$不同，上式中的$S_{v,t}$是随机变量，上式中的期望值同时取决于$L_1,L2,\ldots,L_T$和$S_{v,1},S_{v,2},\ldots,S_{v,T}$的分布，此处$g(\mathcal{S}_v)$中的$\mathcal{S}_{v,t}$是取决于$S_v$的确定集合，即$\mathcal{S}_{v,t}=\{v|(v,t)\in \mathcal{S}_v\}$，$\mathcal{S}_v$是$\mathcal{U}$的子集，其中每个元素$(u,t)$代表用户$u$在第$t$轮接受了广告$v$，$g(\mathcal{S}_v)$中的期望值也只取决于$L_1,L_2,\ldots,L_T$。$\Pr(\mathcal{S}_v)$代表$\mathcal{S}_v$出现的概率，上式的最后一步相当于对$S_{v,t}$的分布概率进行展开。
+
+为了方便，我们使用$p_{u,v,t}$表示$h(A)$中用户$u$在第$t$轮接受广告$v$的概率， $P_{max}(u,v',v,t)$（同在\ref{sec:puvt}节中定义）表示$h(A)$中$(v',v)$为用户$u$第$t$轮中对$v$增益最大的边的概率，用$p_{u,v,t}'$和$P_{max}'(u,v',v,t)$代表$h(A\cup\{(v_1,v_2,t_0)\})$中同样的部分。
+
+根据定义，加入一条边$(v_1,v_2,t_0)$，只会改变第$t$轮中用户们对$v_2$的 接受概率。也就是，当$t\ne t_0$或者$v \ne v_2$时$p_{u,v,t}=p_{u,v,t}'$。
+
+若$v_1 = v_2$，$p_{u,v_2,t_0}'-p_{u,v_2,t_0}=w(u,(v2,v2)) \ge 0$。
+
+若$v_1 \ne v_2$，根据定义：
+\begin{align}
+\small
+    &p_{u,v_2,t_0}'-p_{u,v_2,t_0}\\
+    &= w(u,(v_1,v_2))\cdot w(u,(v_2,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \\
+    &+ \sum_{(v',v,t_0)\in E'}w(u,(v',v_2)\cdot w(u,(v_2,v_2))) \cdot(P_{max}'(u,v',v_2,t_0)-P_{max}(u,v',v_2,t_0)) \\ 
+    &= w(u,(v_2,v_2)) \\ &\cdot \left(w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))} w(u,(v',v_2))\cdot P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}' \right) \\ 
+    &\ge w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \\ & \cdot  \left(P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E'\atop w(u,(v',v_2))<w(u,(v_1,v_2))}P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}'\right) \\ 
+    &= w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \\& \cdot \left(1-\sum_{(v',v_2,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))}p_{u,v',t_0}\prod_{(v_0,v_2,t_0)\in E' ; v_0 \ne v',v_2 \atop w(u,(v',v_2))\le w(u,(v_0,v_2)) \le w(u,(v_1,v_2))}(1-p_{u,v_0,t_0})\right)\label{equ:mon1} \\
+    &\ge 0
+\end{align}
+
+式\ref{equ:mon1}中的求和式本质上表示：在所有增益小于$w(u,(v_1,v_2))$的边中，所有边$(v',v_2)$自身为增益最大的那条边的概率之和，该值必然小于$1$。综上，有$p_{u,v_2,t_0}'\ge p_{u,v_2,t_0}$。
+
+设:
+\begin{equation}
+Pr_i(\mathcal{S}_v) = \left(\prod_{(u,t)\in \mathcal{S}_v \atop u \le i}p_{u,v,t}'\right)\cdot \left(\prod_{(u,t) \notin \mathcal{S}_v \atop u\le i} (1-p_{u,v,t}')\right)\cdot \left(\prod_{(u,t)\in \mathcal{S}_v \atop u > i}p_{u,v,t}\right)\cdot \left(\prod_{(u,t) \notin \mathcal{S}_v \atop u > i} (1-p_{u,v,t})\right)
+\end{equation}
+\begin{equation}
+h_i(E')= \sum_{v\in V} \sum_{\mathcal{S}_v \subseteq U_S \times T} \left[Pr_i(\mathcal{S}_v)\cdot g(\mathcal{S}_v)\right]
+\end{equation}
+
+假设$U_S$中的用户从$1$到$|U_S|$标号，则$h_0(A)=h(A)$，$h_{|U_S|}(A)=h(A\cup\{(v_1,v_2,t_0\})$。
+
+对于任意的$0<i\le |U_S|$，有
+\begin{align}
+    &h_i(A)-h_{i-1}(A)\\
+    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[(Pr_i(\mathcal{S}_{v_2})-Pr_{i-1}(\mathcal{S}_{v_2}))\cdot g(\mathcal{S}_{v_2}) + (Pr_i(\mathcal{S}_{v_2}\cup \{(i,t_0)\}) \\
+    &\ \ \ \ \ \ \ \ \ \ -Pr_{i-1}(\mathcal{S}_{v_2}\cup \{(i,t_0)\}))\cdot g(\mathcal{S}_{v_2}\cup \{(i,t_0)\})] \\ 
+    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\left(\frac{1-p_{i,v_2,t_0}'}{1-p_{i,v_2,t_0}}-1\right) \cdot g(\mathcal{S}_{v_2}) \\ 
+    &\ \ \ \ \ \ \ \ \ \ + Pr_{i-1}(\mathcal{S}_{v_2}\cup \{(i,t_0)\})\cdot (\frac{p_{i,v_2,t_0}'}{p_{i,v_2,t_0}}-1)\cdot g(\mathcal{S}_{v_2}\cup \{(i,t_0)\}) ]  \\ 
+    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\left(\frac{1-p_{i,v_2,t_0}'}{1-p_{i,v_2,t_0}}-1\right) \cdot g(\mathcal{S}_{v_2}) \\ 
+    &\ \ \ \ \ \ \ \ \ \ + Pr_{i-1}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}}{1-p_{i,v_2,t_0}}\cdot (\frac{p_{i,v_2,t_0}'}{p_{i,v_2,t_0}}-1)\cdot g(\mathcal{S}_{v_2}\cup \{(i,t_0)\}) ] \\
+    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}'-p_{i,v_2,t_0}}{1-p_{i,v_2,t_0}} \cdot g(\{(i,t)\} |\mathcal{S}_{v_2})] \label{equ:mon2} \\ 
+    &\ge 0 
+\end{align}
+
+\noindent 式\ref{equ:mon2}中$g(\{(i,t)\} |\mathcal{S}_{v_2})=g(\mathcal{S}_{v_2}\cup\{(i,t)\})-g(\mathcal{S}_{v_2})$，根据$g$的定义，显然有$g(\mathcal{S}_{v_2}\cup\{(i,t)\})\ge g(\mathcal{S}_{v_2})$，即$g(\{(i,t)\} |\mathcal{S}_{v_2}) \ge 0$。其实函数$g$即是\parencite{mrim}中多轮影响力最大化问题中的目标函数，已经被证明是单调的。又有$p_{i,v_2,t_0}'\ge p_{i,v_2,t_0}$，因此对于任意的$0<i\le |U_S|$，都有$h_i(A) \ge h_{i-1}(A)$。
+
+所以有$h(A)=h_0(A) \le h_1(A) \le h_2(A) \le \ldots \le h_{|U_S|}(A)=h(A \cup\{v_1,v_2,t_0\})$，即$h$具有单调性。
+
+证明完毕。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.3\linewidth]{example-image-a}
-    \caption{\label{fig:fig-placeholder}图片占位符}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{sasim/nonsubmodular_sample1.png}
+        \caption{边$b$,$e$被选中\label{fig:nonsub_a}}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{sasim/nonsubmodular_sample1.png}
+        \caption{边$a$,$b$,$d$,$e$被选中\label{fig:nonsub_b}}
+    \end{subfigure}
+
+    \caption{\label{fig:nonsub_sample}函数$h$不满足子模性举例}
 \end{figure}
 
-\chapter{再一章}
 
-\par 如\autoref{alg:sample}，这是一个算法
+然而，目标函数$h$并{\bfseries 不满足子模性}，这一点很容易通过举反例得到。
+
+如图\ref{fig:nonsub_sample}所示，节点$A$、$B$、$C$是可以选择推荐的三个广告，每条边上的数字，如果该边是自环，则代表用户愿意接受该广告的概率，如果是非自环，则代表用户接受边的头部节点对尾部节点的增益倍率。我们先把问题简化为只有一个轮次$t$， 并且用户网络中只有一个用户节点$u$，所有广告单次点击收益均为$1$。在此例中，由于$u$和$t$的值是相同的，为了方便，我们暂时用$p_{v}$代表$p_{u,v,t}$，用图中边上的小写字母代表边两侧的节点和时间的三元组，如$a$表示$(A,A,t)$。
+
+图\ref{fig:nonsub_a}中虚线边代表该边未被选中，黑实线边代表已被选中，计算棕色实线边$e$的边际收益$h(e|\{b\})$。先算每个被推荐的广告被接受的概率：$p_B=0.4$，$h(\{b\})=p_B \cdot revenue(B)=0.4$。加入边$e$后，广告$C$也会被推荐，$p_C=0.4 \cdot 1 \cdot 0.5=0.2$，虽然如果推荐了$C$，最终边$c$一定也会在边集里，但此时我们只计算$e$带来的收益，所以要忽略掉用户本身对广告$C$的接受程度，不计算边$c$的收益。$h(\{b,e\})=p_B\cdot revenue(B)+p_C\cdot revenue(C)=0.4\cdot 1+0.2\cdot 1=0.6$。在图\ref{fig:nonsub_a}的情况下，$e$的边际收益为$h(e|\{b\})=h(\{b,e\})-h(\{e\})=0.2$。
+
+图\ref{fig:nonsub_b}中的图结构与图\ref{fig:nonsub_a}中一致，但是多选择了两条边$a,b$，同样地，计算棕色实线边$e$的边际收益$h(e|{a,b,d})$。$p_A=0.5$，$p_B=0.4+0.5\cdot 1\cdot 0.4=0.6$，$h(\{a,b,d\})=p_A\cdot revenue(A)+p_B\cdot revenue(B)=0.5\cdot 1 + 0.6 \cdot 1 = 1.1$。$p_C=0.6 \cdot 1\cdot 0.5 = 0.3$，$h(\{a,b,d,e\})=1.4$。$h(e|{a,b,d})=h(\{a,b,d,e\})-h(\{a,b,d\})=1.4-1.1=0.3$。
+
+$h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，子模性一般代表边际收益随答案集合变大而递减，在这个例子中，$e$的价值会随着$B$被接受的概率提高而提高，答案集合的变大又导致了$B$被接受的概率提高，那么$e$的收益就随着答案集合变大而提升了，显然不满足子模性，所以对于我们上述问题中的函数$h$，并不能满足定理\ref{thm:greedy}。
+
+对于满足单调性但不满足子模性的目标函数，为了保证算法具有合理的近似比，需要引入\parencite{sandwich}中提到的三明治算法来解决,先令：
+
+\begin{equation}
+\Delta_t^\rho(\sigma_t)=\Delta h_t(E(\sigma_t))=h(E(\bigcup_{i=1}^{t-1}{\sigma_i} \cup \sigma_t)) - h(E(\bigcup_{i=1}^{t-1}{\sigma_i}))
+\end{equation}
+
+\begin{equation}
+\Delta_t^\mu(\sigma_t)=\Delta h_t^\mu(E(\sigma_t))=h_t^\mu(E(\bigcup_{i=1}^{t-1}{\sigma_i} \cup \sigma_t)) - h_t^\mu(E(\bigcup_{i=1}^{t-1}{\sigma_i}))
+\end{equation}
+
+\begin{equation}
+\Delta_t^\nu(\sigma_t)=\Delta h_t^\nu(E(\sigma_t))=h_t^\nu(E(\bigcup_{i=1}^{t-1}{\sigma_i} \cup \sigma_t)) - h_t^\nu(E(\bigcup_{i=1}^{t-1}{\sigma_i}))
+\end{equation}
+
+在每一个轮次$t$，都需要找到两个与$h$定义在同样定义域上的子模函数$h_t^\mu$和$h_t^\nu$，满足对于定义域上的任意$E_t' \subseteq \{(v_1,v_2,t_0)|(v_1,v_2,t_0)\in E',t_0=t\}$，都有$\Delta h_t^\mu(E') \le \Delta h_t(E') \le \Delta h_t^\nu(E')$。即$\Delta h_t^\mu$处处是$\Delta h_t$的下界，$\Delta h_t^\nu$处处是$\Delta h_t$的上界，并且如果将原问题中的$h$替换为$h_t^\mu$和$h_t^\nu$，且每一轮得到的结果近似比均至少每一轮得到的结果近似比至少不差于原问题。
+
+将三明治算法应用于边贪心算法，如算法\ref{alg:sandwich}所示。每一轮分别使用$h_t^\mu$、$h$和$h_t^\nu$（$h_t^\mu$和$h_t^\nu$会在后文中定义）替换原来的$h$来运行三次贪心算法，得到三个结果，$\sigma_t^\mu$，$\sigma_t^\rho$和$\sigma_t^\nu$，然后在其中选择一个最好的作为最终结果：$\sigma_t^{sand}=\arg\max_{\sigma_t \in \{\sigma_t^\mu,\sigma_t^\rho,\sigma_t^\nu\}}\Delta_\rho(\sigma_t)$。在每一轮中使用三明治算法，并将结果加入到答案中，最终得到$\sigma$。
+
+\begin{algorithm}
+    \caption{三明治算法\label{alg:sandwich}} 
+    \begin{algorithmic}
+        \REQUIRE 用户网络， $G(U,E)$; 广告网络, $N(V,W)$; 时间轮, $T$; 预算 $k$; 函数 $h,h_t^\mu,h_t^\nu:2^{|E|} \times T \to \mathbb{R} $
+        \ENSURE $\sigma$
+        \STATE Let $\sigma \gets \phi$
+        \FOR{$t=1$ to $T$}
+            \STATE 使用$h_t^\mu$,$h$,$h_t^\nu$分别代替$h$执行算法\ref{alg:edge_greedy}中的\ref{alg:greedy_line4}-\ref{alg:greedy_line5}行，得到$\sigma_t^\mu$,$\sigma_t^\rho$,$\sigma_t^\nu$
+            \STATE $\sigma_t^{sand}=\arg\max_{\sigma_t \in \{\sigma_t^\mu,\sigma_t^\rho,\sigma_t^\nu\}}\Delta_\rho(\sigma_t)$
+            \STATE $\sigma = \sigma \cup \{\sigma_t^{sand}\}$
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+根据\parencite{sandwich}中三明治算法近似比的证明，我们可以得到：
+
+\begin{theorem}
+\label{thm:sand}
+三明治方法保证对任意$t \in [T]$，使用多轮反向影响力采样的边贪心算法有：
+
+\begin{equation}
+    \Delta_\rho(\sigma_t^{sand}) \ge \max\left\{\frac{\Delta_\rho(\sigma_t^\nu)}{\Delta_\nu(\sigma_t^\nu)},\frac{\Delta_\mu(\sigma_t^{\rho*})}{\Delta_\rho(\sigma_t^{\rho*})} \right\} \cdot (\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1})\cdot \Delta_\rho(\sigma_t^{*})
+\end{equation}
+\end{theorem}
+
+\noindent 其中$\sigma_t^{*}$代表$\Delta_\rho$在第$t$轮的最优解。
+
+定义函数$h_t^\mu$和$h_t^\nu$，除计算第$t$轮的$p_{u,v,t}$以外，其余部分与函数$h$均一致，只需重新定义用户在第$t$轮对所推荐广告的接受概率计算部分，即：
+\begin{align}
+    &p_{u,v,t}^\mu=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) \label{equ:def_mu}\\
+    &p_{u,v,t}^\nu=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \max_{(v',v,t)\in E(\sigma_t)}\{w(u,(v',v))\}\cdot w(u,(v,v)) \label{equ:def_nu}
+\end{align}
+
+直观地理解，函数$h_t^\mu$和$h_t^\nu$限制了当前轮由于边的增加导致的某些边对其他的点的增益增大的情况下，在其余条件都相同的情况下，函数$h_t^\mu$在计算某个广告被接受的概率时，不考虑边的增益，只计算每个节点本身的价值，相当于去除了边的增强作用，最终得到的结果一定小于原函数值。函数$h_t^\nu$则是默认前面的广告被接受的概率均为$1$，增大了这些广告对该广告增益的概率，最终得到的结果一定大于原函数值，因此有$\Delta h_t^\mu(E_t') \le \Delta h_t(E_t') \le \Delta h_t^\nu(E_t')$。
+
+\begin{lemma}
+\label{lem:mon_sub}
+函数$\Delta h_t^\mu$和$ \Delta h_t^\nu$在其定义域上都是单调并子模的。
+\end{lemma}
+
+证明：与引理\ref{lem:h_mon}类似，单调性较为显然。我们找到的$\Delta h_t^\mu$和$ \Delta h_t^\nu$，边不会由于新边的加入而体现出更大的价值，反之会稀释其增益，导致边际收益随着集合的增大而下降，直观上是满足子模性的。具体理论证明如下：
+
+令$\mathcal{W}_t=\{(v_1,v_2,t_0) |(v_1,v_2,t_0) \in \mathcal{W},t_0=t\}$。
+
+要证明$\Delta h_t^\mu$单调性，即证明：对于任意的集合$A \subseteq \mathcal{W}_t$和边$(v_1,v_2,t_0) \in \mathcal{W}_t\setminus A$，都有$\Delta h_t^\mu(A)\le \Delta h_t^\mu(A\cup\{(v_1,v_2,t_0)\})$；
+
+要证明$\Delta h_t^\mu$子模性，即证明：对于任意两个集合$A\subseteq B \subseteq \mathcal{W}_t$和边$(v_1,v_2,t_0) \in \mathcal{W}_t \setminus B$，都有$\Delta h_t^\mu(A \cup \{(v_1,v_2,t_0)\})-\Delta h_t^\mu(A) \ge \Delta h_t^\mu(B\cup \{(v_1,v_2,t_0)\})- \Delta h_t^\mu(B)$；对于$h_t^\nu$也一样，把上标换成$\nu$即可。
+
+为了方便，我们使用$p_{u,v,t}^{\mu,A}$和$p_{u,v,t}^{\mu,A'}$分别代表在$h_t^\mu(A)$和$h_t^\mu(A\cup\{(v_1,v_2,t_0)\})$边集下，用户$u$在第$t$轮接受广告$v$的概率，即式\ref{equ:def_mu}中所定义的$p_{u,v,t}^\mu$的含义。对于$\nu$和$B$也是类似的。
+
+根据定义，加入一条边$(v_1,v_2,t_0)$，只会改变第$t$轮中用户们对$v_2$的 接受概率。也就是, 当$t\ne t_0$或者$v \ne v_2$时$p_{u,v,t}^{\mu,A}=p_{u,v,t}^{\mu,A'}$，$p_{u,v,t}^{\nu,A}=p_{u,v,t}^{\nu,A'}$。
+
+若$v_1=v_2$：
+\begin{equation}
+p_{u,v_2,t_0}^{\mu,A'}-p_{u,v_2,t_0}^{\mu,A}=p_{u,v_2,t_0}^{\mu,B'}-p_{u,v_2,t_0}^{\mu,B} =w(u,(v_2,v_2)) \ge 0
+\end{equation}
+\begin{equation}
+p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}=p_{u,v_2,t_0}^{\nu,B'}-p_{u,v_2,t_0}^{\nu,B} =w(u,(v_2,v_2)) \ge 0
+\end{equation}
+若$v_1 \ne v_2$：
+
+\begin{equation}
+    p_{u,v_2,t_0}^{\mu,A'}-p_{u,v_2,t_0}^{\mu,A}=p_{u,v_2,t_0}^{\mu,B'}-p_{u,v_2,t_0}^{\mu,B} = 0 
+\end{equation}
+\begin{align}
+    p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}&=\mathbb{I}\{w(u,(v_1,v_2))>\max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\}\} \cdot [w(u,(v_1,v_2))\\ 
+    & \ \ \ \ \ -\max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\}] \cdot w(u,(v_2,v_2)) \ge  0
+\end{align}
+
+因为$A \subseteq B$，所以$\max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\} \le \max_{(v',v_2,t)\in B}\{w(u,(v',v_2))\}$。
+
+若$w(u,(v_1,v_2))\le \max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\}$：$p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}=p_{u,v_2,t_0}^{\nu,B'}-p_{u,v_2,t_0}^{\nu,B}=0$；
+
+若$\max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\} < w(u,(v_1,v_2)) \le \max_{(v',v_2,t)\in B}\{w(u,(v',v_2))\}$：
+\begin{equation}
+p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,v_2,t_0}^{\nu,B}
+\end{equation}
+
+若$w(u,(v_1,v_2)) > \max_{(v',v_2,t)\in B}\{w(u,(v',v_2))\}$:
+\begin{align}
+    (p_{u,v_2,t_0}^{\nu,A'}&-p_{u,v_2,t_0}^{\nu,A})-(p_{u,v_2,t_0}^{\nu,B'}-p_{u,v_2,t_0}^{\nu,B}) \\ 
+    &=[\max_{(v',v_2,t)\in B}\{w(u,(v',v_2))\} - \max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\}] \cdot w(u,(v_2,v_2)) \\
+    &\ge 0
+\end{align}
+
+综上，对于任意的集合$A \subseteq \mathcal{W}_t$和边$(v_1,v_2,t_0) \in \mathcal{W}_t\setminus A$，有
+
+\begin{equation}
+    p_{u,v_2,t_0}^{\mu,A} \le p_{u,v_2,t_0}^{\mu,A'},p_{u,v_2,t_0}^{\nu,A} \le p_{u,v_2,t_0}^{\nu,A'}
+\end{equation}
+
+同引理\ref{lem:h_mon}可得，$\Delta h_t^\mu$和$\Delta h_t^\nu$是单调的。
+
+接下来证明子模性。对于任意两个集合$A\subseteq B \subseteq \mathcal{W}_t$和边$(v_1,v_2,t_0) \in \mathcal{W}_t \setminus B$，有
+\begin{equation}
+    p_{u,v_2,t_0}^{\mu,A'}-p_{u,v_2,t_0}^{\mu,A}\ge  p_{u,v_2,t_0}^{\mu,B'}-p_{u,v_2,t_0}^{\mu,B}
+\end{equation}
+\begin{equation}
+    p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge  p_{u,v_2,t_0}^{\nu,B'}-p_{u,v_2,t_0}^{\nu,B}
+\end{equation}
+
+把$p_{u,v_2,t_0}^{\mu,A'}$、$p_{u,v_2,t_0}^{\mu,A}$和$p_{u,v_2,t_0}^{\mu,B'}$、$p_{u,v_2,t_0}^{\mu,B}$分别代入引理\ref{lem:h_mon}证明中的式\ref{equ:mon2}中得：
+\begin{align}
+    &(\Delta h_{t,i}^{\mu}(A)-\Delta h_{t,i-1}^{\mu}(A)) - (\Delta h_{t,i}^{\mu}(B)-\Delta h_{t,i-1}^{\mu}(B)) \\ 
+    &=revenue(v_2)\cdot (\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A}}{1-p_{i,v_2,t_0}^{\mu,A}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \\
+    & \  \ \ \ \ \ \ - \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}^{\mu,B'}-p_{i,v_2,t_0}^{\mu,B}}{1-p_{i,v_2,t_0}^{\mu,B}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] )\\ 
+    &\ge revenue(v_2)\cdot (p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A})  
+    \cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[\left(\frac{Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,A}}-\frac{Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,B}}\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \label{equ:prof_sub1}
+\end{align}
+
+为了方便，我们对$\mathcal{S}_v$中的每一个$(u,t)$进行标号，标号由$1$到$|\mathcal{U}|。$用$(u_j,t_j)$代表的标号为$j$的$(u,t)$对，即$idx(u_j,t_j)=j$。
+
+令：$p_{u,v,t}^{\mu,A,i}=\begin{cases}p_{u,v,t}^{\mu,A'}, u<i,\\p_{u,v,t}^{\mu,A},u\ge i \end{cases}$
+
+那么，对于任意的$u,v,t,i$，都有$p_{u,v,t}^{\mu,A,i} \le p_{u,v,t}^{\mu,B,i}$。
+
+设：
+\begin{equation}
+\footnotesize
+    Pr_{i,j}^{\mu,A,B}(\mathcal{S}_v)=\left(\prod_{{(u,t)\in \mathcal{S}_v \atop idx(u,t)\le j } \atop{ idx(u,t) \ne idx(i,t_0)}}p_{u,v,t}^{\mu,B,i}\right)\cdot \left(\prod_{{(u,t) \notin \mathcal{S}_v \atop idx(u,t)\le j} \atop{ idx(u,t) \ne idx(i,t_0)}} (1-p_{u,v,t}^{\mu,B,i})\right)
+    \cdot \left(\prod_{{(u,t)\in \mathcal{S}_v \atop idx(u,t)> j} \atop {idx(u,t)\ne idx(i,t_0)}}p_{u,v,t}^{\mu,A,i}\right)\cdot \left(\prod_{{(u,t) \notin \mathcal{S}_v \atop idx(u,t)> j} \atop{ idx(u,t)\ne idx(i,t_0)}} (1-p_{u,v,t}^{\mu,A,i})\right)
+\end{equation}
+
+根据定义，则有式\ref{equ:prof_sub1}中的$Pr_{i,0}^{\mu,A,B}(\mathcal{S}_{v2})=\frac{Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,A}}$，$Pr_{i,|\mathcal{U}|}^{\mu,A,B}(\mathcal{S}_{v2})=\frac{Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,B}}$。
+
+设：
+\begin{align}
+    H_{i,j}^{\mu}(A,B)&= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0)\}}\left[Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right],i\ne j 
+    \\H_{i,j}^{\mu}(A,B)&=H_{i,j-1}^{\mu}(A,B),i=j
+\end{align}
+
+当$i=j$且$j>0$时，$H_{i,j}^{\mu}(A,B)-H_{i,j-1}^{\mu}(A,B)=0$。
+
+当$i \ne j$且$j>0$时：
+\begin{align}
+\small
+    &H_{i,j}^{\mu}(A,B)-H_{i,j-1}^{\mu}(A,B)\\
+    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[(Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}) \\
+    &\ \ \ \ + Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})) \\ 
+    &\ \ \ \ -\left(Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})+Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})\right)] \\ 
+    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\\
+    &\ \ \ \ +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\})\cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})] \\  
+    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\\
+    &\ \ \ \ +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})] \\
+    &= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}\left[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,B,i}-p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \cdot (g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})-g(\{(i,t_0)\} |\mathcal{S}_{v_2}))\right] \\
+    &\le 0 \label{equ:prof_sub2}
+\end{align}
+
+式\ref{equ:prof_sub2}的不等号由$p_{u,v,t}^{\mu,A,i} \le p_{u,v,t}^{\mu,B,i}$和$g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})-g(\{(i,t_0)\} |\mathcal{S}_{v_2}) \le 0$得。函数$g$已被证明是子模的\cite{mrim}，因此有$g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})\le g(\{(i,t_0)\} |\mathcal{S}_{v_2}) $。
+
+所以对于任意的$0<i\le |U_S|$和$0<j\le |\mathcal{U}|$均有：$H_{i,j}^{\mu}(A,B)-H_{i,j-1}^{\mu}(A,B) \le 0$，因此$H_{i,0}^{\mu} (A,B)\ge H_{i,1}^{\mu}(A,B) \ge H_{i,1}^{\mu}(A,B) \ge \ldots \ge H_{i,|\mathcal{U}|}^{\mu}(A,B)$。
+
+根据定义,
+\begin{equation}
+H_{i,0}^{\mu} (A,B)= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[\frac{Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,A}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right]
+\end{equation}
+
+\begin{equation}
+H_{i,|\mathcal{U}|}^{\mu} (A,B)= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[\frac{Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,B}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right]
+\end{equation}
+
+又因为$p_{i,v_2,t_0}^{\mu,A'}\ge p_{i,v_2,t_0}^{\mu,A}$，所以
+\begin{equation}
+(\ref{equ:prof_sub1})=revenue(v_2)\cdot (p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A})\cdot (H_{i,0}^{\mu}(A,B)-(H_{i,|\mathcal{U}|}^{\mu}(A,B)) \ge 0
+\end{equation}
+
+即对于所有的$0<i \le |U_S|$，$(\Delta h_{t,i}^{\mu}(A)-\Delta h_{t,i-1}^{\mu}(A)) - (\Delta h_{t,i}^{\mu}(B)-\Delta h_{t,i-1}^{\mu}(B)) \ge 0$，所以
+\begin{align}
+    [\Delta h_t^\mu(A \cup \{(v_1,v_2,t_0)\}&-\Delta h_t^\mu(A))]- [\Delta h_t^\mu(B\cup \{(v_1,v_2,t_0)\})-\Delta h_t^\mu(B)]\\ 
+    &=\sum_{i=1}^{|U_S|}[(\Delta h_{t,i}^{\mu}(A)-\Delta h_{t,i-1}^{\mu}(A)) - (\Delta h_{t,i}^{\mu}(B)-\Delta h_{t,i-1}^{\mu}(B))] \ge 0
+\end{align}
+
+$\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
+
+证明完毕。
+
+\section{近似性与复杂度分析}
+
+针对\ref{sec:def}节中定义的多轮社交广告序列影响最大化问题，\ref{sec:greedy}节给出了基于广告边的贪心策略。\ref{sec:mrris}节中提出的多轮反向影响力采样方法能够解决估算广告边在社交网络中造成的影响力的问题，保证算法的时间复杂度。\ref{sec:sand}节使用三明治方法解决了原问题函数$h$不子模的问题，保证了算法的近似性。
+
+\begin{theorem}
+\label{thm:nonadptive}
+对任意的$\varepsilon>0$和$\ell > 0$，使用多轮反向影响力采样和三明治方法的边贪心算法得到的$\sigma$至少有$1-\frac{1}{n^{\ell}}$的概率满足：
+\begin{equation}
+\frac{\rho(\sigma)}{\rho(\sigma*)} \ge 1-e^{-\min_{t \in [T]}\left\{\max\left\{\frac{\Delta_\rho(\sigma_t^\nu)}{\Delta_\nu(\sigma_t^\nu)},\frac{\Delta_\mu(\sigma_t^{\rho*})}{\Delta_\rho(\sigma_t^{\rho*})} \right\}\right\}\cdot\left(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}-\varepsilon\right)}
+\end{equation}
+\end{theorem}
+
+证明：结合定理\ref{thm:greedy}和引理\ref{lem:ris}，可得，使用多轮反向影响力采样的边贪心算法每轮至少有$1-\frac{1}{n^{\ell}}$能得到近似比为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$的结果。按照三明治算法的过程，每一轮用$h^\mu$和$h^\nu$代替$h$执行原算法过程，然后取最优结果作为每一轮的最终结果，结合定理\ref{thm:sand}和引理\ref{lem:mon_sub}，则每轮至少有$1-\frac{1}{n^{\ell}}$的概率，可以得到近似比为$\max\left\{\frac{\Delta_\rho(\sigma_t^\nu)}{\Delta_\nu(\sigma_t^\nu)},\frac{\Delta_\mu(\sigma_t^{\rho*})}{\Delta_\rho(\sigma_t^{\rho*})} \right\}\cdot\left(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}-\varepsilon\right)$的近似结果。易知，将每个$\sigma_t$作为元素的集合函数$\rho$仍然是单调子模的，因此，套用定理\ref{thm:greedy}证明中提到的$1-e^{-\alpha}$的结论，即可得到定理\ref{thm:nonadptive}。证明完毕。
+
+纵观算法过程，使用了多轮反向影响力采样方法和三明治方法的边贪心的时间复杂度为$O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$,其中$m_v=|W|$代表广告网络的边数，$m_u=|E|$代表用户网络边数，$n_u=|G|$为用户网络节点数，$n_s=|U_S|$为特殊用户集合大小，$R$与$LB$含义与引理\ref{lem:ris}中一致，$LB_{\min}$代表$LB$可能得最小值。算法需进行$T$轮，每轮至多$k$次选边，选边需遍历大小为$m_v$的广告边集，在估算一条边的边际收益时，需要遍历$\theta$个多轮反向可达集，统计采样结果需要计算已经被选择的广告，不会超过$Tk$个，只要统计有哪些特殊用户在该广告出现的那一轮接受了这个广告即可，因此统计其结果的时间为$Tkn_S$，总复杂度为$O(T^2k^2m_vn_S\theta)$。对于生成采样的部分，沿用上一次生成过的采样结果不会影响其估算的准确性，故只需按照最大的$\theta$生成一次即可。生成一个采样的时间是$Tm_u$，这部分时间复杂度为$O(\theta Tm_u)$。综上，根据引理\ref{lem:ris}，代入$\theta$，总时间复杂度即为$O(Tkm_v\cdot Tk(n_u+m_u)\theta) = O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$。
+
+
+\section{动态多轮社交广告序列影响最大化}
+
+在部分实际场景中，在算法进行每一轮决策后，可以观测用户对广告的接受情况和在用户网络中的传播结果。在这种允许动态观测的情况下，可以收集这些信息做出更准确的判断。令$ A_t = \{(u,v) |  u \in U, v \in V ,u \text{在前}t\text{轮接受过广告}v\} $ 代表前t轮广告序列信息在用户网络中传播的观测结果。则动态多轮社交广告序列影响最大化问题的目标则是找到 $\sigma_t = arg max_{\sigma_t} \Delta(E(\sigma_t) | A_{t-1})$，即$\Delta(E(\sigma_t) | A_{t-1})$为每一轮需要最大化的目标函数：
+\begin{equation}
+    \Delta(E(\sigma_t) | A_{t-1}) = \sum_{v \in V} ( f(E(\sigma_t), v) \cup \{u | (u,v) \ in A_{t-1}\}) \cdot revnue(v) - \sum_{(u,v) \in A_{t-1}} revenue(v) 
+\end{equation}
+
+针对动态多轮社交广告序列影响最大化，我们提出了动态边贪心策略，如算法\ref{alg:ada}所示。算法结构整体上与非动态的贪心算法\ref{alg:edge_greedy}类似，只需在估算边际收益时考虑到$A_{t-1}$的信息，并且在每一轮传播后更新新一轮用户对广告的接受情况$A_{t}$。
+
+同样的，在动态观测情况下，也需要使用多轮反向影响力采样加速估计广告边的边际收益。当使用算法\ref{alg:mrris}估算$v$的边际收益时，如果一个多轮反向可达集的其实节点为$u$，且$(u,v) \in A_{t-1}$，则跳过第\ref{alg:mrrisline1}到\ref{alg:mrrisline2}行，使这个多轮反向可达集的贡献为$1$。如果$(u,v) \notin A_{t-1}$，当$t_0 < t$时，令$p_{u,v,t_0} = 0$。这样可以保证估算结果准确性的同时复用多轮反向影响力算法生成的多轮反向可达集。
 
 \begin{algorithm}[H]
-    \begin{algorithmic} % enter the algorithmic environment
-        \REQUIRE $n \geq 0 \vee x \neq 0$
-        \ENSURE $y = x^n$
-        \STATE $y \Leftarrow 1$
-        \IF{$n < 0$}
-            \STATE $X \Leftarrow 1 / x$
-            \STATE $N \Leftarrow -n$
-        \ELSE
-            \STATE $X \Leftarrow x$
-            \STATE $N \Leftarrow n$
-        \ENDIF
-        \WHILE{$N \neq 0$}
-            \IF{$N$ is even}
-                \STATE $X \Leftarrow X \times X$
-                \STATE $N \Leftarrow N / 2$
-            \ELSE[$N$ is odd]
-                \STATE $y \Leftarrow y \times X$
-                \STATE $N \Leftarrow N - 1$
+    \caption{动态边贪心算法\label{alg:ada}}
+    \begin{algorithmic}
+        \REQUIRE 用户网络 $G(U,E)$; 广告网络 $N(V,W)$; 预算 $k$; $t-1$轮的观测结果$A_{t - 1}$
+        \STATE \(\sigma_t \gets ( )\)
+        \WHILE{\( |\sigma_t| \le k-2 \)}
+            \STATE \(\mathcal{E} = \{(v_i,v_j) \in W | v_j \notin \sigma_t \}\)
+            \IF{\(\mathcal{E} = \phi\)}
+                \STATE 跳出循环
+            \ENDIF
+            \STATE \(\forall (v_i,v_j) \in \mathcal{E}\) 计算 $\Delta({(v_i,v_j,t)} \cup E(\sigma_t)|A_{t-1})$
+            \STATE \((v_i,v_j) = \mathop{\arg\max}_{(v_i,v_j) \in \mathcal{E}}\Delta({(v_i,v_j,t)} \cup E(\sigma_t)|A_{t-1}) \)
+            \IF{\(v_j=v_i\) 或 \(v_i \in \sigma_t\)}
+                \STATE \(\sigma_t = \sigma_t \oplus v_j\)
+            \ELSE
+                \STATE \(\sigma_t = \sigma_t \oplus v_i \oplus v_j\) 
             \ENDIF
         \ENDWHILE
+        \STATE 观察 $\sigma_t$的传播结果，更新 $A_t$。
     \end{algorithmic}
-    \caption{\label{alg:sample}算法样例}
 \end{algorithm}
+
+\ref{sec:sand}节中对$h$的分析，同样使用于动态情况下的目标函数$\Delta$，因此也需要使用三明治方法，分别使用$\Delta_\mu$、$\Delta$、$\Delta_\nu$运行算法\ref{alg:ada}得到三个结果然后取最优。同样地，$\Delta_\mu$和$\Delta_\nu$的定义与$\Delta$类似，只需依照$h_\mu$和$h_\nu$的定义，修改$p_{u,v,t}$的计算方法即可。
+
+\begin{theorem}
+令$\sigma_t^*$为动态多轮社交广告序列影响最大化的最优解，则对于任意的$\varepsilon>0$和$\ell > 0$，使用多轮反向影响力采样和三明治方法的动态边贪心算法得到的$\sigma_t$至少有$1-\frac{1}{n^{\ell}}$的概率满足：
+
+\begin{equation}
+    \frac{\Delta(E(\sigma_t) | A_{t-1})}{\Delta(E(\sigma_t^*) | A_{t-1})}
+    \ge \max\left\{\frac{\Delta_\rho(E(\sigma_t^\nu) | A_{t-1} )}{\Delta_\nu(E(\sigma_t^\nu) | A_{t-1})},\frac{\Delta_\mu(E(\sigma_t^{\rho*})  | A_{t-1})}{\Delta_\rho(E(\sigma_t^{\rho*}) | A_{t-1})} \right\}
+    \cdot\left(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}-\varepsilon\right)
+\end{equation}
+
+\noindent 算法的时间复杂度为$O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$。证明方法与定理\ref{thm:nonadptive}相同，不再赘述。
+\end{theorem}
+
+
+\section{本章小结}
+
+
+\chapter{实验设计与结果分析}
+
+\section{鲁棒实验}
+
+\section{多轮社交广告序列影响最大化推荐算法实验结果}
+
+\subsection{实验数据集}
+
+实验在Amazon评论数据集\cite{amazon24}上进行。该数据集主要记录了用户对已经购买的商品的评论信息。商品网络和用户网络的生成参考了Gomez-Rodriguez等人\cite{netgen}的工作。如果较多买过商品$i$的人还买过商品$j$，说明$i$和$j$有较大关联性，就在商品网络中加入一条由$i$到$j$的有向边，并对每一个商品都加入自环；如果两个用户多次购买过相同的商品，那么可以推断他们更有可能是朋友，就在他们之间增加一条有向边。
+
+在TR模型中，还需要对用户网络的每一条边进行赋权，简单地使每条边在$[0,1]$中生成一个随机权重$b_{u_1,u_2}$。为了传播的效果更好并体现用户区分度，对于每个用户网络，都选择度数较大的5个节点和度数较小的5个节点作为特殊用户组$U_S$。对于每一个商品$v$，我们在$\{0.01,0.02,0.03,0.04,0.05\}$中随机一个值作为$revenue(v)$。每个用户对于商品的接受程度不同，首先对每个特殊用户$u$和商品的每个自环$(v,v)$，都在$[0,1]$范围内随机生成一个$w(u,(v,v))$代表用户$u$对商品$v$的接受程度。然后对于每个特殊用户$u$和商品的每条非自环边$(v_1,v_2)$，都在$[0,1/w,(u,(v_2,v_2))-1]$范围内随机生成一个$w(u,(v_1,v_2))$代表用户$u$接受了$v_1$对$v_2$的接受概率的促进程度。
+
+Amazon评论数据集对于不同的商品类别分开统计。我们按照用户网络和广告网络的稠密程度以及节点与边的规模挑选不同类别，生成了4个不同大小的数据集，数据集的具体参数见表\label{tab:imdata}。
+
+\begin{table}[htbp]
+	\setlength{\tabcolsep}{2mm}{}
+	\centering
+	\normalsize
+	\caption{数据集参数}\label{tab:imdata}
+	\begin{tabular}[t]{|c|c|c|c|c|}
+        \hline
+		Dataset Name & 用户个数 & 用户边数 & 广告个数 & 广告边数 \\ \hline
+		Gift\_Cards & 1477 & 50000 & 306 & 13122 \\ \hline
+		Software & 1573 & 20000 & 2032 & 107429 \\ \hline
+		Magazine\_Subscriptions & 854 & 36566 & 1125 & 17381 \\ \hline
+		Video\_Games & 3230 & 300000 & 1613 & 202573 \\ \hline
+	\end{tabular}	
+\end{table}
+
+\subsection{参数设定}
+
+实验设置$T=5$，$k=10$，即每次实验进行$5$轮，每一轮选择至多$10$个广告。对最后得到的结果进行$10000$次蒙特卡洛模拟得到的期望收益作为评价标准，对于动态观测的情况，则以观测到的最终结果作为评价标准。
+
+算法中多轮反向影响力采样部分有两个参数$\varepsilon$和$\ell$，可以通过调整这两个参数来控制算法的准确度和运行效率。$\varepsilon$越小，$\ell$越大，算法在估计每条边的边际收益时就越准确，同时运行时间也会越长。观察算法的流程，可以发现调整算法中多轮反向影响力采样部分有两个参数$\varepsilon$和$\ell$的最终效果都只是改变了$\theta$的大小，因此分别设置$\theta=10,100,1000,10000,100000$运行边贪心算法，记录分析其多轮反向采样得到的目标函数估计值、对结果进行$10000$次蒙特卡洛模拟得到期望收益以及算法总运行时间。
+
+\begin{figure}[th]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/theta/cn_gift}
+        \caption{Gift Cards数据上$\theta$-期望收益}
+        \label{fig:thetasub1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/theta/cn_software}
+        \caption{Software数据上$\theta$-期望收益}
+        \label{fig:thetasub2}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{0.45\textwidth}
+       \includegraphics[width=\linewidth]{figure/sasim/theta/cn_magazine}
+        \caption{Magazine Subscriptions数据上$\theta$-期望收益}
+        \label{fig:thetasub3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/theta/cn_video}
+        \caption{Video Games数据上$\theta$-期望收益}
+        \label{fig:thetasub4}
+    \end{subfigure}
+
+    \caption{$\theta$-期望收益}
+    \label{fig:theta}
+\end{figure}
+
+如图\ref{fig:theta}所示，随着$\theta$的增大，两种最终得到的期望收益的变化并不明显，说明即使是较小的$\theta$，也能得出比较好的效果。但$\theta$过小时，多轮反向采样的结果与蒙特卡洛模拟结果可能相差较大， 达到$1000$以上后，两者基本持平，并且推荐的广告序列基本没有发生变化，结果数据波动较小。而算法的运行时间会随着$\theta$的增大线性增长。因此在下面的实验中，为了兼顾算法的效果、稳定性和运行效率，使用了$\theta=1000$作为反向采样次数。在实际应用中，也可以根据需求牺牲部分置信度缩小$\theta$的大小来满足效率要求。
+
+\subsection{对比实验结果}
+
+考虑用户网络传播的影响、广告边的关联、多轮传播等因素，选择以下共7种方法进行对比：
+
+\begin{itemize}
+    \item {\bfseries 边贪心（动态边贪心）}：本文提出的基于广告边的贪心方法。使用多轮反向影响力采样估计边际期望收益，并使用三明治方法取三个结果中最好的序列作为最终结果。
+    \item {\bfseries 点贪心}：只考虑广告网络中自环的收益，不考虑广告之间的促进作用。使用多轮反向影响力采样估计点的边际期望收益。将影响力最大化领域中经典的贪心方法[5]应用于广告网络中，作为广告节点的选择方法。
+    \item {\bfseries 动态规划}：对Tang[18]提出的算法微调，假设用户看完一个广告会继续浏览的概率为1，由多轮反向影响力采样方法提供广告收益部分的估计。该算法会先将所有广告节点按照期望收益排序，然后使用动态规划选择广告序列。并且每一轮推荐重新运行该算法以适应多轮框架。
+    \item {\bfseries 随机选择}：平凡算法，随机选择广告推荐。
+    \item {\bfseries 边贪心（无传播）}：去除边贪心算法中多轮反向影响力采样部分，不考虑用户网络的信息传播。
+    \item {\bfseries 点贪心（无传播）}：去除点贪心算法中多轮反向影响力采样部分，不考虑用户网络的信息传播。
+    \item {\bfseries 每轮相同}：第一轮使用边贪心算法选取广告序列，后续每一轮推荐与对一轮相同的广告序列。 
+\end{itemize}
+
+\begin{figure}[th]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/nonadp/non_cn_gift}
+        \caption{Gift Cards数据上$t$-期望收益}
+        \label{fig:non1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/nonadp/non_cn_software}
+        \caption{Software数据上$t$-期望收益}
+        \label{fig:non2}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{0.45\textwidth}
+       \includegraphics[width=\linewidth]{figure/sasim/nonadp/non_cn_magazine}
+        \caption{Magazine Subscriptions数据上$t$-期望收益}
+        \label{fig:non3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/nonadp/non_cn_video}
+        \caption{Video Games数据上$t$-期望收益}
+        \label{fig:non4}
+    \end{subfigure}
+    \caption{$t$-期望收益}
+    \label{fig:non}
+\end{figure}
+
+如图\ref{fig:non}所示，边贪心算法在不同大小的数据集上都优于其他算法。并且相较于平凡的随机选择算法，即使是每轮推荐相同的广告序列也有明显优势，说明边贪心第一轮选择的广告序列较为优秀。但每轮相同和随机选择方法在轮数较大时都明显不如其他算法，其他算法会随着轮数增加更新已推荐广告的收益，更加合理地选择。
+
+点贪心算法和动态规划算法基本重合，是因为广告节点之间的收益相对独立，在没有推荐重复广告的情况下，贪心和动态规划的结果基本一致，而重复推荐广告的收益大多较低。两者都没有考虑广告边对结果的影响，因此在广告网络较为稠密的三个数据集上边贪心算法明显更优，期望收益高出至少40\%。而在广告网络较为稀疏的Magazine Subscriptions数据集上，与边贪心算法的效果比较接近，边贪心算法只领先10\%。广告网络稀疏时，广告之间的联系较弱，广告节点的权重相对提升。这也说明边贪心算法在稠密广告网络上更加适用。但结合了三明治方法的边贪心算法会综合考虑广告之间的联系和广告本身的权重，并且三明治方法的下界函数也相当于进行了点贪心，所以即使在广告网络稀疏的情况下也至少不会差于点贪心算法。
+
+图\ref{fig:non}中的两条虚线展示了不考虑用户网络影响力传播的情况。类似地，在用户网络较为稠密的三个数据集上，无传播的算法都表现较差。而在用户网络较为稀疏的Software数据集上，无传播的边贪心算法与有传播的边贪心算法效果较为接近。无传播的算法不考虑传播结果，就无法区分影响力大的用户和影响力小的用户，可能部分用户虽然对广告序列的接收程度很高，但无法造成大量影响导致最终结果较差。在用户网络稀疏的图上，用户的影响力差距较小，会降低影响力传播对结果的贡献，但无法完全消除。有传播的算法还是优于无传播的算法。用户网络越复杂，用户之间的影响力区别越大，有传播的算法越有优势。
+
+综上所述，对比实验证明了边贪心算法的有效性：能够有效地综合利用用户对广告的接受程度、广告之间的关联、用户网络的影响力传播等信息推荐多轮广告序列，在生成的亚马逊评论数据集上效果比已有工作平均提升35\%。
+
+\begin{figure}[th]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/adp/adp_cn_gift}
+        \caption{Gift Cards数据上动态$t$-期望收益}
+        \label{fig:adp1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/adp/adp_cn_software}
+        \caption{Software数据上动态$t$-期望收益}
+        \label{fig:adp2}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{0.45\textwidth}
+       \includegraphics[width=\linewidth]{figure/sasim/adp/adp_cn_magazine}
+        \caption{Magazine Subscriptions数据上动态$t$-期望收益}
+        \label{fig:adp3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/sasim/nonadp/non_cn_video}
+        \caption{Video Games数据上动态$t$-期望收益}
+        \label{fig:adp4}
+    \end{subfigure}
+    \caption{动态$t$-期望收益}
+    \label{fig:adp}
+\end{figure}
+
+如图\ref{fig:adp}所示，动态结果与非动态的结果趋势大致相同。我们提出的动态多边贪算法在不同数据集上都展现了优势。
+
+值得注意的是，由于我们首次将用户网络和广告网络同时加入多轮广告推荐模型中，在估算广告的期望收益上，其他对比算法都只能依赖于我们提出的多轮反向影响力采样方法。在动态观测的情况下，可通过修改已观测到的用户的反向影响力采样值来快速估算收益。由此，本文提出的多轮反向影响力采样方法可以在多轮社交广告序列影响最大化问题上与各种其他已有的算法相结合来解决该问题，为快速估计广告收益提供了一种较为通用的方法。
+
+
+\section{本章小结}
+
+\chapter{总结和展望}

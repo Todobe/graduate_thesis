@@ -43,7 +43,7 @@
 \ifthenelse{\equal{\DepartmentLines}{1}}
 {
     %   DepartmentLines == 1
-    \vskip 20pt
+    \vskip 10pt
 }
 {
     %   DepartmentLines == 2
@@ -62,14 +62,14 @@
 
 \begin{center}
     \bfseries \zihao{-2}
-    \begin{tabularx}{.8\textwidth}{>{\fangsong}l X<{\centering}}
+    \begin{tabularx}{1.1\textwidth}{>{\fangsong}l X<{\centering}}
         % If titles are too long for one row, please manually hardcode them in
         % multiple lines, as the english title example here.
         \ifthenelse{\equal{\TitleLines}{1}}
         {
             % TitleLines == 1
-            中文论文题目：&  \uline{\hfill \fangsong \Title{} \hfill} \\
-            ~ & \uline{\hfill} \\
+            中文论文题目：& \uline{\hfill \fangsong \Title{} \hfill} \\
+            % ~ & \uline{\hfill} \\
         }
         {
             \ifthenelse{\equal{\TitleLines}{2}}
@@ -114,7 +114,7 @@
 \ifthenelse{\equal{\DepartmentLines}{1}}
 {
     %   DepartmentLines == 1
-    \vskip 20pt
+    \vskip 10pt
 }
 {
     %   DepartmentLines == 2

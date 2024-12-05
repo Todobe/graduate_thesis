@@ -13,7 +13,8 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"James-Yu.latex-workshop"
+		"James-Yu.latex-workshop",
+		"manhen.latex-workshop-2"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
