@@ -7,7 +7,90 @@
 
 \chapter{相关工作}
 
-\chapter{鲁棒}
+\chapter{鲁棒序列网络子模最大化}
+
+\section{鲁棒序列网络子模最大化问题定义}
+在本文中，我们遵循Tschiatschek等人\cite{tschiatschek2017selecting}的设定。令$V={v_1,v_2,...,v_n}$代表$n$个元素的集合。一组边\(W\)表示按特定顺序选择某些元素会带来额外收益。更具体地，边\(e_{ij} = (v_i,v_j)\)表示在选择\(v_i\)之后选择\(v_j\)会带来额外收益。自环（即起始和结束于同一元素的边）表示选择一个元素本身会带来的收益。
+
+\begin{definition}
+{\bfseries 序列子模最大化问题}是指，给定一个有向图\(N = (V,W)\)，一个非负单调子模集合函数\(h: 2^W \rightarrow \mathbb{R}_{\ge 0}\)，以及一个参数\(k\)，目标是选择一个不重复的长度为\(k\)的唯一元素序列\(\sigma\)，使目标函数最大化：
+\begin{equation}
+    f(\sigma)=h(E(\sigma))
+\end{equation}
+\noindent 其中，\(E(\sigma)\) 为序列$\sigma$的生成边集，包含所有满足\((v_i,v_j)\in W\)且在\(\sigma\)中\(v_i\)出现在\(v_j\)之前的边。
+\end{definition}
+
+需要注意的是，函数\(h\)是关于边集的子模函数，而非元素集合。而目标函数\(f\)既不是一个集合函数，关于元素集合也不一定是子模的。我们将这样的函数\(f(\sigma)\)称为{\bfseries 网络子模}函数。
+
+定义\(f(\sigma - Z)\)为$\sigma$在移除集合\(Z\)中的元素后目标函数的剩余价值。
+\begin{definition}
+{\bfseries 鲁棒序列网络子模最大化问题}是指，给定一个有向图\(G=(V,E)\)、一个网络次模函数\(f(\cdot)\)和鲁棒性参数\(\tau\)，找到一个序列\(\sigma\)，使其对最坏情况下移除\(\tau\)个节点仍具有鲁棒性：
+\begin{equation}
+    \max_{\sigma:|\sigma|\le k} \min_{Z\in \sigma,|Z|\le \tau} f(\sigma - Z)
+\end{equation}
+\end{definition}
+
+鲁棒参数\(\tau\)表示被移除的子集\(Z\)的大小。在移除之后，目标值应尽可能保持大。当\(\tau = 0\)时，该问题简化为经典的序列子模最大化问题\cite{mitrovic2018submodularity}。
+
+\section{鲁棒序列网络子模最大化算法}
+
+序列贪心算法\cite{mitrovic2018submodularity}不会考虑元素被删除的情况，直接应用其来解决鲁棒序列网络子模最大化问题效果可能会比较糟糕。我们可以构造一个非常简单的例子来进行说明，如图\ref{fig:rose_sample}所示，边$(A,B),(B,C),(B,E),(B,F)$的权重为0.9，边$(C,D),(C,G),(D,G)$的权重为0.5。假设目标网络子模函数\(f\)是所选序列生成边集中所有边的权重总和，要选择一个包含5个元素的序列，使用序列贪心算法，为了最大化总价值，包含更多高权重边的序列\(\langle A,B,C,E,F \rangle\)将会被选中，价值为\((0.9 \times 4 = 3.6)\)。然而，如果设置\(\tau=2\)，即移除两个元素，在最坏情况下，只要移除\(B\)和任意一个其他元素，都会使价值减为$0$。
+
+\begin{figure}[th]
+    \centering
+    \includegraphics[width=.89\linewidth]{figure/rosenets/sample2}
+    \caption{序列子模最大化示例}
+    \label{fig:rose_sample}
+\end{figure}
+
+因此，我们希望设计一个在移除任意$\tau$个已选定元素时仍能保持鲁棒性的算法。我们提出了鲁棒序列网络子模最大化算法，该算法可以近似解决鲁棒序列网络子模最大化问题，如算法\ref{alg:rosenets}所示。考虑到最终的结果需要移除部分元素，我们仅考虑$k \ge 3$的情况。
+
+序列贪心算法的局限性在于所选序列的整体价值可能集中在前几个元素上，导致个别元素被删除时对整体价值影响巨大。基于这一观察，算法\ref{alg:rosenets}分为两个步骤：第一步（第一个\textit{while}循环,第\ref{alg:rose_line1}到\ref{alg:rose_line2}行）中，我们以类似于序列贪心的方法从\(V\)中选择一个包含\(\tau\)个元素的序列\(\sigma_1\)。其中$h(e_{ij}|E(\sigma_1))=h(E(\sigma_1)\cup\{e_{ij}\})-h(E(\sigma_1))$，为边$e_{ij}$的边际收益。$\oplus$符号代表将两个序列顺序连接。第二步（第二个\textit{while}循环，第\ref{alg:rose_line3}到\ref{alg:rose_line4}行）中，以类似于序列贪心的方法从\(V\backslash \sigma_1\)中选择包含\(k-\tau\)个元素的另一个序列\(\sigma_2\)。需要注意的是，当我们选择序列\(\sigma_2\)时，我们会假定序列\(\sigma_1\)根本不存在，这确保了最终返回的序列\(\sigma = \sigma_1 \oplus \sigma_2\) 的价值不会集中在\(\sigma_1\)或\(\sigma_2\)中。算法\ref{alg:rosenets}的复杂度为\(O(k|E|)\)，为算法中评估函数$h$值的次数。
+
+\begin{algorithm}[H]
+    \caption{鲁棒序列网络子模最大化算法 \label{alg:rosenets}}
+    \begin{algorithmic}[1]
+        \REQUIRE 有向图\(N = (V,W)\)；非负单调子模集合函数\(h: 2^W \rightarrow \mathbb{R}_{\ge 0}\)；参数$k, \tau$
+        \ENSURE $\sigma$
+        \STATE $\sigma_0=\emptyset$, $\sigma_1=\emptyset$, $\sigma_2=\emptyset$\;
+        \WHILE{$|\sigma_1| < \tau$} \label{alg:rose_line1}
+            \IF{$|\sigma_1|=\tau-1$}
+                \STATE$e_{ij}=\arg\max_{\{e_{ij}|(v_i=v_j \text{ or } v_i \in \sigma_1) \text{ and } v_j\notin \sigma_1\}} h(e_{ij}|E(\sigma_1))$\;
+                \STATE$\sigma_1 = \sigma_1 \oplus v_j$\;
+            \ELSE
+                \STATE $e_{ij}=\arg\max_{\{e_{ij}|v_j\notin \sigma_1\}} h(e_{ij}|E(\sigma_1))$\;
+                \IF{$v_j=v_i$ or $v_i\in \sigma_1$}
+                    \STATE $\sigma_1 = \sigma_1 \oplus v_j$\;
+                \ELSE
+                    \STATE $\sigma_1 = \sigma_1 \oplus v_i \oplus v_j$\;
+                \ENDIF
+            \ENDIF
+        \ENDWHILE \label{alg:rose_line2}
+        \WHILE{$|\sigma_2| < k-\tau$} \label{alg:rose_line3}
+            \IF{$|\sigma_2|=k-\tau-1$}
+                \STATE $e_{ij}=\arg\max_{\{e_{ij}|(v_i=v_j \text{ or } v_i \in \sigma_1 \cup \sigma_2) \text{ and } v_j \notin \sigma_1 \cup \sigma_2\}} h(e_{ij}|E(\sigma_2))$\;
+                \STATE $\sigma_2 = \sigma_2 \oplus v_j$\;
+            \ELSE
+                \STATE $e_{ij}=\arg\max_{\{e_{ij}|v_i\notin \sigma_1, v_j \notin \sigma_1 \cup \sigma_2\}} h(e_{ij}|E(\sigma_2))$\;
+                \IF{$v_j=v_i$ or $v_i\in \sigma_2$}
+                    \STATE$\sigma_2 = \sigma_2 \oplus v_j$\;
+                \ELSE
+                    \STATE $\sigma_2 = \sigma_2 \oplus v_i \oplus v_j$\;
+                \ENDIF
+            \ENDIF
+        \ENDWHILE \label{alg:rose_line4}
+        \STATE $\sigma=\sigma_1\oplus \sigma_2$\;
+    \end{algorithmic}
+\end{algorithm}
+
+回到图\ref{fig:rose_sample}中的例子。当\(k=5\)且\(\tau=2\)时，鲁棒序列网络子模最大化算法将选择序列\(\sigma_1=\langle A,B \rangle\)和序列\(\sigma_2=\langle C,D,G \rangle\)。在选择\(\sigma_2\)时，算法不会考虑序列\(\sigma_1\)中的元素\(B\)。因此，元素\(E\)和\(F\)被视为对目标函数没有贡献。算法将返回序列\(\sigma=\langle A,B,C,D,G \rangle\)。移除\(\tau=2\)个元素的最坏情况是移除\(B\)和\(\{C,D,G\}\)中的任意一个元素。剩余价值为0.5。而序列贪心函数得到的结果最坏情况的剩余价值为0。这个例子展现了鲁棒序列网络子模最大化算法的差异与优势。
+
+一个鲁棒的序列应具有复杂的网络结构，其价值不应集中于少数中心元素，而应来源于序列中所有元素之间的边。要选择这样的鲁棒序列，需要进行多次相互独立的贪心选择尝试。这种方法可以避免单一贪心选择可能导致的问题，即高概率选中中心元素及其高边权邻居（如图\ref{fig:rose_sample}中的节点$B$），从而使得移除这些节点导致整体价值急剧下降。本文通过两次独立的贪心选择来实现这一策略。理论上，增加贪心选择的次数可能会提高算法的近似比。然而，考虑到这是鲁棒序列网络子模最大化问题研究的初步阶段，且当前的理论分析已相当复杂，我们将多部分选择算法的设计及其近似比分析留作未来研究课题。
+
+
+\section{近似性分析}
+
+\section{本章小结}
 
 \chapter{多轮社交广告序列影响最大化推荐算法}
 
@@ -32,14 +115,14 @@ b. $\forall u,v_1,v_2$ 有$w(u,(v_1,v_2))\le 1/w(u,(v_2,v_2))-1$。
 
 触发模型可以用活跃边图（live-edge graph）上的方法等价表示。给定一组触发集合$\{T(u)\}_{u\in U}$，我们可以构造一个活跃边图$L=(U,E(L))$，其中$E(L)=\{(u_1,u_2)|u_2\in U, u_1\in T(u_2)\}$，每条边$(u_1,u_2)$都被称为一条活跃边（live-edge）。令$\Gamma(G,S)$代表图$G$中可以被$S$到达的点的集合。由于触发模型和活跃边图的等价性，触发模型中种子集合$S$的影响力等价于$\mathbb{E}[|\Gamma(L,S)|]$，该期望值取决于生成的活跃边图$L$的分布。
 \begin{definition}
-多轮广告序列推荐影响最大化问题是指，在给定用户网络$G=(U,E)$、生成触发集合的概率分布、广告网络$N = (V, W)$、用户组$U_S$、函数$w:U_S \times W \to \mathbb{R}$、轮数$T$、每轮的预算$k$、广告被接受的收益函数$revenue:V->\mathbb{R}$的情况下，找到$T$轮广告序列$\sigma_1^*,\sigma_2^*,...,\sigma_T^*$，每轮至多$k$个，使得平台推荐广告的总收益最大化，即：
+{\bfseries 多轮广告序列推荐影响最大化问题}是指，在给定用户网络$G=(U,E)$、生成触发集合的概率分布、广告网络$N = (V, W)$、用户组$U_S$、函数$w:U_S \times W \to \mathbb{R}$、轮数$T$、每轮的预算$k$、广告被接受的收益函数$revenue:V->\mathbb{R}$的情况下，找到$T$轮广告序列$\sigma_1^*,\sigma_2^*,...,\sigma_T^*$，每轮至多$k$个，使得平台推荐广告的总收益最大化，即：
 \begin{equation}
 \sigma^* = \bigcup _{t=1} ^T \{\sigma_t^*\} = \mathop{\arg\max}_{\sigma:|\sigma_t|\le k,\forall t \in[T]} \ \ \rho(\sigma)
 \end{equation}
 \noindent 其中$\rho(\sigma)$代表平台推荐广告带来的总收益。
 \end{definition}
 后续内容中会频繁使用一组解中的某个广告及广告之间的边，因此我们先定义如下符号来方便描述：
-用$\sigma_{t,i}$表示一组解$\sigma$中第$t$轮广告序列中的第$i$个广告。使用符号$E$来表示广告序列中包含的边，即
+用$\sigma_{t,i}$表示一组解$\sigma$中第$t$轮广告序列中的第$i$个广告。使用符号$E$来表示广告序列的生成边集，即
 \begin{equation}
 E(\sigma_t)=\{(\sigma_{t,i},\sigma_{t,j},t)|i \le j, (\sigma_{t,i},\sigma_{t,j})\in W\}
 \end{equation}
@@ -79,14 +162,14 @@ p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\
 \label{thm:greedy}
 用$\sigma^*$表示多轮社交广告序列影响力最大化的最优解。如果函数$h$具有单调性和子模性，则边贪心算法满足：
 \begin{equation}
-\rho(\sigma)\ge (1-e^{-(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}})\rho(\sigma^*)
+\rho(\sigma)\ge (1-e^{-\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}})\rho(\sigma^*)
 \end{equation}
 \noindent 其中$d_{in}$为广告网络中节点的最大入度。
 \end{theorem}
 \begin{algorithm}[H]
     \renewcommand{\algorithmcfname}{算法}
     \caption{\label{alg:edge_greedy}边贪心算法} 
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
     \REQUIRE 用户网络， \(G(U,E)\); 广告网络, \(N(V,W)\);
     时间轮, \(T\); 预算 \(k\);
     函数 \(h:2^{|E|} \times T \to \mathbb{R} \)
@@ -156,7 +239,7 @@ Tang等人\cite{IMM}使用了鞅论的方法来分析反向可达集估计信息
 
 \begin{definition}
 \label{def:marginal}
-（鞅）一系列随机变量$X_1,X_2,X_3,\ldots$为鞅，当且仅当对于任意的$i\ge1$, 有$\mathbb{E}[|X_i|]<+\infty$，并且$\mathbb{E}[X_{i+1}|X_1,X_2,\ldots,X_i]=X_i$。
+（鞅）一系列随机变量$X_1,X_2,X_3,\ldots$为{\bfseries 鞅}，当且仅当对于任意的$i\ge1$, 有$\mathbb{E}[|X_i|]<+\infty$，并且$\mathbb{E}[X_{i+1}|X_1,X_2,\ldots,X_i]=X_i$。
 \end{definition}
 
 \begin{lemma}
@@ -172,7 +255,7 @@ Tang等人\cite{IMM}使用了鞅论的方法来分析反向可达集估计信息
 \begin{algorithm}[H]
     \renewcommand{\algorithmcfname}{算法}
     \caption{多轮反向影响力采样方法\label{alg:mrris}}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
     \REQUIRE 用户网络, $G(U,E)$;已选的边集, $E'$; 特殊用户组, $U_S$; 时间轮, $T$; 参数 $\varepsilon,\ell$; 收益函数，$revenue$;
     \ $\tilde{h}$
     \STATE 对所有 $u,v,t$ 计算 $p_{u,v,t}$;
@@ -394,7 +477,7 @@ $h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，�
 
 \begin{algorithm}
     \caption{三明治算法\label{alg:sandwich}} 
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \REQUIRE 用户网络， $G(U,E)$; 广告网络, $N(V,W)$; 时间轮, $T$; 预算 $k$; 函数 $h,h_t^\mu,h_t^\nu:2^{|E|} \times T \to \mathbb{R} $
         \ENSURE $\sigma$
         \STATE Let $\sigma \gets \phi$
@@ -569,8 +652,9 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 证明完毕。
 
 \section{近似性与复杂度分析}
+\label{sec:ana}
 
-针对\ref{sec:def}节中定义的多轮社交广告序列影响最大化问题，\ref{sec:greedy}节给出了基于广告边的贪心策略。\ref{sec:mrris}节中提出的多轮反向影响力采样方法能够解决估算广告边在社交网络中造成的影响力的问题，保证算法的时间复杂度。\ref{sec:sand}节使用三明治方法解决了原问题函数$h$不子模的问题，保证了算法的近似性。
+针对\ref{sec:def}节中定义的多轮社交广告序列影响最大化问题，\ref{sec:greedy}节给出了基于广告边的贪心策略。\ref{sec:mrris}节中提出的多轮反向影响力采样算法能够解决估算广告边在社交网络中造成的影响力的问题，保证算法的时间复杂度。\ref{sec:sand}节使用三明治算法解决了原问题函数$h$不子模的问题，保证了算法的近似性。将多轮反向影响力采样算法和三明治算法应用于边贪心策略，才能在保证复杂度和近似性的情况下解决多轮社交广告序列影响最大化问题。
 
 \begin{theorem}
 \label{thm:nonadptive}
@@ -586,6 +670,7 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 
 \section{动态多轮社交广告序列影响最大化}
+\label{sec:ada}
 
 在部分实际场景中，在算法进行每一轮决策后，可以观测用户对广告的接受情况和在用户网络中的传播结果。在这种允许动态观测的情况下，可以收集这些信息做出更准确的判断。令$ A_t = \{(u,v) |  u \in U, v \in V ,u \text{在前}t\text{轮接受过广告}v\} $ 代表前t轮广告序列信息在用户网络中传播的观测结果。则动态多轮社交广告序列影响最大化问题的目标则是找到 $\sigma_t = arg max_{\sigma_t} \Delta(E(\sigma_t) | A_{t-1})$，即$\Delta(E(\sigma_t) | A_{t-1})$为每一轮需要最大化的目标函数：
 \begin{equation}
@@ -598,7 +683,7 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 \begin{algorithm}[H]
     \caption{动态边贪心算法\label{alg:ada}}
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \REQUIRE 用户网络 $G(U,E)$; 广告网络 $N(V,W)$; 预算 $k$; $t-1$轮的观测结果$A_{t - 1}$
         \STATE \(\sigma_t \gets ( )\)
         \WHILE{\( |\sigma_t| \le k-2 \)}
@@ -632,19 +717,57 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 \noindent 算法的时间复杂度为$O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$。证明方法与定理\ref{thm:nonadptive}相同，不再赘述。
 \end{theorem}
 
-
 \section{本章小结}
 
+在本章中，首先在\ref{sec:def}节中，同时考虑广告网络中广告之间的关联关系和用户网络中的信息传播，提出并定义了的多轮社交广告序列影响最大化问题。在\ref{sec:greedy}节中提出了基于广告边的贪心算法。由于目标函数无法快速精确计算，为估计每一条的边际收益，\ref{sec:mrris}节设计了适合多轮广告序列影响最大化问题的多轮反向影响力采样方法。然后在\ref{sec:sand}节引入三明治方法，找到了合适的上界函数和下界函数，解决变函数不具备子模性的问题。在\ref{sec:ana}节中分析了将多轮反向影响力采样算法和三明治算法应用于边贪心算法解决多轮社交广告序列影响力最大化问题的近似性和时间复杂度。\ref{sec:ada}节在原问题的基础上考虑到可以动态观测广告在用户网络中传播结果的情况，拓展了多轮社交广告序列影响力最大化问题并给出对应的贪心算法。
 
 \chapter{实验设计与结果分析}
 
-\section{鲁棒实验}
-
-\section{多轮社交广告序列影响最大化推荐算法实验结果}
+\section{鲁棒序列网络子模最大化算法实验}
 
 \subsection{实验数据集}
 
-实验在Amazon评论数据集\cite{amazon24}上进行。该数据集主要记录了用户对已经购买的商品的评论信息。商品网络和用户网络的生成参考了Gomez-Rodriguez等人\cite{netgen}的工作。如果较多买过商品$i$的人还买过商品$j$，说明$i$和$j$有较大关联性，就在商品网络中加入一条由$i$到$j$的有向边，并对每一个商品都加入自环；如果两个用户多次购买过相同的商品，那么可以推断他们更有可能是朋友，就在他们之间增加一条有向边。
+{\bfseries Amazon评论数据集}：我们基于亚马逊视频游戏评论数据集\cite{ni2019justifying}进行了产品推荐实验。实验的具体目标是，给定用户已购买的前$4$个产品，预测他们接下来可能购买的$k$个产品。
+
+为此，我们构建了一个图模型$N = (V,W)$。其中，$V$代表所有产品的集合，$W$表示产品之间的边集。每条边的权重$w_{ij}$定义为条件概率：即用户在购买产品$i$后购买产品$j$的概率。我们通过计算所有购买过产品$i$的用户中，随后又购买产品$j$的用户比例来确定$w_{ij}$。此外，图中还包含自环，其权重$w_{ii}$表示在所有用户中购买产品$i$的比例。为了确保数据的可靠性，我们只考虑了被购买至少50次的商品，最终得到9383种独立商品。同时，我们选取了至少购买过29种商品的用户，共909名。我们对这909名用户进行广告推荐任务，并计算每个评估指标的平均值来衡量推荐效果。
+
+{\bfseries Wikispeedia数据集}：我们使用Wikispeedia数据集\cite{west2009wikispeedia}，考虑用户在维基百科中浏览并通过链接跳转试图找到某个目标文章的情况。我们的任务是，根据用户之前访问过的一系列文章，预测并为他们推荐链接，引导他们到达目标页面。这个任务的关键在于页面访问顺序，因为不同页面拥有不同的有效链接。具体而言，我们会基于用户访问的前4个页面，通过提供一系列链接建议来预测他们试图到达的最终页面。
+
+我们构建了一个图模型$N = (V,W)$。其中$V$代表所有页面的集合，$W$表示页面之间现有链接的集合。对于每条边$(i,j)\in W$，其权重$w_{ij}$定义为条件概率：即用户当前在页面$i$的情况下移动到页面$j$的概率。这个概率通过计算从$i$到$j$的移动次数占所有访问$i$次数的比例来得出。值得注意的是，我们没有构建自环，因为我们假设用户只能通过现有链接进行页面间的跳转，而不能随机访问任意页面。我们将数据集压缩为仅包含出现在实际浏览路径中的文章和边，最终得到4170个独立页面和55147条边。我们选取了长度至少为29的路径进行分析，共得到271条符合条件的路径。我们对这271条路径进行链接预测任务，并计算每个评估指标的平均值来衡量预测效果。
+
+\subsection{实验设置与评估标准}
+
+我们对以下算法的性能进行对比：
+
+\begin{itemize}
+\item {\bfseries 鲁棒序列}：本文提出的鲁棒序列网络子模最大化算法，简称鲁棒序列算法。
+\item {\bfseries 序列贪心}：序列贪心算法\cite{mitrovic2018submodularity},不考虑序列的鲁棒性。
+\item {\bfseries OMegA}：现有的自摸序列基准算法\cite{tschiatschek2017selecting}。
+\item {\bfseries 高频推荐}：较为平凡的基准算法，推荐最受欢迎的（用户点击最多的）项目（商品广告或链接）。
+\end{itemize}
+
+为了评估这些算法的性能，我们使用了三个评估指标。
+
+\begin{itemize}
+    \item \textbf{准确度得分}：这个指标简单地计算准确推荐项目的数量，是一个很合理的衡量标准，但它的局限性在于没有明确考虑序列的顺序。
+    \item \textbf{序列得分}：为了弥补准确度得分的不足，我们引入了基于Kendall-Tau距离\cite{kendall1938new}的度量。它通过计算在预测序列和真实序列中都出现的有序对的数量来评估序列的相似度。这个指标更好地反映了推荐序列的质量。
+    \item \textbf{目标函数值}：我们采用如下概率价值函数作为目标网络子模函数$f$:
+\begin{equation}
+    f(\sigma)=h(E(\sigma))=\sum_{j\in V} [1- \prod_{(i,j)\in E(\sigma)} (1-w_{ij})]
+\end{equation}
+\end{itemize}
+
+前两个指标在\parencite{mitrovic2019adaptive}中也有使用。对于第三个评估指标，我们会尝试对$\sigma$所有大小为$\tau$的子集进行移除，选择最低的函数值作为最终评估指标，以衡量序列的稳定性。
+
+
+\subsection{对比实验结果}
+
+
+\section{多轮社交广告序列影响最大化推荐算法实验}
+
+\subsection{实验数据集}
+
+实验在{\bfseries Amazon评论数据集}\cite{amazon24}上进行。该数据集主要记录了用户对已经购买的商品的评论信息。商品网络和用户网络的生成参考了Gomez-Rodriguez等人\cite{netgen}的工作。如果较多买过商品$i$的人还买过商品$j$，说明$i$和$j$有较大关联性，就在商品网络中加入一条由$i$到$j$的有向边，并对每一个商品都加入自环；如果两个用户多次购买过相同的商品，那么可以推断他们更有可能是朋友，就在他们之间增加一条有向边。
 
 在TR模型中，还需要对用户网络的每一条边进行赋权，简单地使每条边在$[0,1]$中生成一个随机权重$b_{u_1,u_2}$。为了传播的效果更好并体现用户区分度，对于每个用户网络，都选择度数较大的5个节点和度数较小的5个节点作为特殊用户组$U_S$。对于每一个商品$v$，我们在$\{0.01,0.02,0.03,0.04,0.05\}$中随机一个值作为$revenue(v)$。每个用户对于商品的接受程度不同，首先对每个特殊用户$u$和商品的每个自环$(v,v)$，都在$[0,1]$范围内随机生成一个$w(u,(v,v))$代表用户$u$对商品$v$的接受程度。然后对于每个特殊用户$u$和商品的每条非自环边$(v_1,v_2)$，都在$[0,1/w,(u,(v_2,v_2))-1]$范围内随机生成一个$w(u,(v_1,v_2))$代表用户$u$接受了$v_1$对$v_2$的接受概率的促进程度。
 
