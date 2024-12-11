@@ -10,21 +10,21 @@
 \chapter{鲁棒序列网络子模最大化}
 
 \section{鲁棒序列网络子模最大化问题定义}
-在本文中，我们遵循Tschiatschek等人\cite{tschiatschek2017selecting}的设定。令$V={v_1,v_2,...,v_n}$代表$n$个元素的集合。一组边\(W\)表示按特定顺序选择某些元素会带来额外收益。更具体地，边\(e_{ij} = (v_i,v_j)\)表示在选择\(v_i\)之后选择\(v_j\)会带来额外收益。自环（即起始和结束于同一元素的边）表示选择一个元素本身会带来的收益。
+在本文中，我们遵循Tschiatschek等人\cite{tschiatschek2017selecting}的设定。令$V={v_1,v_2,...,v_n}$代表$n$个节点的集合。一组边\(W\)表示按特定顺序选择某些节点会带来额外收益。更具体地，边\(e_{ij} = (v_i,v_j)\)表示在选择\(v_i\)之后选择\(v_j\)会带来额外收益。自环（即起始和结束于同一节点的边）表示选择一个节点本身会带来的收益。
 
 \begin{definition}
-{\bfseries 序列子模最大化问题}是指，给定一个有向图\(N = (V,W)\)，一个非负单调子模集合函数\(h: 2^W \rightarrow \mathbb{R}_{\ge 0}\)，以及一个参数\(k\)，目标是选择一个不重复的长度为\(k\)的唯一元素序列\(\sigma\)，使目标函数最大化：
+{\bfseries 序列子模最大化问题}是指，给定一个有向图\(N = (V,W)\)，一个非负单调子模集合函数\(h: 2^W \rightarrow \mathbb{R}_{\ge 0}\)，和序列长度限制\(k\)，目标是选择一个不重复的长度为\(k\)的节点序列\(\sigma\)，使目标函数最大化：
 \begin{equation}
     f(\sigma)=h(E(\sigma))
 \end{equation}
 \noindent 其中，\(E(\sigma)\) 为序列$\sigma$的生成边集，包含所有满足\((v_i,v_j)\in W\)且在\(\sigma\)中\(v_i\)出现在\(v_j\)之前的边。
 \end{definition}
 
-需要注意的是，函数\(h\)是关于边集的子模函数，而非元素集合。而目标函数\(f\)既不是一个集合函数，关于元素集合也不一定是子模的。我们将这样的函数\(f(\sigma)\)称为{\bfseries 网络子模}函数。
+需要注意的是，函数\(h\)是关于边集的子模函数，而非节点集合。而目标函数\(f\)既不是一个集合函数，关于节点也不一定是子模的。我们将这样的函数\(f(\sigma)\)称为{\bfseries 网络子模}函数。
 
-定义\(f(\sigma - Z)\)为$\sigma$在移除集合\(Z\)中的元素后目标函数的剩余价值。
+定义\(f(\sigma - Z)\)为$\sigma$在移除集合\(Z\)中的节点后目标函数的剩余价值。
 \begin{definition}
-{\bfseries 鲁棒序列网络子模最大化问题}是指，给定一个有向图\(G=(V,E)\)、一个网络次模函数\(f(\cdot)\)和鲁棒性参数\(\tau\)，找到一个序列\(\sigma\)，使其对最坏情况下移除\(\tau\)个节点仍具有鲁棒性：
+{\bfseries 鲁棒序列网络子模最大化问题}是指，给定一个有向图\(G=(V,E)\)、一个网络次模函数\(f(\cdot)\)、序列长度限制$k$和鲁棒性参数\(\tau\)，找到一个序列\(\sigma\)，使其对最坏情况下移除\(\tau\)个节点仍具有鲁棒性：
 \begin{equation}
     \max_{\sigma:|\sigma|\le k} \min_{Z\in \sigma,|Z|\le \tau} f(\sigma - Z)
 \end{equation}
@@ -34,7 +34,7 @@
 
 \section{鲁棒序列网络子模最大化算法}
 
-序列贪心算法\cite{mitrovic2018submodularity}不会考虑元素被删除的情况，直接应用其来解决鲁棒序列网络子模最大化问题效果可能会比较糟糕。我们可以构造一个非常简单的例子来进行说明，如图\ref{fig:rose_sample}所示，边$(A,B),(B,C),(B,E),(B,F)$的权重为0.9，边$(C,D),(C,G),(D,G)$的权重为0.5。假设目标网络子模函数\(f\)是所选序列生成边集中所有边的权重总和，要选择一个包含5个元素的序列，使用序列贪心算法，为了最大化总价值，包含更多高权重边的序列\(\langle A,B,C,E,F \rangle\)将会被选中，价值为\((0.9 \times 4 = 3.6)\)。然而，如果设置\(\tau=2\)，即移除两个元素，在最坏情况下，只要移除\(B\)和任意一个其他元素，都会使价值减为$0$。
+序列贪心算法\cite{mitrovic2018submodularity}不会考虑节点被删除的情况，直接应用其来解决鲁棒序列网络子模最大化问题效果可能会比较糟糕。我们可以构造一个非常简单的例子来进行说明，如图\ref{fig:rose_sample}所示，边$(A,B),(B,C),(B,E),(B,F)$的权重为0.9，边$(C,D),(C,G),(D,G)$的权重为0.5。假设目标网络子模函数\(f\)是所选序列生成边集中所有边的权重总和，要选择一个包含5个节点的序列，使用序列贪心算法，为了最大化总价值，包含更多高权重边的序列\(\langle A,B,C,E,F \rangle\)将会被选中，价值为\((0.9 \times 4 = 3.6)\)。然而，如果设置\(\tau=2\)，即移除两个节点，在最坏情况下，只要移除\(B\)和任意一个其他节点，都会使价值减为$0$。
 
 \begin{figure}[th]
     \centering
@@ -43,9 +43,9 @@
     \label{fig:rose_sample}
 \end{figure}
 
-因此，我们希望设计一个在移除任意$\tau$个已选定元素时仍能保持鲁棒性的算法。我们提出了鲁棒序列网络子模最大化算法，该算法可以近似解决鲁棒序列网络子模最大化问题，如算法\ref{alg:rosenets}所示。考虑到最终的结果需要移除部分元素，我们仅考虑$k \ge 3$的情况。
+因此，我们希望设计一个在移除任意$\tau$个已选定节点时仍能保持鲁棒性的算法。我们提出了鲁棒序列网络子模最大化算法，该算法可以近似解决鲁棒序列网络子模最大化问题，如算法\ref{alg:rosenets}所示。考虑到最终的结果需要移除部分节点，我们仅考虑$k \ge 3$的情况。
 
-序列贪心算法的局限性在于所选序列的整体价值可能集中在前几个元素上，导致个别元素被删除时对整体价值影响巨大。基于这一观察，算法\ref{alg:rosenets}分为两个步骤：第一步（第一个\textit{while}循环,第\ref{alg:rose_line1}到\ref{alg:rose_line2}行）中，我们以类似于序列贪心的方法从\(V\)中选择一个包含\(\tau\)个元素的序列\(\sigma_1\)。其中$h(e_{ij}|E(\sigma_1))=h(E(\sigma_1)\cup\{e_{ij}\})-h(E(\sigma_1))$，为边$e_{ij}$的边际收益。$\oplus$符号代表将两个序列顺序连接。第二步（第二个\textit{while}循环，第\ref{alg:rose_line3}到\ref{alg:rose_line4}行）中，以类似于序列贪心的方法从\(V\backslash \sigma_1\)中选择包含\(k-\tau\)个元素的另一个序列\(\sigma_2\)。需要注意的是，当我们选择序列\(\sigma_2\)时，我们会假定序列\(\sigma_1\)根本不存在，这确保了最终返回的序列\(\sigma = \sigma_1 \oplus \sigma_2\) 的价值不会集中在\(\sigma_1\)或\(\sigma_2\)中。算法\ref{alg:rosenets}的复杂度为\(O(k|E|)\)，为算法中评估函数$h$值的次数。
+序列贪心算法的局限性在于所选序列的整体价值可能集中在前几个节点上，导致个别节点被删除时对整体价值影响巨大。基于这一观察，算法\ref{alg:rosenets}分为两个步骤：第一步（第一个\textit{while}循环,第\ref{alg:rose_line1}到\ref{alg:rose_line2}行）中，我们以类似于序列贪心的方法从\(V\)中选择一个包含\(\tau\)个节点的序列\(\sigma_1\)。其中$h(e_{ij}|E(\sigma_1))=h(E(\sigma_1)\cup\{e_{ij}\})-h(E(\sigma_1))$，为边$e_{ij}$的边际收益。$\oplus$符号代表将两个序列顺序连接。第二步（第二个\textit{while}循环，第\ref{alg:rose_line3}到\ref{alg:rose_line4}行）中，以类似于序列贪心的方法从\(V\backslash \sigma_1\)中选择包含\(k-\tau\)个节点的另一个序列\(\sigma_2\)。需要注意的是，当我们选择序列\(\sigma_2\)时，我们会假定序列\(\sigma_1\)根本不存在，这确保了最终返回的序列\(\sigma = \sigma_1 \oplus \sigma_2\) 的价值不会集中在\(\sigma_1\)或\(\sigma_2\)中。算法\ref{alg:rosenets}的复杂度为\(O(k|E|)\)，为算法中评估函数$h$值的次数。
 
 \begin{algorithm}[H]
     \caption{鲁棒序列网络子模最大化算法 \label{alg:rosenets}}
@@ -83,14 +83,404 @@
     \end{algorithmic}
 \end{algorithm}
 
-回到图\ref{fig:rose_sample}中的例子。当\(k=5\)且\(\tau=2\)时，鲁棒序列网络子模最大化算法将选择序列\(\sigma_1=\langle A,B \rangle\)和序列\(\sigma_2=\langle C,D,G \rangle\)。在选择\(\sigma_2\)时，算法不会考虑序列\(\sigma_1\)中的元素\(B\)。因此，元素\(E\)和\(F\)被视为对目标函数没有贡献。算法将返回序列\(\sigma=\langle A,B,C,D,G \rangle\)。移除\(\tau=2\)个元素的最坏情况是移除\(B\)和\(\{C,D,G\}\)中的任意一个元素。剩余价值为0.5。而序列贪心函数得到的结果最坏情况的剩余价值为0。这个例子展现了鲁棒序列网络子模最大化算法的差异与优势。
+回到图\ref{fig:rose_sample}中的例子。当\(k=5\)且\(\tau=2\)时，鲁棒序列网络子模最大化算法将选择序列\(\sigma_1=\langle A,B \rangle\)和序列\(\sigma_2=\langle C,D,G \rangle\)。在选择\(\sigma_2\)时，算法不会考虑序列\(\sigma_1\)中的节点\(B\)。因此，节点\(E\)和\(F\)被视为对目标函数没有贡献。算法将返回序列\(\sigma=\langle A,B,C,D,G \rangle\)。移除\(\tau=2\)个节点的最坏情况是移除\(B\)和\(\{C,D,G\}\)中的任意一个节点。剩余价值为0.5。而序列贪心函数得到的结果最坏情况的剩余价值为0。这个例子展现了鲁棒序列网络子模最大化算法的差异与优势。
 
-一个鲁棒的序列应具有复杂的网络结构，其价值不应集中于少数中心元素，而应来源于序列中所有元素之间的边。要选择这样的鲁棒序列，需要进行多次相互独立的贪心选择尝试。这种方法可以避免单一贪心选择可能导致的问题，即高概率选中中心元素及其高边权邻居（如图\ref{fig:rose_sample}中的节点$B$），从而使得移除这些节点导致整体价值急剧下降。本文通过两次独立的贪心选择来实现这一策略。理论上，增加贪心选择的次数可能会提高算法的近似比。然而，考虑到这是鲁棒序列网络子模最大化问题研究的初步阶段，且当前的理论分析已相当复杂，我们将多部分选择算法的设计及其近似比分析留作未来研究课题。
-
+一个鲁棒的序列应具有复杂的网络结构，其价值不应集中于少数中心节点，而应来源于序列中所有节点之间的边。要选择这样的鲁棒序列，需要进行多次相互独立的贪心选择尝试。这种方法可以避免单一贪心选择可能导致的问题，即高概率选中中心节点及其高边权邻居（如图\ref{fig:rose_sample}中的节点$B$），从而使得移除这些节点导致整体价值急剧下降。本文通过两次独立的贪心选择来实现这一策略。理论上，增加贪心选择的次数可能会提高算法的近似比。然而，考虑到这是鲁棒序列网络子模最大化问题研究的初步阶段，且当前的理论分析已相当复杂，我们将多部分选择算法的设计及其近似比分析留作未来研究课题。
 
 \section{近似性分析}
 
+令 $\alpha=2 d_{\text{in}}+1$，$\beta=1+d_{\text{in}}+d_{\text{out}}$，$\gamma=e^{\frac{k-3}{k-2}}$，$\eta=e^{\frac{k-2\tau-1}{k-\tau-1}}$。其中，$d_{\text{in}}$ 和 $d_{\text{out}}$ 分别是网络中节点的最大入度和出度。
+
+为了方便，我们用 $f(v|\sigma)$ 和 $f(\sigma'|\sigma)$ 分别表示将 $v$ 和 $\sigma'$ 添加到序列 $\sigma$ 后的边际增益。用 $\sigma^*(V,k,\tau)$ 表示鲁棒序列网络子模最大化问题的最优解，其中 $V$ 是节点集，$k$ 是选择序列的长度，$\tau$ 是鲁棒参数。$g_\tau(\sigma)$ 表示从序列 $\sigma$ 中移除 $\tau$ 个节点后 $f(\sigma)$ 的最小值（即最差情况）。
+
+\begin{theorem}
+\label{thm:tau1}
+当 $\tau=1$ 时，鲁棒序列网络子模最大化算法的近似比可以达到
+\begin{equation}
+\max\{\frac{1-e^{-(1-1/k)}}{\alpha\beta},\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1}\}\end{equation}
+\end{theorem}
+
+\begin{theorem}
+\label{thm:tau2}
+当 $1\le \tau \le k$时, 鲁棒序列网络子模最大化算法的近似比可以达到
+\begin{equation}
+ \max\{\frac{1-e^{-(1-1/k)}}{\alpha\beta},\frac{\tau\alpha\beta(\eta^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha\eta^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-(1-1/k)}) }\}    
+\end{equation}
+\end{theorem}
+
+在定理\ref{thm:tau1}中，由于两个近似比下限的数学表达式较为复杂，很难直接进行比较。因此，我们考虑特定的情况来展示这两项的大小关系。
+
+首先，很容易验证这两项都是关于 $k$ 的单调递增函数。当 $k=3$ 时，我们有 $\frac{1-e^{-(1-1/k)}}{\alpha\beta}-\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1} = \frac{1-e^{-2/3}}{\alpha \beta}>0$。因此，我们知道当 $k$ 较小时，第一项更大。当 $k \to \infty$ 时，第一项的极限值为 $(1-1/e)/\alpha\beta$，第二项的极限值为 $\frac{e^{\frac{1}{d_{\text{in}}}}-1}{\beta e^{\frac{1}{d_{\text{in}}}}-1}$。当 $d_{\text{in}}=1$ 时，$\alpha=3$，且 $(1-1/e)/\alpha\beta-\frac{e^{\frac{1}{d_{\text{in}}}}-1}{\beta e^{\frac{1}{d_{\text{in}}}}-1} =(1-1/e)/3\beta-\frac{e-1}{\beta e-1}=\frac{-1-2\beta e +\frac{1}{e}+2\beta}{3\beta(\beta e-1)}<0$。在这种情况下，定理\ref{thm:tau1}中的第二项大于第一项。因此，我们可以得出，在特定的网络结构下以及 $k$ 较大时，第二项会更大。
+
+类似地，对于定理\ref{thm:tau2}，当 $k=3$ 且 $\tau=1$ 时，$\frac{1-e^{-(1-1/k)}}{\alpha\beta}-\frac{\tau\alpha\beta(\eta^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha\eta^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-(1-1/k)})} = \frac{1-e^{-2/3}}{\alpha \beta}>0$。因此，我们知道当 $k$ 和 $\tau$ 较小时，第一项更大。当 $k \to \infty$ 而 $\tau$ 保持常数时，第一项的极限值为 $(1-1/e)/\alpha\beta$，第二项的极限值为 $\frac{\tau\alpha\beta(e^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha e^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-1}) }$。当 $d_{\text{in}}=1$ 且 $d_{\text{out}}<\frac{3\tau e^2}{e-1}-2$ 时，则 $\alpha=3$，$\beta < \frac{3\tau e^2}{e-1}$，且 $(1-1/e)/\alpha\beta-\frac{\tau\alpha\beta(e^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha e^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-1}) } = \frac{(1-\frac{1}{e})(3\tau e -\beta(1-\frac{1}{e}))-9\beta^2 \tau(e-1)}{3\beta(3\tau e -\beta(1-\frac{1}{e}))}<0$。在这种情况下，定理\ref{thm:tau2}中的第二项大于第一项。因此，我们可以得出，在特定的网络结构以及 $k$ 较大时，第二项会更大。
+
+根据上述分析，可知 $k$ 和 $\tau$ 的值以及网络拓扑结构，都对近似比产生显著影响。进一步探究参数变化和网络拓扑结构改变时近似比的动态变化规律，也是一个有趣的未来研究方向。
+
+接下来证明定理\ref{thm:tau1}和定理\ref{thm:tau2}，我们需要以下三个引理辅助证明。
+
+\begin{lemma}
+\label{lem:lem1}
+对于序列$\sigma_1$和$\sigma_2$,存在一个节点$v$满足 $f(v|\sigma_1) \ge \frac{1}{d_{\text{in}}|\sigma_2|} f(\sigma_2|\sigma_1)$。
+\end{lemma}
+
+证明：
+定义 $E_1=E(\sigma_1)$ and $E_2=E(\sigma_2 \oplus \sigma_1)-E(\sigma_1)$。$E^{[i,j]}$ 代表$E$中第$i$到第$j$条边的集合。
+\begin{align}
+    f(\sigma_2|\sigma_1) & = f(\sigma_2 \oplus \sigma_1) - f(\sigma_1) = h(E(\sigma_2 \oplus \sigma_1)) - h(E(\sigma_1)) \\
+    & = \sum^{|E_2|}_{j=1} h(E_1 \cup E_2^{[1,j]}) - h(E_1 \cup E_2^{[1,j-1]}) = \sum_{j=1}^{|E_2|} h(E_2^{[j,j]} | E_1 \cup E_2^{[1,j-1]})
+\end{align}
+那么必然有一个满足$1\le j' \le |E_2|$的$j'$，使得
+\begin{equation}
+    h(E_2^{[j',j']} | E_1 \oplus E_2^{[1,j'-1]}) \ge \frac{h(E(\sigma_2 \oplus \sigma_1)) - h(E(\sigma_1))}{|E_2|}   
+\end{equation}
+
+由函数$h$的子模性，有
+\begin{equation}
+h(E_2^{[j',j']} | E_1) \ge h(E_2^{[j',j']} | E_1 \oplus E_2^{[1,j'-1]}) \ge \frac{1}{|E_2|}(h(E(\sigma_2 \oplus \sigma_1)) - h(E(\sigma_1)))
+\end{equation}
+
+那么必然存在某条边$e$和某个节点$v$使得
+\begin{equation}
+h(e|E_1) \ge \frac{1}{|E_2|}f(\sigma_2|\sigma_1) \Longrightarrow
+f(v|\sigma_1) \ge \frac{1}{d_{\text{in}}|\sigma_2|}f(\sigma_2|\sigma_1)
+\end{equation}
+
+证明完毕。
+
+\begin{lemma}
+\label{lem:lem2}
+对于任意的 $c \in (0,1]$ 和 $1 \le k' \le k$，假设序列贪心算法选择的序列为 $\sigma$，且 $|\sigma| = k$，并且存在一个序列 $\sigma'$，其中 $|\sigma'| = k-k'$，使得 $\sigma' \subseteq \sigma$ 且 $f(\sigma') \ge c f(\sigma)$，则有
+\begin{equation}
+ f(\sigma) \ge \frac{e^{\frac{k'}{d_{\text{in}}k}}-1} {e^{\frac{k'}{d_{\text{in}}k}}-c} f(\sigma^*(V,k,0))
+\end{equation}
+\end{lemma}
+
+证明：
+令 $v_2^i$ 表示序列 $\sigma_2$ 中的第 $i$ 个顶点。令 $\sigma_2^i$ 表示由序列 $\sigma_2$ 的前 $i$ 个顶点组成的序列。我们可以合理假设 $|\sigma^*(V,k,0)|=k$。
+
+\begin{align}
+f(\sigma_1 \oplus \sigma_2^i) &- f(\sigma_1 \oplus \sigma_2^{i-1}) = f(v_2^i|\sigma_1 \oplus \sigma_2^{i-1}) \ge h(e_2^i|E(\sigma_1 \oplus \sigma_2^{i-1})) \label{equ:lem2_line1}\\
+& \ge \frac{1}{d_{\text{in}}k} (h(E(\sigma^*(V,k,0)) \cup E(\sigma_1 \oplus \sigma_2^{i-1})) -h(E(\sigma_1 \oplus \sigma_2^{i-1}))) \label{equ:lem2_line2}\\
+& = \frac{1}{d_{\text{in}}k} f(\sigma^*(V,k,0)|\sigma_1 \oplus \sigma_2^{i-1}) \ge \frac{1}{d_{\text{in}}k} (f(\sigma^*(V,k,0) - f(\sigma_1 \oplus \sigma_2^{i-1}))) \label{equ:lem2_line3}
+\end{align}
+
+其中，$e_2^i$ 是算法使 $v_2^i$ 被添加到序列中的那条边。不等式\ref{equ:lem2_line1}成立是基于函数$h$的单调性。不等式\ref{equ:lem2_line2}成立是由于序列贪心算法每次都会选择边际收益最大的边以及将 $\sigma^*(V,k,0)$ 添加到 $\sigma_1 \oplus \sigma_2^{i-1}$ 中最只可能增加 $d_{\text{in}}k$ 条边。不等式\ref{equ:lem2_line3}成立则是基于函数$f$的单调性。
+
+整理上式得
+\begin{equation}
+    f(\sigma_1 \oplus \sigma_2^i) \ge \frac{1}{d_{\text{in}}k} f(\sigma^*(V,k,0) + (1-\frac{1}{d_{\text{in}}k}) f(\sigma_1 \oplus \sigma_2^{i-1}))
+\end{equation}
+
+分别令$i= 1,2,...,k'$，叠加得
+\begin{align}
+    f(\sigma_1 \oplus \sigma_2^{k'}) &\ge \sum_{j=0}^{k'-1}\frac{1}{d_{\text{in}}k}(1-\frac{1}{d_{\text{in}}k})^j f(\sigma^*(V,k,0)) + (1-\frac{1}{d_{\text{in}}k})^{k'} f(\sigma_1) \\
+    =& (1-(1- \frac{1}{d_{\text{in}}k})^{k'})f(\sigma^*(V,k,0)) + (1-\frac{1}{d_{\text{in}}k})^{k'} f(\sigma_1)
+\end{align}
+
+则有
+\begin{align}
+    f(\sigma_2 | \sigma_1) = f(\sigma_1 \oplus \sigma_2^{k'}) - f(\sigma_1) & \ge (1-(1- \frac{1}{d_{\text{in}}k})^{k'})(f(\sigma^*(V,k,0)) - f(\sigma_1)) \\
+    & \ge (1-1/e^{\frac{k'}{d_{\text{in}}k}})(f(\sigma^*(V,k,0)) - f(\sigma_1))
+\end{align}
+
+令 $\delta = f(\sigma) /f(\sigma^*(V,k,0))$， 则有
+\begin{align}
+\small
+\delta f(\sigma^*(V,k,0)) &= f(\sigma) = f(\sigma_1)+f(\sigma_2|\sigma_1) \\ &\ge f(\sigma_1) + (1-1/e^{\frac{k'}{d_{\text{in}}k}})(f(\sigma^*(V,k,0)) - f(\sigma_1)) \\
+& = (1/e^{\frac{k'}{d_{\text{in}}k}}) f(\sigma_1) + (1-1/e^{\frac{k'}{d_{\text{in}}k}})f(\sigma^*(V,k,0)) \\ &\ge \frac{c\delta}{e^{\frac{k'}{d_{\text{in}}k}}} f(\sigma^*(V,k,0)) + (1-\frac{1}{e^{\frac{k'}{d_{\text{in}}k}}})f(\sigma^*(V,k,0))
+\end{align}
+
+整理得
+
+\begin{equation}
+\delta \ge (c\cdot \delta/e^{\frac{k'}{d_{\text{in}}k}}) + (1-1/e^{\frac{k'}{d_{\text{in}}k}}) \Longrightarrow
+\delta \ge \frac{e^{\frac{k'}{d_{\text{in}}k}}-1}{e^{\frac{k'}{d_{\text{in}}k}}-c}
+\end{equation}
+
+证明完毕。
+
+\begin{lemma}
+\label{lem:lem3}
+对于 $1 \le \tau \le k$的整数$\tau$，任意满足 $|Z| \le \tau$ 的集合 $Z \subseteq V$，以下不等式成立：
+\begin{equation}
+g_\tau (\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))
+\end{equation}
+
+\end{lemma}
+
+证明：
+
+令 $Z_{\tau}(\sigma)$ 为使 $g_{\tau}(\sigma)$ 最小化的集合。我们可以合理假设 $|Z_{\tau}(\sigma)|=\tau$。
+
+令 $\mathcal{U}=V(\sigma^*(V,k,\tau)) \cap Z$ 且 $\tau'=|\mathcal{U}|$。显然，$\mathcal{U}\subseteq V(\sigma^*(V,k,\tau))$。且有
+\begin{equation}
+\mathcal{U} \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau)-\mathcal{U}) \subseteq V(\sigma^*(V,k,\tau)) 
+\end{equation}
+\begin{equation}
+|\mathcal{U} \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau)-\mathcal{U})| =\tau
+\end{equation}
+
+因此，集合 $\mathcal{U} \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau)-\mathcal{U})$ 是在 $\sigma^*$ 和 $\tau$ 条件下最小化函数 $g_\tau(\sigma)$ 的一个可行解。那么有
+\begin{equation}
+    f(\sigma^*(V,k,\tau) -Z_\tau(\sigma^*(V,k,\tau))) \le f(\sigma^*(V,k,\tau) - \mathcal{U} \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau)-\mathcal{U}))
+\end{equation}
+
+此外，$\sigma^*(V,k,\tau)-\mathcal{U} = \sigma^*(V,k,\tau) - Z$，可得
+\begin{equation}
+Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - \mathcal{U}) = Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)
+\end{equation}
+
+因为$Z-\mathcal{U}$ 中的元素不在 $\sigma^*(V,k,\tau)$ 中，所以我们有
+\begin{equation}
+    f( \sigma^*(V,k,\tau) - \mathcal{U} \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - \mathcal{U}) ) = f( \sigma^*(V,k,\tau) - Z \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)
+\end{equation}
+
+注意序列 $\sigma^*(V,k,\tau) - Z$ 不包含 $Z$ 中的任何元素，并且有 $k-\tau'$ 个元素。它是在 $V-Z,k-\tau'$ 和 $\tau-\tau'$ 条件下最小化函数 $g_\tau(\sigma)$ 的一个可行解。因此我们有
+\begin{equation}
+g_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)  \le g_{\tau-\tau'}(\sigma^*(V-Z,k-\tau',\tau-\tau')) \le f(\sigma^*(V-Z,k-\tau,0))
+\end{equation}
+\begin{align}
+    g_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z) & = f((\sigma^*(V,k,\tau) - Z) - Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)) \\
+    & = f(\sigma^*(V,k,\tau) - Z \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)) \\
+    & = f(\sigma^*(V,k,\tau) - \mathcal{U} \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - \mathcal{U})) \\
+    & \ge f(\sigma^*(V,k,\tau) - Z_{\tau}(\sigma^*(V,k,\tau))) = g_{\tau}(\sigma^*(V,k,\tau))
+\end{align}
+
+$g_{\tau}(\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))$得证。
+
+证明完毕。
+
+接下来证明定理\ref{thm:tau1}。
+
+\noindent \textbf{定理\ref{thm:tau1}} 当 $\tau=1$ 时，鲁棒序列网络子模最大化算法的近似比可以达到
+\begin{equation*}
+\max\{\frac{1-e^{-(1-1/k)}}{\alpha\beta},\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1}\}\end{equation*}
+
+证明：
+由于 $\tau=1$，所以算法选择的序列 $\sigma_1$ 只有一个元素。并且我们有 $\sigma_2=k-1$。令 $\sigma_1=\{v_1\}$。那么最终的序列为 $\sigma= \{v_1\} \oplus \sigma_2$。假设从序列中移除的顶点是 $z$。
+
+首先，我们可以给出$f(\sigma_2)$的一个下界：
+\begin{equation}
+    f(\sigma_2)  \ge \frac{1-e^{-(1-1/k)}}{\alpha} f(\sigma^*(V\backslash v_1,k-1,0))
+     \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \label{equ:tau1_line2}
+\end{equation}
+
+不等式\ref{equ:tau1_line2}的第一个不等号成立是由于序列贪心算法在序列网络子模最大化问题上的近似比\cite{mitrovic2018submodularity}。第二个不等号成立是由于引理\ref{lem:lem3}。
+
+被移除的元素 $z$ 可能是 $v_1$ 或者是 $\sigma_2$ 中的一个元素。考虑这两种情况：
+
+\textbf{情况 1.} $z=v_1$。那么我们有
+\begin{equation}
+f(\sigma -z ) = f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
+\end{equation}
+
+\textbf{情况 2.} $z\in \sigma_2$。我们进一步考虑两种情况：
+
+\textbf{情况 2.1.} $f(\sigma_2) \le f(\sigma_2-z)$。
+
+在这种情况下，移除操作不会减少剩余序列 $\sigma_2-\{z\}$ 的整体价值。那么我们有
+\begin{equation}
+    f(\sigma-z)  =f(v_1 \oplus (\sigma_2-z)) \ge f(\sigma_2-z)
+     \ge f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
+\end{equation}
+
+\textbf{情况2.2.} $f(\sigma_2) > f(\sigma_2-z)$。
+定义 $q= \frac{f(\sigma_2)-f(\sigma_2-z)}{(d_{\text{in}}+d_{\text{out}})f(\sigma_2)}$，来表示从序列 $\sigma_2$ 中移除元素 $z$ 的损失与序列 $\sigma_2$ 的价值之比。因为 $f(\sigma_2) > f(\sigma_2-z)$，所以有 $q\in (0,\frac{1}{d_{\text{in}}+d_{\text{out}}}]$。
+
+首先，有
+\begin{align}
+    (d_{\text{in}} +  d_{\text{out}}) q f(\sigma_2)&= f(\sigma_2) - f(\sigma_2-z) \\
+    & = f(\sigma_2^1 \oplus z \oplus \sigma_2^2) - f(\sigma_2^1 \oplus \sigma_2^2) \\
+    & = f(\sigma_2^1) + f(z|\sigma_2^1)+f(\sigma_2^2| (\sigma_2^1\oplus z)) - f(\sigma_2^1) -f(\sigma_2^2|\sigma_2^1) \\
+    & = f(z|\sigma_2^1)+f(\sigma_2^2| (\sigma_2^1\oplus z)) - f(\sigma_2^2|\sigma_2^1) \\
+    & \le d_{\text{in}} h(e_z^{\text{in}}) + d_{\text{out}} h(e_z^{\text{out}}) \label{equ:tau1_line3}\\
+    & \le (d_{\text{in}} + d_{\text{out}}) \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \label{equ:tau1_line4}
+\end{align}
+\noindent 其中 $h(e_z^{\text{in}})$/$h(e_z^{\text{out}})$ 是 $z$ 的所有入边/出边中具有最大价值的边。不等式\ref{equ:tau1_line3}是由于顶点 $z$ 对前面和后续序列的边际增益最多为 $d_{\text{in}} h(e_z^{\text{in}})$ 和 $d_{\text{out}} h(e_z^{\text{out}})$。不等式\ref{equ:tau1_line4}成立较为显然。
+
+首先，假设 $\sigma_2$ 的第一个顶点是 $v_2$。根据函数 $f(\cdot)$ 的单调性和式\ref{equ:tau1_line4}，我们有
+\begin{align}
+    f(\sigma-\{z\}) & \ge f(v_1 \oplus v_2) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\sigma_2) \\
+    f(\sigma-\{z\}) & = f(v_1 \oplus (\sigma_2-z)) \ge f(\sigma_2 -z) \ge (1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)
+\end{align}
+
+则有式
+\begin{equation}
+    f(\sigma-z)\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \label{equ:tau1_ine1}
+\end{equation}
+
+对于 $x\in (0,\frac{1}{b}]$ 和 $b>0$，有 $\max\{x,1-bx\} \ge \frac{1}{1+b}$。因此，我们得到下式：
+\begin{equation}
+    \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \ge 1/\beta
+\end{equation}
+
+$\sigma_2$ 中的前两个元素 $v_2$ 和 $v_3$ 满足：
+\begin{equation}
+f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\sigma_2) \label{equ:tau1_ine2}
+\end{equation}
+
+则通过替换引理\ref{lem:lem2}和引理\ref{lem:lem3}中的参数，我们得到以下结果:
+
+\begin{equation}
+    f(\sigma_2) \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} f(\sigma^*(V\backslash v_1,k-\tau,0)) \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} g_{\tau} (\sigma^*(V,k,\tau)) \label{equ:tau1_ine3}
+\end{equation}
+
+定义 $\ell_1(q) = q \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q}$ 和 $\ell_2(q) = (1-(d_{\text{in}} + d_{\text{out}})q) \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1}$。
+
+容易验证，对于 $k\ge 3$ 且 $q\in (0,\frac{1}{d_{\text{in}}+d_{\text{out}}}]$，$\ell_1(q)$ 单调递增，而 $\ell_2(q)$ 单调递减。当 $q=\frac{1}{\beta}$ 时，$\ell_1(q)=\ell_2(q)=\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1}$。
+
+我们考虑 $q$ 的两种情况：
+
+(1) 当 $q \in (0,\frac{1}{\beta}]$ 时，由于 $\ell_2(q)$ 单调递减，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_2(\frac{1}{\beta})$；
+
+(2) 当 $q \in (\frac{1}{\beta},\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，由于 $\ell_1(q)$ 单调递增，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_1(\frac{1}{\beta})$。
+
+因此，得到如下不等式：
+\begin{equation}
+    \max\{ q \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} \} \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1} \label{equ:tau1_ine4}    
+\end{equation}
+
+结合不等式\ref{equ:tau1_line2}、不等式\ref{equ:tau1_ine1} 和不等式\ref{equ:tau1_ine2}，我们可以得到定理\ref{thm:tau1} 中的第一个下界：
+
+\begin{align}
+    f(\sigma -z ) \ge & \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)\} \\
+    \ge & \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \\
+    \ge & \frac{1-e^{-(1-1/k)}}{\alpha\beta} g_\tau(\sigma^*(V,k,\tau))
+\end{align}
+
+结合不等式\ref{equ:tau1_ine1}、不等式\ref{equ:tau1_ine3} 和不等式\ref{equ:tau1_ine4}，我们可以得到定理\ref{thm:tau1} 中的第二个下界：
+
+\begin{align}
+     f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
+    & \ge \max\{ q \cdot \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} \} g_\tau(\sigma^*(V,k,\tau)) \\
+    & \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1} g_\tau(\sigma^*(V,k,\tau))
+\end{align}
+
+证明完毕。
+
+
+接下来证明定理\ref{thm:tau2}。
+
+\noindent \textbf{定理3.2} 当 $1\le \tau \le k$时, 鲁棒序列网络子模最大化算法的近似比可以达到
+\begin{equation*}
+ \max\{\frac{1-e^{-(1-1/k)}}{\alpha\beta},\frac{\tau\alpha\beta(\eta^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha\eta^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-(1-1/k)}) }\}   
+\end{equation*}
+
+证明：
+证明过程与定理\ref{thm:tau1}的证明过程类似。
+在执行鲁棒序列网络子模最大化算法后，选定的序列为 $\sigma=\sigma_1 \oplus \sigma_2$，其中 $|\sigma_1|=\tau$ ， $|\sigma_2|=k-\tau$。定义 $Z_{\tau} = Z_{\tau}^1 \cup Z_{\tau}^2$ 为能最小化 $f(\sigma-Z_{\tau})$ 的被移除节点集，其中 $Z_{\tau}^1 = Z_{\tau} \cap \sigma_1$ 且 $Z_{\tau}^2 = Z_{\tau} \cap \sigma_2$。
+
+首先，我们给出 $f(\sigma_2)$ 的一个下界：
+\begin{equation}
+    f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} f(\sigma^*(V\backslash \sigma_1,k-\tau,0)) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \label{equ:tau2_line1}
+\end{equation}
+
+对于移除的元素，考虑两种情况：
+
+\textbf{情况1.} $Z^2_{\tau}=\emptyset$，也就是被移除的顶点都在 $\sigma_1$ 中。因此有
+\begin{equation}
+    f(\sigma-Z_\tau(\sigma))=f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
+\end{equation}
+
+\textbf{情况2.} $Z^2_{\tau} \neq \emptyset$，我们进一步考虑两种情况：
+
+\textbf{情况2.1.} $f(\sigma_2) \le f(\sigma_2 - Z^2_\tau(\sigma))$。
+
+在这种情况下，移除 $Z^2_\tau(\sigma)$ 中的节点不会减少剩余序列的总体价值。那么我们有
+
+\begin{align}
+f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \\
+& \ge f(\sigma_2 -Z_\tau^2(\sigma)) \ge f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
+\end{align}
+
+\textbf{情况2.2.}  $f(\sigma_2) \ge f(\sigma_2 - Z^2_\tau(\sigma))$。
+
+令 $\tau_1 = |Z_\tau^1(\sigma)|$ 且 $\tau_2=|Z_\tau^2(\sigma)|$。那么我们有 $\tau=\tau_1+\tau_2$ 以及 $k=|\sigma|=|\sigma_1|+|\sigma_2|\ge \tau+\tau_2$。
+
+令 $q= \frac{f(\sigma_2)-f(\sigma_2-Z_\tau^2(\sigma))}{(d_{\text{in}}+d_{\text{out}})f(\sigma_2)}$，表示从序列 $\sigma_2$ 中移除 $Z_\tau^2(\sigma)$ 中元素所造成的损失与序列 $\sigma_2$ 的价值之比。则有 $q\in (0,\frac{1}{(d_{\text{in}}+d_{\text{out}})}]$，因为 $f(\sigma_2) > f(\sigma_2-Z_\tau^2(\sigma))$。
+
+假设 $Z^2_\tau(\sigma)$ 中的元素根据它们在序列 $\sigma_2$ 中的顺序被表示为 $z_1,z_2,...,z_{\tau_2}$。那么我们可以将 $\sigma_2$ 重写为 $\sigma_2=\sigma_2^1\oplus z_1 \oplus \sigma_2^2 \oplus z_2 \oplus ... \oplus \sigma_2^{\tau_2+1}$，其中 $\sigma_2^i$ 是位于元素 $z_{i-1}$ 和 $z_i$ 之间的子序列，对于 $i=1,2,...,\tau_2+1$，而 $z_0$ 和 $z_{\tau_2+1}$ 是空序列。需要注意对于任意 $i$，$\sigma_2^i$ 可以是空序列。然后我们有
+\begin{align}
+(d_{\text{in}} & + d_{\text{out}}) q f(\sigma_2) = f(\sigma_2) - f(\sigma_2-Z_\tau^2(\sigma)) \\
+& = f(\sigma_2^1) + f(z_1|\sigma_2^1)+f(\sigma_2^2| \sigma_2^1\oplus z_1) + ... + f(\sigma_2^{\tau_2+1}| \sigma_2^1\oplus z_1 \oplus ... \oplus \sigma_2^{\tau_2})\\
+& \quad - f(\sigma_2^1) -f(\sigma_2^2|\sigma_2^1) - ... - f(\sigma_2^{\tau_2+1}| \sigma_2^1\oplus ... \oplus \sigma_2^{\tau_2}) \\
+& = \sum_{i=1}^{\tau_2} \left( f(z_i|\sigma_2^1\oplus z_1 \oplus ... \oplus z_{i-1}\oplus \sigma_2^i)+f(\sigma_2^{i+1}|\sigma_2^i\oplus z_i) - f(\sigma_2^{i+1}|\sigma_2^i) \right)\\
+& \le \tau_2 d_{\text{in}} h(e_z^{\text{in}}) + \tau_2 d_{\text{out}} h(e_z^{\text{out}}) \\
+& \le \tau_2(d_{\text{in}} + d_{\text{out}}) \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \\
+& \le \tau_2(d_{\text{in}} + d_{\text{out}}) f(Z_\tau^2)
+\end{align}
+\noindent 其中 $d_{\text{in}}$/$d_{\text{out}}$ 是网络的最大入度/出度，$h(e_z^{\text{in}})$/$h(e_z^{\text{out}})$ 是在所有被移除节点 $\{z_i\}_{i=1,2,...,\tau_2}$ 的所有入边/出边中具有最大价值的边。第一个不等式是由于顶点 $z$ 对前缀和后续序列的边际增益最多为 $d_{\text{in}} h(e_z^{\text{in}})$ 和 $d_{\text{out}} h(e_z^{\text{out}})$。后两个不等式成立比较显然。
+
+根据函数 $f(\cdot)$ 的单调性和上述不等式，我们有
+\begin{align}
+f(\sigma- Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \\ &\ge f(\sigma_1 - Z_\tau^1(\sigma)) = f(\sigma_1^{\tau_2}) \ge \tau_2 \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\sigma_2) \\
+f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \ge f(\sigma_2 -Z_\tau^2(\sigma)) \ge (1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)
+\end{align}
+
+则有不等式：
+\begin{equation}
+f(\sigma-z)\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \label{equ:tau2_ine1}
+\end{equation}
+
+与定理\ref{thm:tau1}的证明类似，接下来有不等式：
+\begin{equation}
+    \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \ge 1/\beta
+\end{equation}
+
+用 $\sigma_2^{\tau_2}$ 表示由序列 $\sigma_2$ 的前 $\tau_2$ 个元素组成的序列。那么我们有
+\begin{equation}
+f(\sigma_2^{\tau_2}) \ge \frac{1-e^{-(1-1/k)}}{\alpha} f(\sigma^*(V\backslash \sigma_1,\tau_2,0)) \ge  \frac{1-e^{-(1-1/k)}}{\alpha} f(Z_\tau^2(\sigma)) \ge q \frac{1-e^{-(1-1/k)}}{\tau_2 \alpha} f(\sigma_2)
+\end{equation}
+
+则有不等式：
+\begin{equation}
+f(\sigma_2) \ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } f(\sigma^*(V\backslash \sigma_1,k-\tau,0)) \ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } g_\tau(\sigma^*(V,k,\tau)) \label{equ:tau2_ine3}
+\end{equation}
+
+定义 $\ell_1(q) = q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
+{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} }$ 和 $\ell_2(q) = (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
+{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} }$。
+
+容易验证，当 $k\ge 3$ 且 $q\in (0,\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，$\ell_1(q)$ 单调递增，而 $\ell_2(q)$ 单调递减。当 $q=\frac{1}{\beta}$ 时，$\ell_1(q)=\ell_2(q)=\frac{\beta(e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1)}{e^{\frac{k-\tau-\tau_2-1}
+{d_{\text{in}}(k-\tau_2-1)}}-\beta \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} }$。
+
+我们考虑 $q$ 的两种情况：
+
+(1) 当 $q \in (0,\frac{1}{\beta}]$ 时，由于 $\ell_2(q)$ 单调递减，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_2(\frac{1}{\beta})$；
+
+(2) 当 $q \in (\frac{1}{\beta},\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，由于 $\ell_1(q)$ 单调递增，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_1(\frac{1}{\beta})$。
+
+因此，我们得到如下的不等式：
+\begin{equation}
+\max\{ q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
+{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
+{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } \} \ge
+\frac{\beta(e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1)}{e^{\frac{k-\tau-\tau_2-1}
+{d_{\text{in}}(k-\tau_2-1)}}-\beta \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } \label{equ:tau2_ine4}
+\end{equation}
+
+结合不等式\ref{equ:tau2_line1}、不等式\ref{equ:tau2_ine1} 和不等式\ref{equ:tau2_ine2}，我们可以得到定理\ref{thm:tau2} 中的第一个下界：
+\begin{align}
+f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
+& \ge \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \cdot \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \\
+& \ge \frac{1-e^{-(1-1/k)}}{\alpha\beta} g_\tau(\sigma^*(V,k,\tau))
+\end{align}
+
+结合不等式\ref{equ:tau2_ine1}、不等式\ref{equ:tau2_ine3} 和不等式\ref{equ:tau2_ine4}，我们可以得到定理\ref{thm:tau2} 中的第二个下界：
+
+\begin{align}
+f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
+& \ge \max\{ q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}} q \frac{1-e^{-(1-1/k)}}{\alpha} } , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-\tau_2 q \frac{1-e^{-(1-1/k)}}{\alpha} } \} g_\tau(\sigma^*(V,k,\tau)) \\
+& \ge \frac{\beta(e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1)}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- \beta \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } g_\tau(\sigma^*(V,k,\tau))
+\end{align}
+
+由于 $\tau_2 \le \tau$，定理\ref{thm:tau2}成立。
+
+证明完毕。
+
+
 \section{本章小结}
+
 
 \chapter{多轮社交广告序列影响最大化推荐算法}
 
@@ -611,7 +1001,7 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,
 当$i \ne j$且$j>0$时：
 \begin{align}
 \small
-    &H_{i,j}^{\mu}(A,B)-H_{i,j-1}^{\mu}(A,B)\\
+    &H_{i,j}^{\mu}(A,B)-H_{i,j-1}^{\mu}(A,B) \nonumber \\
     &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[(Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}) \\
     &\ \ \ \ + Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})) \\ 
     &\ \ \ \ -\left(Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})+Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})\right)] \\ 
