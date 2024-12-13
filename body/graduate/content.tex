@@ -123,7 +123,8 @@
 对于序列$\sigma_1$和$\sigma_2$,存在一个节点$v$满足 $f(v|\sigma_1) \ge \frac{1}{d_{\text{in}}|\sigma_2|} f(\sigma_2|\sigma_1)$。
 \end{lemma}
 
-证明：
+\noindent 证明：
+
 定义 $E_1=E(\sigma_1)$ and $E_2=E(\sigma_2 \oplus \sigma_1)-E(\sigma_1)$。$E^{[i,j]}$ 代表$E$中第$i$到第$j$条边的集合。
 \begin{align}
     f(\sigma_2|\sigma_1) & = f(\sigma_2 \oplus \sigma_1) - f(\sigma_1) = h(E(\sigma_2 \oplus \sigma_1)) - h(E(\sigma_1)) \\
@@ -145,7 +146,7 @@ h(e|E_1) \ge \frac{1}{|E_2|}f(\sigma_2|\sigma_1) \Longrightarrow
 f(v|\sigma_1) \ge \frac{1}{d_{\text{in}}|\sigma_2|}f(\sigma_2|\sigma_1)
 \end{equation}
 
-证明完毕。
+\noindent 证明完毕。
 
 \begin{lemma}
 \label{lem:lem2}
@@ -155,7 +156,7 @@ f(v|\sigma_1) \ge \frac{1}{d_{\text{in}}|\sigma_2|}f(\sigma_2|\sigma_1)
 \end{equation}
 \end{lemma}
 
-证明：
+\noindent 证明：
 令 $v_2^i$ 表示序列 $\sigma_2$ 中的第 $i$ 个顶点。令 $\sigma_2^i$ 表示由序列 $\sigma_2$ 的前 $i$ 个顶点组成的序列。我们可以合理假设 $|\sigma^*(V,k,0)|=k$。
 
 \begin{align}
@@ -197,7 +198,7 @@ f(\sigma_1 \oplus \sigma_2^i) &- f(\sigma_1 \oplus \sigma_2^{i-1}) = f(v_2^i|\si
 \delta \ge \frac{e^{\frac{k'}{d_{\text{in}}k}}-1}{e^{\frac{k'}{d_{\text{in}}k}}-c}
 \end{equation}
 
-证明完毕。
+\noindent 证明完毕。
 
 \begin{lemma}
 \label{lem:lem3}
@@ -208,7 +209,7 @@ g_\tau (\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))
 
 \end{lemma}
 
-证明：
+\noindent 证明：
 
 令 $Z_{\tau}(\sigma)$ 为使 $g_{\tau}(\sigma)$ 最小化的集合。我们可以合理假设 $|Z_{\tau}(\sigma)|=\tau$。
 
@@ -248,7 +249,7 @@ g_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)  \le g_{\tau-\tau'}(\sigma^*(V-Z,k-\tau',
 
 $g_{\tau}(\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))$得证。
 
-证明完毕。
+\noindent 证明完毕。
 
 接下来证明定理\ref{thm:tau1}。
 
@@ -256,7 +257,7 @@ $g_{\tau}(\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))$得证。
 \begin{equation*}
 \max\{\frac{1-e^{-(1-1/k)}}{\alpha\beta},\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1}\}\end{equation*}
 
-证明：
+\noindent 证明：
 由于 $\tau=1$，所以算法选择的序列 $\sigma_1$ 只有一个元素。并且我们有 $\sigma_2=k-1$。令 $\sigma_1=\{v_1\}$。那么最终的序列为 $\sigma= \{v_1\} \oplus \sigma_2$。假设从序列中移除的顶点是 $z$。
 
 首先，我们可以给出$f(\sigma_2)$的一个下界：
@@ -341,7 +342,6 @@ f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\si
 \end{equation}
 
 结合不等式\ref{equ:tau1_line2}、不等式\ref{equ:tau1_ine1} 和不等式\ref{equ:tau1_ine2}，我们可以得到定理\ref{thm:tau1} 中的第一个下界：
-
 \begin{align}
     f(\sigma -z ) \ge & \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)\} \\
     \ge & \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \\
@@ -349,14 +349,13 @@ f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\si
 \end{align}
 
 结合不等式\ref{equ:tau1_ine1}、不等式\ref{equ:tau1_ine3} 和不等式\ref{equ:tau1_ine4}，我们可以得到定理\ref{thm:tau1} 中的第二个下界：
-
 \begin{align}
      f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
     & \ge \max\{ q \cdot \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} \} g_\tau(\sigma^*(V,k,\tau)) \\
     & \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1} g_\tau(\sigma^*(V,k,\tau))
 \end{align}
 
-证明完毕。
+\noindent 证明完毕。
 
 
 接下来证明定理\ref{thm:tau2}。
@@ -366,7 +365,7 @@ f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\si
  \max\{\frac{1-e^{-(1-1/k)}}{\alpha\beta},\frac{\tau\alpha\beta(\eta^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha\eta^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-(1-1/k)}) }\}   
 \end{equation*}
 
-证明：
+\noindent 证明：
 证明过程与定理\ref{thm:tau1}的证明过程类似。
 在执行鲁棒序列网络子模最大化算法后，选定的序列为 $\sigma=\sigma_1 \oplus \sigma_2$，其中 $|\sigma_1|=\tau$ ， $|\sigma_2|=k-\tau$。定义 $Z_{\tau} = Z_{\tau}^1 \cup Z_{\tau}^2$ 为能最小化 $f(\sigma-Z_{\tau})$ 的被移除节点集，其中 $Z_{\tau}^1 = Z_{\tau} \cap \sigma_1$ 且 $Z_{\tau}^2 = Z_{\tau} \cap \sigma_2$。
 
@@ -402,7 +401,7 @@ f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - 
 假设 $Z^2_\tau(\sigma)$ 中的元素根据它们在序列 $\sigma_2$ 中的顺序被表示为 $z_1,z_2,...,z_{\tau_2}$。那么我们可以将 $\sigma_2$ 重写为 $\sigma_2=\sigma_2^1\oplus z_1 \oplus \sigma_2^2 \oplus z_2 \oplus ... \oplus \sigma_2^{\tau_2+1}$，其中 $\sigma_2^i$ 是位于元素 $z_{i-1}$ 和 $z_i$ 之间的子序列，对于 $i=1,2,...,\tau_2+1$，而 $z_0$ 和 $z_{\tau_2+1}$ 是空序列。需要注意对于任意 $i$，$\sigma_2^i$ 可以是空序列。然后我们有
 \begin{align}
 (d_{\text{in}} & + d_{\text{out}}) q f(\sigma_2) = f(\sigma_2) - f(\sigma_2-Z_\tau^2(\sigma)) \\
-& = f(\sigma_2^1) + f(z_1|\sigma_2^1)+f(\sigma_2^2| \sigma_2^1\oplus z_1) + ... + f(\sigma_2^{\tau_2+1}| \sigma_2^1\oplus z_1 \oplus ... \oplus \sigma_2^{\tau_2})\\
+& = f(\sigma_2^1) + f(z_1|\sigma_2^1)+f(\sigma_2^2| \sigma_2^1\oplus z_1) + ... + f(\sigma_2^{\tau_2+1}| \sigma_2^1\oplus z_1 \oplus ... \oplus \sigma_2^{\tau_2}) \nonumber \\
 & \quad - f(\sigma_2^1) -f(\sigma_2^2|\sigma_2^1) - ... - f(\sigma_2^{\tau_2+1}| \sigma_2^1\oplus ... \oplus \sigma_2^{\tau_2}) \\
 & = \sum_{i=1}^{\tau_2} \left( f(z_i|\sigma_2^1\oplus z_1 \oplus ... \oplus z_{i-1}\oplus \sigma_2^i)+f(\sigma_2^{i+1}|\sigma_2^i\oplus z_i) - f(\sigma_2^{i+1}|\sigma_2^i) \right)\\
 & \le \tau_2 d_{\text{in}} h(e_z^{\text{in}}) + \tau_2 d_{\text{out}} h(e_z^{\text{out}}) \\
@@ -476,7 +475,7 @@ f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}
 
 由于 $\tau_2 \le \tau$，定理\ref{thm:tau2}成立。
 
-证明完毕。
+\noindent 证明完毕。
 
 
 \section{本章小结}
@@ -584,9 +583,11 @@ p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\
     \ENDFOR
     \end{algorithmic}
 \end{algorithm}
-证明:我们的算法可以看成对每个时间轮$t$，都贪心的选择一个的$\sigma_t$来最大化$\rho(\{\sigma_1\}\cup \{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}\cup\{\sigma_t\})-\rho(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\})$。每一轮内部再每次选择边际收益最大的边加入进来最终形成$\sigma_t$。由于$h$是单调子模的，那么每一轮内的目标函数$h_t(E')=h(E'|E(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}))$也是单调子模的。对于目标函数为单调子模函数的基于边的贪心算法，Marko Mitrovic等人在\parencite{mitrovic2018submodularity}中证明其近似比至少为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$。
+\noindent 证明:我们的算法可以看成对每个时间轮$t$，都贪心的选择一个的$\sigma_t$来最大化$\rho(\{\sigma_1\}\cup \{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}\cup\{\sigma_t\})-\rho(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\})$。每一轮内部再每次选择边际收益最大的边加入进来最终形成$\sigma_t$。由于$h$是单调子模的，那么每一轮内的目标函数$h_t(E')=h(E'|E(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}))$也是单调子模的。对于目标函数为单调子模函数的基于边的贪心算法，Marko Mitrovic等人在\parencite{mitrovic2018submodularity}中证明其近似比至少为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$。
 
-对于贪心的每一步，如果我们无法找到最优的答案，但是能够找到一个近似比至少为$\alpha$的答案，那么对于一个子模的问题来说，这样的贪心算法也可以达到$1-e^{-\alpha}$的近似比。这个结论在\parencite{mrim}和\parencite{goundan2007revisiting}中都已经被提及并使用，是\parencite{nemhauser1978analysis}中部分结论的延伸。应用该结论即可得到$\rho(\sigma)\ge (1-e^{-(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1})})\rho(\sigma^*)$。证明完毕。
+对于贪心的每一步，如果我们无法找到最优的答案，但是能够找到一个近似比至少为$\alpha$的答案，那么对于一个子模的问题来说，这样的贪心算法也可以达到$1-e^{-\alpha}$的近似比。这个结论在\parencite{mrim}和\parencite{goundan2007revisiting}中都已经被提及并使用，是\parencite{nemhauser1978analysis}中部分结论的延伸。应用该结论即可得到$\rho(\sigma)\ge (1-e^{-(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1})})\rho(\sigma^*)$。
+
+\noindent 证明完毕。
 
 \section{多轮反向影响力采样}
 \label{sec:mrris}
@@ -612,7 +613,7 @@ p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\
 \end{equation}
 
 
-证明：
+\noindent 证明：
 \begin{align}
     \mathbb{E}[\mathbb{I}\{S_v\cap \mathcal{R} \ne \varnothing  \}] &=\sum_{u \in U}\Pr\{ u=root(\mathcal{R})\}\cdot \mathbb{E}[\mathbb{I}\{S_v \cap \mathcal{R}\ne\varnothing \}|u=root(\mathcal{R})] \label{equ:1} \\ 
     &= \frac{1}{n}\sum_{u \in U}\mathbb{E}[\mathbb{I}\{S_v \cap \mathcal{R}_u \ne \varnothing \}] \\ 
@@ -621,7 +622,9 @@ p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\
     &= \frac{1}{n}\mathbb{E}\left[\left|\bigcup_{t=1}^T\Gamma(L_t,S_{v,t})\right|\right] \\ 
     &=\ \frac{1}{n}\cdot f(E(\sigma),v)    
 \end{align}
-其中等式\ref{equ:1}中的$root(\mathcal{R})$代表多轮反向可达集$\mathcal{R}$的初始节点。等式\ref{equ:2}的成立是基于多轮反向可达集和活跃边图的等价性，这里的期望值基于$L_1,L_2,\ldots, L_T$的分布以及$S_{v,1},S_{v,2},\ldots,S_{v,T}$的分布。证明完毕。
+其中等式\ref{equ:1}中的$root(\mathcal{R})$代表多轮反向可达集$\mathcal{R}$的初始节点。等式\ref{equ:2}的成立是基于多轮反向可达集和活跃边图的等价性，这里的期望值基于$L_1,L_2,\ldots, L_T$的分布以及$S_{v,1},S_{v,2},\ldots,S_{v,T}$的分布。
+
+\noindent 证明完毕。
 
 用多轮反向影响力采样方法估计$h$的值的过程如算法\ref{alg:mrris}所示。$S_v$的分布可以通过$p_{u,v,t}$得出。如第\ref{alg:mrrisline1}到\ref{alg:mrrisline2}行所示，对于生成的每一个多轮反向可达集$\mathcal{R}$，可以直接计算出$S_v \cap \mathcal{R} = \empty$的概率，进而得出$S_v \cap \mathcal{R} \neq \empty$的期望。
 
@@ -684,7 +687,7 @@ Tang等人\cite{IMM}使用了鞅论的方法来分析反向可达集估计信息
 \end{equation}
 在算法\ref{alg:mrris}中，我们将使用$LB$作为$h(E')$的一个下界计算$\theta$，并进行$\theta$次反向采样，结合对$S_v$分布的计算，最终有$1-1/n^\ell T$的概率，得出函数$h$的估计值的偏差与真实值相比不超过$\varepsilon$。
 
-证明：
+\noindent 证明：
 
 使用$\mathcal{R}_i(i\in[1,\theta])$代表生成的第$i$个多轮反向可达集，用$x_i=\sum_{v\in V}\mathbb{I}\{S_v\cap\mathcal{R}_i\ne \varnothing  \}\cdot revenue(v)$表示随机变量代表第$i$次采样的结果值。
 
@@ -742,7 +745,7 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 \theta \ge \frac{(2+\frac{2}{3}\varepsilon)(\ell\ln n+ln(2T))}{\varepsilon^2\cdot p}=\frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+ln(2T)) R}{\varepsilon^2f(E')}
 \end{equation}
 
-证明完毕。
+\noindent 证明完毕。
 
 \section{三明治算法}
 \label{sec:sand}
@@ -755,7 +758,7 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 \label{lem:h_mon}
 公式\ref{equ:def_h}中定义的目标函数$h$具有单调性。
 \end{lemma}
-证明：
+\noindent 证明：
 直观上，加入一条边$(v_1,v_2,t_0)$后，只会改变第$t_0$轮中广告$v_2$被$U_S$中的用户接受的概率，而且边的作用只会使该广告被接受的概率增加，至少不会减少，并且不会对其他广告的接受程度产生影响。$U_S$中用户的更愿意接受$v_2$并分享出去，更有可能被更多的人看到，至少不会使平台的收益降低。因此函数$h$显然是单调的，具体理论证明如下：
 
 令$\mathcal{U}=U_S \times T$，$\mathcal{W}=W \times T$。
@@ -780,11 +783,11 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 \begin{align}
 \small
     &p_{u,v_2,t_0}'-p_{u,v_2,t_0}\\
-    &= w(u,(v_1,v_2))\cdot w(u,(v_2,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \\
+    &= w(u,(v_1,v_2))\cdot w(u,(v_2,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \nonumber \\
     &+ \sum_{(v',v,t_0)\in E'}w(u,(v',v_2)\cdot w(u,(v_2,v_2))) \cdot(P_{max}'(u,v',v_2,t_0)-P_{max}(u,v',v_2,t_0)) \\ 
-    &= w(u,(v_2,v_2)) \\ &\cdot \left(w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))} w(u,(v',v_2))\cdot P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}' \right) \\ 
-    &\ge w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \\ & \cdot  \left(P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E'\atop w(u,(v',v_2))<w(u,(v_1,v_2))}P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}'\right) \\ 
-    &= w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \\& \cdot \left(1-\sum_{(v',v_2,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))}p_{u,v',t_0}\prod_{(v_0,v_2,t_0)\in E' ; v_0 \ne v',v_2 \atop w(u,(v',v_2))\le w(u,(v_0,v_2)) \le w(u,(v_1,v_2))}(1-p_{u,v_0,t_0})\right)\label{equ:mon1} \\
+    &= w(u,(v_2,v_2)) \nonumber \\ &\cdot \left(w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))} w(u,(v',v_2))\cdot P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}' \right) \\ 
+    &\ge w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \nonumber \\ & \cdot  \left(P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E'\atop w(u,(v',v_2))<w(u,(v_1,v_2))}P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}'\right) \\ 
+    &= w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \nonumber \\& \cdot \left(1-\sum_{(v',v_2,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))}p_{u,v',t_0}\prod_{(v_0,v_2,t_0)\in E' ; v_0 \ne v',v_2 \atop w(u,(v',v_2))\le w(u,(v_0,v_2)) \le w(u,(v_1,v_2))}(1-p_{u,v_0,t_0})\right)\label{equ:mon1} \\
     &\ge 0
 \end{align}
 
@@ -803,11 +806,11 @@ h_i(E')= \sum_{v\in V} \sum_{\mathcal{S}_v \subseteq U_S \times T} \left[Pr_i(\m
 对于任意的$0<i\le |U_S|$，有
 \begin{align}
     &h_i(A)-h_{i-1}(A)\\
-    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[(Pr_i(\mathcal{S}_{v_2})-Pr_{i-1}(\mathcal{S}_{v_2}))\cdot g(\mathcal{S}_{v_2}) + (Pr_i(\mathcal{S}_{v_2}\cup \{(i,t_0)\}) \\
+    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[(Pr_i(\mathcal{S}_{v_2})-Pr_{i-1}(\mathcal{S}_{v_2}))\cdot g(\mathcal{S}_{v_2}) + (Pr_i(\mathcal{S}_{v_2}\cup \{(i,t_0)\}) \nonumber \\
     &\ \ \ \ \ \ \ \ \ \ -Pr_{i-1}(\mathcal{S}_{v_2}\cup \{(i,t_0)\}))\cdot g(\mathcal{S}_{v_2}\cup \{(i,t_0)\})] \\ 
-    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\left(\frac{1-p_{i,v_2,t_0}'}{1-p_{i,v_2,t_0}}-1\right) \cdot g(\mathcal{S}_{v_2}) \\ 
+    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\left(\frac{1-p_{i,v_2,t_0}'}{1-p_{i,v_2,t_0}}-1\right) \cdot g(\mathcal{S}_{v_2})  \nonumber \\ 
     &\ \ \ \ \ \ \ \ \ \ + Pr_{i-1}(\mathcal{S}_{v_2}\cup \{(i,t_0)\})\cdot (\frac{p_{i,v_2,t_0}'}{p_{i,v_2,t_0}}-1)\cdot g(\mathcal{S}_{v_2}\cup \{(i,t_0)\}) ]  \\ 
-    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\left(\frac{1-p_{i,v_2,t_0}'}{1-p_{i,v_2,t_0}}-1\right) \cdot g(\mathcal{S}_{v_2}) \\ 
+    &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\left(\frac{1-p_{i,v_2,t_0}'}{1-p_{i,v_2,t_0}}-1\right) \cdot g(\mathcal{S}_{v_2}) \nonumber \\ 
     &\ \ \ \ \ \ \ \ \ \ + Pr_{i-1}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}}{1-p_{i,v_2,t_0}}\cdot (\frac{p_{i,v_2,t_0}'}{p_{i,v_2,t_0}}-1)\cdot g(\mathcal{S}_{v_2}\cup \{(i,t_0)\}) ] \\
     &=revenue(v_2)\cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}[Pr_{i-1}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}'-p_{i,v_2,t_0}}{1-p_{i,v_2,t_0}} \cdot g(\{(i,t)\} |\mathcal{S}_{v_2})] \label{equ:mon2} \\ 
     &\ge 0 
@@ -817,7 +820,7 @@ h_i(E')= \sum_{v\in V} \sum_{\mathcal{S}_v \subseteq U_S \times T} \left[Pr_i(\m
 
 所以有$h(A)=h_0(A) \le h_1(A) \le h_2(A) \le \ldots \le h_{|U_S|}(A)=h(A \cup\{v_1,v_2,t_0\})$，即$h$具有单调性。
 
-证明完毕。
+\noindent 证明完毕。
 
 \begin{figure}[htbp]
     \centering
@@ -905,7 +908,7 @@ $h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，�
 函数$\Delta h_t^\mu$和$ \Delta h_t^\nu$在其定义域上都是单调并子模的。
 \end{lemma}
 
-证明：与引理\ref{lem:h_mon}类似，单调性较为显然。我们找到的$\Delta h_t^\mu$和$ \Delta h_t^\nu$，边不会由于新边的加入而体现出更大的价值，反之会稀释其增益，导致边际收益随着集合的增大而下降，直观上是满足子模性的。具体理论证明如下：
+\noindent 证明：与引理\ref{lem:h_mon}类似，单调性较为显然。我们找到的$\Delta h_t^\mu$和$ \Delta h_t^\nu$，边不会由于新边的加入而体现出更大的价值，反之会稀释其增益，导致边际收益随着集合的增大而下降，直观上是满足子模性的。具体理论证明如下：
 
 令$\mathcal{W}_t=\{(v_1,v_2,t_0) |(v_1,v_2,t_0) \in \mathcal{W},t_0=t\}$。
 
@@ -930,7 +933,7 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}=p_{u,v_2,t_0}^{\nu,B'}-p_{u,v_2,t_0
     p_{u,v_2,t_0}^{\mu,A'}-p_{u,v_2,t_0}^{\mu,A}=p_{u,v_2,t_0}^{\mu,B'}-p_{u,v_2,t_0}^{\mu,B} = 0 
 \end{equation}
 \begin{align}
-    p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}&=\mathbb{I}\{w(u,(v_1,v_2))>\max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\}\} \cdot [w(u,(v_1,v_2))\\ 
+    p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}&=\mathbb{I}\{w(u,(v_1,v_2))>\max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\}\} \cdot [w(u,(v_1,v_2)) \nonumber \\ 
     & \ \ \ \ \ -\max_{(v',v_2,t)\in A}\{w(u,(v',v_2))\}] \cdot w(u,(v_2,v_2)) \ge  0
 \end{align}
 
@@ -969,7 +972,7 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,
 把$p_{u,v_2,t_0}^{\mu,A'}$、$p_{u,v_2,t_0}^{\mu,A}$和$p_{u,v_2,t_0}^{\mu,B'}$、$p_{u,v_2,t_0}^{\mu,B}$分别代入引理\ref{lem:h_mon}证明中的式\ref{equ:mon2}中得：
 \begin{align}
     &(\Delta h_{t,i}^{\mu}(A)-\Delta h_{t,i-1}^{\mu}(A)) - (\Delta h_{t,i}^{\mu}(B)-\Delta h_{t,i-1}^{\mu}(B)) \\ 
-    &=revenue(v_2)\cdot (\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A}}{1-p_{i,v_2,t_0}^{\mu,A}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \\
+    &=revenue(v_2)\cdot (\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A}}{1-p_{i,v_2,t_0}^{\mu,A}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \nonumber \\
     & \  \ \ \ \ \ \ - \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}^{\mu,B'}-p_{i,v_2,t_0}^{\mu,B}}{1-p_{i,v_2,t_0}^{\mu,B}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] )\\ 
     &\ge revenue(v_2)\cdot (p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A})  
     \cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[\left(\frac{Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,A}}-\frac{Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,B}}\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \label{equ:prof_sub1}
@@ -1002,12 +1005,12 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,
 \begin{align}
 \small
     &H_{i,j}^{\mu}(A,B)-H_{i,j-1}^{\mu}(A,B) \nonumber \\
-    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[(Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}) \\
-    &\ \ \ \ + Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})) \\ 
+    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[(Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\nonumber \\
+    &\ \ \ \ + Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})) \nonumber \\ 
     &\ \ \ \ -\left(Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})+Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})\right)] \\ 
-    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\\
+    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\nonumber\\
     &\ \ \ \ +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\})\cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})] \\  
-    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\\
+    &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\nonumber\\
     &\ \ \ \ +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})] \\
     &= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}\left[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,B,i}-p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \cdot (g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})-g(\{(i,t_0)\} |\mathcal{S}_{v_2}))\right] \\
     &\le 0 \label{equ:prof_sub2}
@@ -1039,7 +1042,7 @@ H_{i,|\mathcal{U}|}^{\mu} (A,B)= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\se
 
 $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
-证明完毕。
+\noindent 证明完毕。
 
 \section{近似性与复杂度分析}
 \label{sec:ana}
@@ -1054,7 +1057,9 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 \end{equation}
 \end{theorem}
 
-证明：结合定理\ref{thm:greedy}和引理\ref{lem:ris}，可得，使用多轮反向影响力采样的边贪心算法每轮至少有$1-\frac{1}{n^{\ell}}$能得到近似比为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$的结果。按照三明治算法的过程，每一轮用$h^\mu$和$h^\nu$代替$h$执行原算法过程，然后取最优结果作为每一轮的最终结果，结合定理\ref{thm:sand}和引理\ref{lem:mon_sub}，则每轮至少有$1-\frac{1}{n^{\ell}}$的概率，可以得到近似比为$\max\left\{\frac{\Delta_\rho(\sigma_t^\nu)}{\Delta_\nu(\sigma_t^\nu)},\frac{\Delta_\mu(\sigma_t^{\rho*})}{\Delta_\rho(\sigma_t^{\rho*})} \right\}\cdot\left(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}-\varepsilon\right)$的近似结果。易知，将每个$\sigma_t$作为元素的集合函数$\rho$仍然是单调子模的，因此，套用定理\ref{thm:greedy}证明中提到的$1-e^{-\alpha}$的结论，即可得到定理\ref{thm:nonadptive}。证明完毕。
+\noindent 证明：结合定理\ref{thm:greedy}和引理\ref{lem:ris}，可得，使用多轮反向影响力采样的边贪心算法每轮至少有$1-\frac{1}{n^{\ell}}$能得到近似比为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$的结果。按照三明治算法的过程，每一轮用$h^\mu$和$h^\nu$代替$h$执行原算法过程，然后取最优结果作为每一轮的最终结果，结合定理\ref{thm:sand}和引理\ref{lem:mon_sub}，则每轮至少有$1-\frac{1}{n^{\ell}}$的概率，可以得到近似比为$\max\left\{\frac{\Delta_\rho(\sigma_t^\nu)}{\Delta_\nu(\sigma_t^\nu)},\frac{\Delta_\mu(\sigma_t^{\rho*})}{\Delta_\rho(\sigma_t^{\rho*})} \right\}\cdot\left(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}-\varepsilon\right)$的近似结果。易知，将每个$\sigma_t$作为元素的集合函数$\rho$仍然是单调子模的，因此，套用定理\ref{thm:greedy}证明中提到的$1-e^{-\alpha}$的结论，即可得到定理\ref{thm:nonadptive}。
+
+\noindent 证明完毕。
 
 纵观算法过程，使用了多轮反向影响力采样方法和三明治方法的边贪心的时间复杂度为$O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$,其中$m_v=|W|$代表广告网络的边数，$m_u=|E|$代表用户网络边数，$n_u=|G|$为用户网络节点数，$n_s=|U_S|$为特殊用户集合大小，$R$与$LB$含义与引理\ref{lem:ris}中一致，$LB_{\min}$代表$LB$可能得最小值。算法需进行$T$轮，每轮至多$k$次选边，选边需遍历大小为$m_v$的广告边集，在估算一条边的边际收益时，需要遍历$\theta$个多轮反向可达集，统计采样结果需要计算已经被选择的广告，不会超过$Tk$个，只要统计有哪些特殊用户在该广告出现的那一轮接受了这个广告即可，因此统计其结果的时间为$Tkn_S$，总复杂度为$O(T^2k^2m_vn_S\theta)$。对于生成采样的部分，沿用上一次生成过的采样结果不会影响其估算的准确性，故只需按照最大的$\theta$生成一次即可。生成一个采样的时间是$Tm_u$，这部分时间复杂度为$O(\theta Tm_u)$。综上，根据引理\ref{lem:ris}，代入$\theta$，总时间复杂度即为$O(Tkm_v\cdot Tk(n_u+m_u)\theta) = O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$。
 
@@ -1117,7 +1122,7 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 \subsection{实验数据集}
 
-{\bfseries Amazon评论数据集}：我们基于亚马逊视频游戏评论数据集\cite{ni2019justifying}进行了产品推荐实验。实验的具体目标是，给定用户已购买的前$4$个产品，预测他们接下来可能购买的$k$个产品。
+{\bfseries Amazon评论数据集}：我们基于亚马逊视频游戏评论数据集\cite{ni2019justifying}进行了商品广告推荐实验。实验的具体目标是，给定用户已经购买的商品，预测他们接下来可能想购买的商品为它们推荐广告。
 
 为此，我们构建了一个图模型$N = (V,W)$。其中，$V$代表所有产品的集合，$W$表示产品之间的边集。每条边的权重$w_{ij}$定义为条件概率：即用户在购买产品$i$后购买产品$j$的概率。我们通过计算所有购买过产品$i$的用户中，随后又购买产品$j$的用户比例来确定$w_{ij}$。此外，图中还包含自环，其权重$w_{ii}$表示在所有用户中购买产品$i$的比例。为了确保数据的可靠性，我们只考虑了被购买至少50次的商品，最终得到9383种独立商品。同时，我们选取了至少购买过29种商品的用户，共909名。我们对这909名用户进行广告推荐任务，并计算每个评估指标的平均值来衡量推荐效果。
 
@@ -1125,18 +1130,11 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 我们构建了一个图模型$N = (V,W)$。其中$V$代表所有页面的集合，$W$表示页面之间现有链接的集合。对于每条边$(i,j)\in W$，其权重$w_{ij}$定义为条件概率：即用户当前在页面$i$的情况下移动到页面$j$的概率。这个概率通过计算从$i$到$j$的移动次数占所有访问$i$次数的比例来得出。值得注意的是，我们没有构建自环，因为我们假设用户只能通过现有链接进行页面间的跳转，而不能随机访问任意页面。我们将数据集压缩为仅包含出现在实际浏览路径中的文章和边，最终得到4170个独立页面和55147条边。我们选取了长度至少为29的路径进行分析，共得到271条符合条件的路径。我们对这271条路径进行链接预测任务，并计算每个评估指标的平均值来衡量预测效果。
 
+
+
 \subsection{实验设置与评估标准}
 
-我们对以下算法的性能进行对比：
-
-\begin{itemize}
-\item {\bfseries 鲁棒序列}：本文提出的鲁棒序列网络子模最大化算法，简称鲁棒序列算法。
-\item {\bfseries 序列贪心}：序列贪心算法\cite{mitrovic2018submodularity},不考虑序列的鲁棒性。
-\item {\bfseries OMegA}：现有的自摸序列基准算法\cite{tschiatschek2017selecting}。
-\item {\bfseries 高频推荐}：较为平凡的基准算法，推荐最受欢迎的（用户点击最多的）项目（商品广告或链接）。
-\end{itemize}
-
-为了评估这些算法的性能，我们使用了三个评估指标。
+为了有效评估和对比算法的性能，我们使用了三个评估指标：
 
 \begin{itemize}
     \item \textbf{准确度得分}：这个指标简单地计算准确推荐项目的数量，是一个很合理的衡量标准，但它的局限性在于没有明确考虑序列的顺序。
@@ -1147,10 +1145,133 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 \end{equation}
 \end{itemize}
 
-前两个指标在\parencite{mitrovic2019adaptive}中也有使用。对于第三个评估指标，我们会尝试对$\sigma$所有大小为$\tau$的子集进行移除，选择最低的函数值作为最终评估指标，以衡量序列的稳定性。
+前两个指标在\parencite{mitrovic2019adaptive}中也有使用。对于全部的评估指标，我们会尝试对$\sigma$所有大小为$\tau$的子集进行移除，选择最低的函数值作为最终评估指标，以衡量序列的稳定性。
+
+我们对以下算法的性能进行对比：
+
+\begin{itemize}
+\item {\bfseries 鲁棒序列}：本文提出的鲁棒序列网络子模最大化算法，简称鲁棒序列算法。
+\item {\bfseries 序列贪心}：序列贪心算法\cite{mitrovic2018submodularity},不考虑序列的鲁棒性。
+\item {\bfseries OMegA}：现有的子模序列基准算法\cite{tschiatschek2017selecting}。
+\item {\bfseries 高频推荐}：较为平凡的基准算法，推荐最受欢迎的（用户点击最多的）项目（商品广告或链接）。
+\end{itemize}
+
+为了探究加入鲁棒参数$\tau$后得到的结果在不移除情况下的表现，实验中还会额外对比两项结果：
+\begin{itemize}
+\item {\bfseries 鲁棒序列($\tau = 0$)}：本文提出的鲁棒序列网络子模最大化算法，在算法运行时，正常使用$\tau$作为鲁棒参数，但在评估时不会对结果中的节点进行选择性移除。即只有评估时$\tau = 0$。
+\item {\bfseries 序列贪心($\tau = 0$)}：序列贪心算法，在评估时不会对结果中的节点进行选择性移除，即评估时$\tau = 0$。
+\end{itemize}
+
+
+
+对于在Amazon评论数据集上进行的商品广告推荐实验，设置$k\in[11,20],\tau \in[0,10]$。算法会根据用户已购买的前$4$个产品，预测其接下来可能购买的$k$个产品。
+
+对于Wikispeedia数据集上进行的链接跳转预测实验，设置$k\in[6,15],\tau \in[0,10]$。算法会根据用户前面点击的$4$个链接，预测其接下来可能想要点击的$k$个链接。
 
 
 \subsection{对比实验结果}
+
+图\ref{fig:rec}展示了几种算法在商品广告推荐任务中的表现，分别从准确度得分、序列得分和目标函数值三个方面进行了比较。在图\ref{fig:rec-acc}、\ref{fig:rec-acc-t}、\ref{fig:rec-seq}和\ref{fig:rec-seq-t}中，我们观察到在移除$\tau$个元素后，鲁棒序列算法的性能优于所有对比算法。考虑到准确度分数和序列分数是实际应用中常用的评估指标，这一结果充分证明了鲁棒序列算法在商品广告推荐任务中的有效性和稳健性。
+
+图\ref{fig:rec-fun}和\ref{fig:rec-fun-t}有区别的是，当$\tau$较小或$k$较大时，OMegA算法表现更为出色。OMegA算法致力于寻找全局最优解，它在每次选择元素后都会对所有候选对象进行拓扑重排。当$k$较大且$\tau$较小时，OMegA能够返回具有更优目标函数值的解，但其运行速度显著慢于鲁棒序列和序列贪心算法，而且OMegA在准确度和序列分数方面的表现相对较差。综合考虑，鲁棒序列算法在实际应用中仍然展现出更高的效率和稳健性。
+
+我们还特别关注了鲁棒序列和序列贪心算法在$\tau=0$时的情况。可能需要解释的一点是，在图\ref{fig:rec-acc-t}、\ref{fig:rec-seq-t}和\ref{fig:rec-fun-t}中，序列贪心($\tau=0$)由于算法运行与$\tau$无关，且评估时固定$\tau=0$，所以结果成一条直线。而鲁棒序列($\tau=0$)由于在算法运行时仍然会正常使用$\tau$,因此即使评估时固定$\tau=0$,得出的结果也会随$\tau$变化而变化。
+
+实验结果显示，在目标函数值方面，序列贪心($\tau=0$)略胜一筹；但在准确度分数和序列分数上，鲁棒序列($\tau=0$)与序列贪心($\tau=0$)的表现非常接近，有时甚至更优。序列贪心($\tau=0$)在目标函数值上的优势源于贪心框架的有效性。鲁棒序列算法虽然独立调用了两次序列贪心算法，但由于网络子模性的影响，难以达到单次序列贪心执行的性能水平。然而，准确度和序列分数上的结果表明，直接应用贪心选择并非总是最优策略。这反映了贪心算法的内在特性：尽管$1-1/e$接近最佳近似比，但在特定场景下，某些启发式算法可能会取得更好的表现。
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/rec/rec-acc1}
+        \caption{$\tau=10$ and $k=[11,20]$}
+        \label{fig:rec-acc}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/rec/rec-acc1-t}
+        \caption{$k=15$ and $\tau=[0,10]$}
+        \label{fig:rec-acc-t}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{0.45\textwidth}
+       \includegraphics[width=\linewidth]{figure/rosenets/rec/rec-seq1}
+        \caption{$\tau=10$ and $k=[11,20]$}
+        \label{fig:rec-seq}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/rec/rec-seq1-t}
+        \caption{$k=15$ and $\tau=[0,10]$}
+        \label{fig:rec-seq-t}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{0.45\textwidth}
+       \includegraphics[width=\linewidth]{figure/rosenets/rec/rec-fun1}
+        \caption{$\tau=10$ and $k=[11,20]$}
+        \label{fig:rec-fun}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/rec/rec-fun1-t}
+        \caption{$k=15$ and $\tau=[0,10]$}
+        \label{fig:rec-fun-t}
+    \end{subfigure}
+    \caption{商品广告推荐实验结果\label{fig:rec}}
+\end{figure}
+
+值得一提的是，如果我们增加序列贪心算法的调用次数，可能会获得更稳健的实验结果和更高的近似比，但目标函数值可能会下降。这是因为多次独立的贪心选择会增加触发收益递减现象的概率。在实际应用中，设计稳健算法时面临的一个关键挑战是如何在算法的稳健性和目标函数值最大化之间取得平衡。这需要我们根据具体应用场景和需求，权衡各种因素，以达到最佳的综合效果。
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/wik/wik-acc}
+        \caption{$\tau=5$ and $k=[6,15]$}
+        \label{fig:wik-acc}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/wik/wik-acc-t}
+        \caption{$k=10$ and $\tau=[0,10]$}
+        \label{fig:wik-acc-t}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{0.45\textwidth}
+       \includegraphics[width=\linewidth]{figure/rosenets/wik/wik-seq}
+        \caption{$\tau=5$ and $k=[6,15]$}
+        \label{fig:wik-seq}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/wik/wik-seq-t}
+        \caption{$k=10$ and $\tau=[0,10]$}
+        \label{fig:wik-seq-t}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{0.45\textwidth}
+       \includegraphics[width=\linewidth]{figure/rosenets/wik/wik-fun}
+        \caption{$\tau=5$ and $k=[6,15]$}
+        \label{fig:wik-fun}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figure/rosenets/wik/wik-fun-t}
+        \caption{$k=10$ and $\tau=[0,10]$}
+        \label{fig:wik-fun-t}
+    \end{subfigure}
+    \caption{链接跳转预测实验结果\label{fig:wik}}
+\end{figure}
+
+图\ref{fig:wik}分别几种算法在链接跳转预测中的表现，分别从准确度得分、序列得分和目标函数值三个方面进行了比较。我们发现在移除$\tau$个元素后，鲁棒序列在所有情况下都优于所有比较对象。这些结果表明鲁棒算法在链接跳转预测任务中是有效和稳健的。与商品广告推荐实验不同的是，OMegA算法在这项任务中未能展现出与鲁棒序列算法相当的性能。这主要归因于两个因素：首先，本任务中需要预测的路径通常较长；其次，不同路径之间的交叉部分相对较少，不如商品广告推荐实验中那样普遍。这些特点使得全局算法OMegA难以充分发挥其优势。而且我们可以在图\ref{fig:wik-acc}，\ref{fig:wik-seq}和4\ref{fig:wik-fun}中发现，当$k$变大时，OMegA算法的性能增长更快。这反过来证明了鲁棒序列算法更加通用、有效和稳健，能够适应不同的应用场景，而无需对特定环境做出假设。
+
+链接预测应用中的另一个不同之处是，鲁棒序列($\tau=0$)在准确度和序列分数方面几乎在所有情况下都优于序列贪心($\tau=0$)。这再次验证了直接实施贪心选择有时可能远离最优解。因此，我们认为探索如何通过增加独立贪心选择试验的次数，在算法的稳健性效率和效用值最大化之间取得更好的平衡也是一个有趣的未来探索方向。
+
 
 
 \section{多轮社交广告序列影响最大化推荐算法实验}
