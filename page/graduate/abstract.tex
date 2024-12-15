@@ -1,5 +1,27 @@
 \cleardoublepage
 \chapternonum{摘要}
 
+随着移动设备和社交网络的快速发展，广告序列推荐成为一个重要而具有挑战性的问题。本研究针对现有广告序列推荐方法的不足，提出了两个创新性算法，全面考虑了用户兴趣、广告间关系、用户选择性接受广告和社交网络影响力等多个因素。
+
+首先，本文提出了鲁棒序列网络子模最大化算法，引入网络子模函数来增强广告间正向关系的重要性，并采用两段式贪心策略来提高序列的鲁棒性。我们严格证明了该算法在不同情况下的近似比，并分析了其理论性能。
+
+进一步，结合信息在用户社交网络中的传播，本文提出了多轮社交广告序列影响最大化问题，首次将广告网络和用户社交网络同时纳入模型。我们设计了基于边贪心的算法框架，并提出了多轮反向影响力采样方法来提高计算效率。为解决目标函数非子模性的问题，我们引入了三明治方法来保证算法的近似比。此外，我们还拓展了算法以适应动态场景。
+
+最后，在真实数据集上进行了商品广告推荐和链接跳转预测等实验。结果表明，我们提出的算法在评价指标上均优于现有方法，展示了优秀的有效性和鲁棒性。这些实验不仅验证了算法的实际应用价值，也为广告序列推荐领域提供了新的解决方案和研究方向。
+
+
+\textbf{关键词}：广告推荐，子模最大化，影响力最大化，社交网络。
+
+
 \cleardoublepage
 \chapternonum{Abstract}
+
+With the rapid development of mobile devices and social networks, advertising sequence recommendation has become an important and challenging problem. This research addresses the limitations of existing advertising sequence recommendation methods by proposing two innovative algorithms that comprehensively consider multiple factors including users' interests, relationships between advertisements, users' selective acceptance of ads, and social network influence.
+
+First, we propose a Robust Sequence Networked Submodular Maximization algorithm, which introduces net-submodular functions to enhance the importance of positive relationships between advertisements and employs a two-stage greedy strategy to improve the robustness of the sequence. We rigorously prove the approximation ratios of this algorithm under different scenarios and analyze its theoretical performance.
+
+Furthermore, considering information propagation in users' social networks, we propose the Multi-Round Social Advertising Sequence Influence Maximization problem, which for the first time incorporates both ad networks and user social networks into the model. We design an edge-based greedy algorithm framework and propose a multi-round reverse influence sampling method to improve computational efficiency. To address the non-submodularity of the objective function, we introduce the sandwich method to guarantee the approximation ratio of the algorithm. Additionally, we extend the algorithm to adapt to dynamic scenarios.
+
+Finally, we conduct experiments on real datasets for tasks such as product advertisement recommendation and link  prediction. The results show that our proposed algorithms outperform existing methods across evaluation metrics, demonstrating excellent effectiveness and robustness. These experiments not only validate the practical value of the algorithms but also provide new solutions and research directions for the field of advertising sequence recommendation.
+
+\textbf{Keywords}:Advertising Recommendation, Submodular Maximization, Influence Maximization, Social Network.
