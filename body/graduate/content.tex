@@ -10,7 +10,7 @@
 
 在集合函数最大化领域中，子模性是一个极为重要的性质。它可以简单理解为一种边际收益递减的特性。更具体地说：如果对于任意两个集合$A\subseteq B \subseteq V$和一个元素$v\in V\backslash B$，集合函数$f: 2^V \to \mathbb{R}$满足$f(A\cup v) - f(A) \ge f(B\cup v) -f(B)$，那么称集合函数$f$具有子模型。这一性质最初由Nemhauser\cite{nemhauser1978analysis}等人归纳总结，并证明了其应用于贪心策略时$1-1/e$的近似比。后与单调性一起被广泛应用于集合函数的最大化或最小化问题中\cite{nemhauser1978best,khuller1999budgeted}。而在序列函数最大化的工作中\cite{tschiatschek2017selecting,mitrovic2018submodularity}略有不同的是，序列函数对于序列的生成点集（元素集）并不需要具有子模性，而是需要对序列的生成边集具有子模性。这种性质在此前并未被明确的命名，在本文中，我们将这种关于序列的函数对序列的生成边集具有子模性的性质成为\textbf{网络子模}。 
 
-在实际应用时，仍然需要考虑到用户可能不会接受序列中的所有广告。在考虑广告之间正向关系的序列广告推荐中，由于序列中的广告之间存在额外的关系收益，一个广告被移除所带来的影响可能不仅仅局限于这个广告本身。相反，它可能会影响到所有与之相连的广告，进而对整个序列的价值造成巨大影响。因此，在设计广告推荐策略时，我们不仅要考虑序列的整体价值，还需要特别关注广告序列的鲁棒性。
+在实际应用时，仍然需要考虑到用户可能不会接受序列中的所有广告。在考虑广告之间正向关系的序列广告推荐中，由于序列中的广告之间存在额外的关系收益，一个广告被移除所带来的影响可能不仅仅局限于这个广告本身。其实，它可能会影响到所有与之相连的广告，进而对整个序列的价值造成巨大影响。因此，在设计广告推荐策略时，我们不仅要考虑序列的整体价值，还需要特别关注广告序列的鲁棒性。
 
 \begin{figure}[th]
     \centering
@@ -580,7 +580,7 @@ f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - 
 根据函数 $f(\cdot)$ 的单调性和上述不等式，我们有
 \begin{align}
 f(\sigma- Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \\ &\ge f(\sigma_1 - Z_\tau^1(\sigma)) = f(\sigma_1^{\tau_2}) \ge \tau_2 \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\sigma_2) \\
-f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \ge f(\sigma_2 -Z_\tau^2(\sigma)) \ge (1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)
+f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \\ & \ge f(\sigma_2 -Z_\tau^2(\sigma)) \ge (1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)
 \end{align}
 
 则有不等式：
@@ -590,7 +590,7 @@ f(\sigma-z)\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) 
 
 与定理\ref{thm:tau1}的证明类似，接下来有不等式：
 \begin{equation}
-    \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \ge 1/\beta
+    \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \ge 1/\beta \label{equ:tau2_ine2}
 \end{equation}
 
 用 $\sigma_2^{\tau_2}$ 表示由序列 $\sigma_2$ 的前 $\tau_2$ 个元素组成的序列。那么我们有
@@ -599,9 +599,9 @@ f(\sigma_2^{\tau_2}) \ge \frac{1-e^{-(1-1/k)}}{\alpha} f(\sigma^*(V\backslash \s
 \end{equation}
 
 则有不等式：
-\begin{equation}
-f(\sigma_2) \ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } f(\sigma^*(V\backslash \sigma_1,k-\tau,0)) \ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } g_\tau(\sigma^*(V,k,\tau)) \label{equ:tau2_ine3}
-\end{equation}
+\begin{align}
+f(\sigma_2) &\ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } f(\sigma^*(V\backslash \sigma_1,k-\tau,0)) \\& \ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } g_\tau(\sigma^*(V,k,\tau)) \label{equ:tau2_ine3}
+\end{align}
 
 定义 $\ell_1(q) = q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
 {d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} }$ 和 $\ell_2(q) = (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
@@ -617,13 +617,13 @@ f(\sigma_2) \ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e
 (2) 当 $q \in (\frac{1}{\beta},\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，由于 $\ell_1(q)$ 单调递增，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_1(\frac{1}{\beta})$。
 
 因此，我们得到如下的不等式：
-\begin{equation}
+\begin{align}
 \max\{ q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
-{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
-{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } \} \ge
+{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } ,& (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
+{d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } \} \nonumber \\& \ge
 \frac{\beta(e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1)}{e^{\frac{k-\tau-\tau_2-1}
 {d_{\text{in}}(k-\tau_2-1)}}-\beta \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } \label{equ:tau2_ine4}
-\end{equation}
+\end{align}
 
 结合不等式\ref{equ:tau2_line1}、不等式\ref{equ:tau2_ine1} 和不等式\ref{equ:tau2_ine2}，我们可以得到定理\ref{thm:tau2} 中的第一个下界：
 \begin{align}
@@ -635,8 +635,8 @@ f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}
 结合不等式\ref{equ:tau2_ine1}、不等式\ref{equ:tau2_ine3} 和不等式\ref{equ:tau2_ine4}，我们可以得到定理\ref{thm:tau2} 中的第二个下界：
 
 \begin{align}
-f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
-& \ge \max\{ q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}} q \frac{1-e^{-(1-1/k)}}{\alpha} } , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-\tau_2 q \frac{1-e^{-(1-1/k)}}{\alpha} } \} g_\tau(\sigma^*(V,k,\tau)) \\
+f(\sigma -z ) &\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
+& \ge \max\{ q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}} q \frac{1-e^{-(1-1/k)}}{\alpha} } ,\nonumber \\ &\quad \quad \quad (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-\tau_2 q \frac{1-e^{-(1-1/k)}}{\alpha} } \} g_\tau(\sigma^*(V,k,\tau)) \\
 & \ge \frac{\beta(e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1)}{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}- \beta \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } g_\tau(\sigma^*(V,k,\tau))
 \end{align}
 
@@ -952,10 +952,10 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 \small
     &p_{u,v_2,t_0}'-p_{u,v_2,t_0}\\
     &= w(u,(v_1,v_2))\cdot w(u,(v_2,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \nonumber \\
-    &+ \sum_{(v',v,t_0)\in E'}w(u,(v',v_2)\cdot w(u,(v_2,v_2))) \cdot(P_{max}'(u,v',v_2,t_0)-P_{max}(u,v',v_2,t_0)) \\ 
-    &= w(u,(v_2,v_2)) \nonumber \\ &\cdot \left(w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))} w(u,(v',v_2))\cdot P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}' \right) \\ 
-    &\ge w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \nonumber \\ & \cdot  \left(P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E'\atop w(u,(v',v_2))<w(u,(v_1,v_2))}P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}'\right) \\ 
-    &= w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \nonumber \\& \cdot \left(1-\sum_{(v',v_2,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))}p_{u,v',t_0}\prod_{(v_0,v_2,t_0)\in E' ; v_0 \ne v',v_2 \atop w(u,(v',v_2))\le w(u,(v_0,v_2)) \le w(u,(v_1,v_2))}(1-p_{u,v_0,t_0})\right)\label{equ:mon1} \\
+    &\quad + \sum_{(v',v,t_0)\in E'}w(u,(v',v_2)\cdot w(u,(v_2,v_2))) \cdot(P_{max}'(u,v',v_2,t_0)-P_{max}(u,v',v_2,t_0)) \\ 
+    &= w(u,(v_2,v_2)) \cdot (w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \nonumber \\ &\quad -\sum_{(v',v,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))} w(u,(v',v_2))\cdot P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}' ) \\ 
+    &\ge w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \nonumber \\ &\quad \cdot  \left(P_{max}'(u,v_1,v_2,t_0)-\sum_{(v',v,t_0)\in E'\atop w(u,(v',v_2))<w(u,(v_1,v_2))}P_{max}(u,v',v_2,t_0)\cdot p_{u,v_1,t_0}'\right) \\ 
+    &= w(u,(v_2,v_2))\cdot w(u,(v_1,v_2)) \cdot P_{max}'(u,v_1,v_2,t_0) \nonumber \\&\quad  \cdot \left(1-\sum_{(v',v_2,t_0)\in E' \atop w(u,(v',v_2))<w(u,(v_1,v_2))}p_{u,v',t_0}\prod_{(v_0,v_2,t_0)\in E' ; v_0 \ne v',v_2 \atop w(u,(v',v_2))\le w(u,(v_0,v_2)) \le w(u,(v_1,v_2))}(1-p_{u,v_0,t_0})\right)\label{equ:mon1} \\
     &\ge 0
 \end{align}
 
@@ -1142,7 +1142,7 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,
     &(\Delta h_{t,i}^{\mu}(A)-\Delta h_{t,i-1}^{\mu}(A)) - (\Delta h_{t,i}^{\mu}(B)-\Delta h_{t,i-1}^{\mu}(B)) \\ 
     &=revenue(v_2)\cdot (\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A}}{1-p_{i,v_2,t_0}^{\mu,A}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \nonumber \\
     & \  \ \ \ \ \ \ - \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})\cdot\frac{p_{i,v_2,t_0}^{\mu,B'}-p_{i,v_2,t_0}^{\mu,B}}{1-p_{i,v_2,t_0}^{\mu,B}} \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] )\\ 
-    &\ge revenue(v_2)\cdot (p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A})  
+    &\ge revenue(v_2)\cdot (p_{i,v_2,t_0}^{\mu,A'}-p_{i,v_2,t_0}^{\mu,A})  \nonumber \\ &\quad
     \cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[\left(\frac{Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,A}}-\frac{Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,B}}\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \label{equ:prof_sub1}
 \end{align}
 
@@ -1153,11 +1153,11 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,
 那么，对于任意的$u,v,t,i$，都有$p_{u,v,t}^{\mu,A,i} \le p_{u,v,t}^{\mu,B,i}$。
 
 设：
-\begin{equation}
+\begin{align}
 \footnotesize
-    Pr_{i,j}^{\mu,A,B}(\mathcal{S}_v)=\left(\prod_{{(u,t)\in \mathcal{S}_v \atop idx(u,t)\le j } \atop{ idx(u,t) \ne idx(i,t_0)}}p_{u,v,t}^{\mu,B,i}\right)\cdot \left(\prod_{{(u,t) \notin \mathcal{S}_v \atop idx(u,t)\le j} \atop{ idx(u,t) \ne idx(i,t_0)}} (1-p_{u,v,t}^{\mu,B,i})\right)
-    \cdot \left(\prod_{{(u,t)\in \mathcal{S}_v \atop idx(u,t)> j} \atop {idx(u,t)\ne idx(i,t_0)}}p_{u,v,t}^{\mu,A,i}\right)\cdot \left(\prod_{{(u,t) \notin \mathcal{S}_v \atop idx(u,t)> j} \atop{ idx(u,t)\ne idx(i,t_0)}} (1-p_{u,v,t}^{\mu,A,i})\right)
-\end{equation}
+    Pr_{i,j}^{\mu,A,B}(\mathcal{S}_v)=&\left(\prod_{{(u,t)\in \mathcal{S}_v \atop idx(u,t)\le j } \atop{ idx(u,t) \ne idx(i,t_0)}}p_{u,v,t}^{\mu,B,i}\right)\cdot \left(\prod_{{(u,t) \notin \mathcal{S}_v \atop idx(u,t)\le j} \atop{ idx(u,t) \ne idx(i,t_0)}} (1-p_{u,v,t}^{\mu,B,i})\right) \nonumber \\
+    &\cdot \left(\prod_{{(u,t)\in \mathcal{S}_v \atop idx(u,t)> j} \atop {idx(u,t)\ne idx(i,t_0)}}p_{u,v,t}^{\mu,A,i}\right)\cdot \left(\prod_{{(u,t) \notin \mathcal{S}_v \atop idx(u,t)> j} \atop{ idx(u,t)\ne idx(i,t_0)}} (1-p_{u,v,t}^{\mu,A,i})\right)
+\end{align}
 
 根据定义，则有式\ref{equ:prof_sub1}中的$Pr_{i,0}^{\mu,A,B}(\mathcal{S}_{v2})=\frac{Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,A}}$，$Pr_{i,|\mathcal{U}|}^{\mu,A,B}(\mathcal{S}_{v2})=\frac{Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,B}}$。
 
@@ -1171,16 +1171,15 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,
 
 当$i \ne j$且$j>0$时：
 \begin{align}
-\small
     &H_{i,j}^{\mu}(A,B)-H_{i,j-1}^{\mu}(A,B) \nonumber \\
     &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[(Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\nonumber \\
     &\ \ \ \ + Pr_{i,j}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})) \nonumber \\ 
     &\ \ \ \ -\left(Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})+Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\}) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})\right)] \\ 
     &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\nonumber\\
-    &\ \ \ \ +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\})\cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})] \\  
+    &\quad \quad \quad   +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2}\cup\{(u_j,t_j)\})\cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})] \\  
     &=\sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \left(\frac{1-p_{u_j,v_2,t_j}^{\mu,B,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} - 1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\nonumber\\
-    &\ \ \ \ +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})] \\
-    &= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}\left[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,B,i}-p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \cdot (g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})-g(\{(i,t_0)\} |\mathcal{S}_{v_2}))\right] \\
+    &\quad \quad \quad +Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \cdot \left(\frac{p_{u_j,v_2,t_j}^{\mu,B,i}}{p_{u_j,v_2,t_j}^{\mu,A,i}}-1\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2}\cup \{(u_j,t_j)\})] \\
+    &= \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U} \setminus \{(i,t_0),(u_j,t_j)\}}[Pr_{i,j-1}^{\mu,A,B}(\mathcal{S}_{v_2})\cdot \frac{p_{u_j,v_2,t_j}^{\mu,B,i}-p_{u_j,v_2,t_j}^{\mu,A,i}}{1-p_{u_j,v_2,t_j}^{\mu,A,i}} \nonumber \\ &\quad \quad \quad \cdot (g(\{(i,t_0)\} |\mathcal{S}_{v_2} \cup \{(u_j,t_j)\})-g(\{(i,t_0)\} |\mathcal{S}_{v_2}))] \\
     &\le 0 \label{equ:prof_sub2}
 \end{align}
 
