@@ -7,9 +7,9 @@
 
 \textbf{现有研究忽视了广告间正向关系对序列价值的影响}。研究表明，用户在看到一个广告之前接受的信息会对其对该广告的接受程度产生影响\cite{loda2005sequence}。用户在看到某个广告之前所接受的信息中，最容易获得和干预的就是平台之前向用户推荐过的其他广告。因此，如果能够充分利用广告之间的正向信息关联，为用户打造一个具有更强相关性的广告序列，不仅可以提升用户的浏览体验，还能增加用户对广告的接受程度。Tschiatschek等人\cite{tschiatschek2017selecting}和Mitrovic等人\cite{mitrovic2018submodularity}的研究在集合函数最大化的基础上加入了对边价值的考虑，提出了序列函数最大化问题并给出了序列贪心算法。如果将序列函数设定为广告的价值，通过序列贪心算法可以在考虑广告之间正向关系的情况下获得一个最大价值广告序列的近似解，近似比与网络的结构有关。
 
-在集合函数最大化和序列函数最大化问题中，子模性都是一个极为重要的性质。它可以简单理解为一种边际收益递减的特性。更具体地说：如果对于任意两个集合$A\subseteq B \subseteq V$和一个元素$v\in V\backslash B$，集合函数$f: 2^V \to \mathbb{R}$满足$f(A\cup v) - f(A) \ge f(B\cup v) -f(B)$，那么称集合函数$f$具有子模型。这一性质最初由Nemhauser\cite{nemhauser1978analysis}等人归纳总结，并证明了其应用于贪心策略时$1-1/e$的近似比。后与单调性一起被广泛应用于集合函数的最大化或最小化问题中\cite{nemhauser1978best,khuller1999budgeted}。而在序列函数最大化的工作中\cite{tschiatschek2017selecting,mitrovic2018submodularity}略有不同的是，序列函数对于序列的生成点集（元素集）并不需要具有子模性，而是需要对序列的生成边集具有子模性。这种性质在此前并未被明确的命名，在本文中，我们将这种关于序列的函数对序列的生成边集具有子模性的性质称为\textbf{网络子模}。 
+在集合函数最大化和序列函数最大化问题中，子模性（Submodularity）都是一个极为重要的性质。子模性可以简单理解为一种边际收益递减的特性,这一性质最初由Nemhauser\cite{nemhauser1978analysis}等人归纳总结，并证明了其应用于贪心策略时$1-1/e$的近似比。后与单调性一起被广泛应用于集合函数的最大化或最小化问题中\cite{nemhauser1978best,khuller1999budgeted}。而在序列函数最大化的工作中\cite{tschiatschek2017selecting,mitrovic2018submodularity}略有不同的是，序列函数对于序列的生成点集（元素集）并不需要具有子模性，而是需要对序列的生成边集具有子模性。这种性质在此前并未被明确的命名，在本文中，本文将这种关于序列的函数对序列的生成边集具有子模性的性质称为\textbf{网络子模}。 
 
-\textbf{由序列贪心方法得到的广告序列往往缺乏鲁棒性}。在实际应用中，用户很可能会不接受序列中的部分广告，导致序列价值急剧减少。在考虑广告之间正向关系的序列广告推荐中，由于序列中的广告之间存在额外的关系收益，一个广告被移除所带来的影响可能不仅仅局限于这个广告本身。它可能会影响到所有与之相连的广告，进而对整个序列的价值造成巨大影响。因此，在设计广告推荐策略时，我们不仅要考虑序列的整体价值，还需要特别关注广告序列的鲁棒性。
+\textbf{由序列贪心方法得到的广告序列往往缺乏鲁棒性}。在实际应用中，用户很可能会不接受序列中的部分广告，导致序列价值急剧减少。在考虑广告之间正向关系的序列广告推荐中，由于序列中的广告之间存在额外的关系收益，一个广告被移除所带来的影响可能不仅仅局限于这个广告本身。它可能会影响到所有与之相连的广告，进而对整个序列的价值造成巨大影响。因此，在设计广告推荐策略时，不仅要考虑序列的整体价值，还需要特别关注广告序列的鲁棒性。
 
 \begin{figure}[th]
     \centering
@@ -18,15 +18,15 @@
     \label{fig:robust_sample}
 \end{figure}
 
-图 \ref{fig:robust_sample} 展示了三个具有不同鲁棒性的序列。在序列1中，所有边的权重均为0.9；序列2中，所有边的权重为0.5；而序列3中，所有边的权重为0.4。我们定义序列的网络子模函数$f$为序列生成边集的权重之和。这样定义的函数在生成点集上显然是单调的，但不具备子模性；然而，在边集上则具有子模性。通过计算可得，三个序列的整体价值分别为2.7（序列1，最大）、2.5（序列2）和2.4（序列3）。进一步分析发现，当从每个序列中移除一个节点时，序列1、2和3的最小价值分别为0.9、1.0（最大）和0.8。若移除两个节点，则序列1、2和3的价值分别变为0、0和0.4（最大）。
+图 \ref{fig:robust_sample} 展示了三个具有不同鲁棒性的序列。在序列1中，所有边的权重均为0.9；序列2中，所有边的权重为0.5；而序列3中，所有边的权重为0.4。定义序列的网络子模函数$f$为序列生成边集的权重之和。这样定义的函数在生成点集上显然是单调的，但不具备子模性；然而，在边集上则具有子模性。通过计算可得，三个序列的整体价值分别为2.7（序列1，最大）、2.5（序列2）和2.4（序列3）。进一步分析发现，当从每个序列中移除一个节点时，序列1、2和3的最小价值分别为0.9、1.0（最大）和0.8。若移除两个节点，则序列1、2和3的价值分别变为0、0和0.4（最大）。
 
-这一现象表明，随着移除节点数量的变化，三个序列表现出不同程度的鲁棒性。传统的序列贪心算法\cite{tschiatschek2017selecting,mitrovic2018submodularity}可能会选择序列1，因为它具有最大的初始价值。然而，从鲁棒性的角度来看，序列2和序列3对节点移除表现出更强的鲁棒性。已有不少研究关注于集合子模函数的鲁棒性工作\cite{orlin2018robust,bogunovic2017robust,mitrovic2017streaming,tzoumas2017resilient}，但关于序列网络子模函数鲁棒性的研究仍存在明显空白。针对这一问题，本文提出了鲁棒序列网络子模最大化算法。该算法不仅填补了理论研究的空白，还为序列广告推荐等实际应用提供了新的解决方案。我们的算法在保持序列网络子模函数优势的同时，引入了鲁棒性考虑，使得推荐结果在面对最差情况时能够表现出更好的鲁棒性和可靠性。
+这一现象表明，随着移除节点数量的变化，三个序列表现出不同程度的鲁棒性。传统的序列贪心算法\cite{tschiatschek2017selecting,mitrovic2018submodularity}可能会选择序列1，因为它具有最大的初始价值。然而，从鲁棒性的角度来看，序列2和序列3对节点移除表现出更强的鲁棒性。已有不少研究关注于集合子模函数的鲁棒性工作\cite{orlin2018robust,bogunovic2017robust,mitrovic2017streaming,tzoumas2017resilient}，但关于序列网络子模函数鲁棒性的研究仍存在明显空白。针对这一问题，本文提出了鲁棒序列网络子模最大化算法。该算法不仅填补了理论研究的空白，还为序列广告推荐等实际应用提供了新的解决方案。本文提出的算法在保持序列网络子模函数优势的同时，引入了鲁棒性考虑，使得推荐结果在面对最差情况时能够表现出更好的鲁棒性和可靠性。
 
-\textbf{序列广告推荐应当关注社交网络上的信息传播。}在社交网络的背景下，我们注意到用户并非孤立存在，信息会在用户的社交网络中不断传播，产生更广泛的影响。这种现象在各种平台上都有体现：在淘宝、Amazon等交易平台中，用户可以通过商品评价相互交流，分享对商品的看法。而在Twitter、Facebook（国外）和微博、微信（国内）等专门的社交平台上，拥有大量粉丝的博主只需发布一条信息，就可能促成大量交易。社交网络已经渗透到我们的网络生活的方方面面。正因如此，信息可以通过“口碑效应”在社交网络中迅速传播，产生巨大的影响力。这种社交网络中的信息传播过程吸引了多个领域的广泛研究，包括计算机科学、物理学、流行病学等\cite{li2018influence}。
+\textbf{序列广告推荐应当关注社交网络上的信息传播。}在社交网络的背景下，应当注意到用户并非孤立存在，信息会在用户的社交网络中不断传播，产生更广泛的影响。这种现象在各种平台上都有体现：在淘宝、Amazon等交易平台中，用户可以通过商品评价相互交流，分享对商品的看法。而在Twitter、Facebook（国外）和微博、微信（国内）等专门的社交平台上，拥有大量粉丝的博主只需发布一条信息，就可能促成大量交易。社交网络已经渗透到网络生活的方方面面。正因如此，信息可以通过“口碑效应”在社交网络中迅速传播，产生巨大的影响力。这种社交网络中的信息传播过程吸引了多个领域的广泛研究，包括计算机科学、物理学、流行病学等\cite{li2018influence}。
 
 社交网络影响力最大化问题（Influence Maximization问题，简称IM问题）最早由Richardson和Domingos等人\cite{richardson2002mining}在2002年提出，主要用来研究“口碑效应(Word-of-Mouth)”和“病毒营销(Viral marketing)”，后由Kemp等人\cite{kempe2003maximizing}模型化为算法问题，即在用户网络中选取一个种子集合，向他们投放广告，通过网络传播，最大化受影响的用户数量。Kempe等人引入了后来广泛使用的独立级联模型\cite{goldenberg2001talk}和线性阈值模型\cite{granovetter1978threshold}，还提出了触发模型（Triggering Model，简称TR模型），证明了影响力最大化问题在这三种模型上都是NP-hard的，并给出了近似比为$1-1/e$的贪心算法。贪心算法在估算节点的边际收益时需进行大量蒙特卡洛模拟过程，时间复杂度较高，后续的工作大多针对这一点进行优化。
 
-Borgs等人\cite{borgs2014maximizing}提出的反向影响力采样（Reverse Influence Sampling，简称RIS）技术在这一点上做出了突破性的贡献。该方法给出相同的近似比$1-1/e-\varepsilon$，时间复杂度仅为$O(k(m+n)log^2n/\varepsilon^2)$。基于这一思路，Tang等人相继提出了TIM/TIM+\cite{tang2014influence}和IMM\cite{tang2015influence}算法，运用鞅论方法，对时间复杂度进行了优化，达到了更低的了$O(k(m+n)logn/\varepsilon^2)$。Sun等人关注实际应用场景，建模了多轮影响力传播模型并提出了多轮影响力最大化问题\cite{mrim}。尽管影响力最大化领域的研究众多，但大多数研究默认用户都会接受推荐的广告，也不会考虑广告推荐顺序的不同影响。
+Borgs等人\cite{borgs2014maximizing}提出的反向影响力采样（Reverse Influence Sampling，简称RIS）技术在这一点上做出了突破性的贡献。该方法给出相同的近似比$1-1/e-\varepsilon$，时间复杂度仅为$O(k(m+n)\log^2n/\varepsilon^2)$。基于这一思路，Tang等人相继提出了TIM/TIM+\cite{tang2014influence}和IMM\cite{tang2015influence}算法，运用鞅论方法，对时间复杂度进行了优化，达到了更低的$O(k(m+n)\log n/\varepsilon^2)$。Sun等人关注实际应用场景，建模了多轮影响力传播模型并提出了多轮影响力最大化问题\cite{mrim}。尽管影响力最大化领域的研究众多，但大多数研究默认用户都会接受推荐的广告，也不会考虑广告推荐顺序的不同影响。
 
 应对这一问题，Tang\cite{tang2018social}首次将社交广告序列推荐和影响力最大化问题结合起来，假定用户逐个按顺序到来，为每一个到来的用户都推荐一组序列广告，用户根据兴趣概率接受部分广告，并有可能停止浏览。该研究将广告按照用户在网络上传播的期望收益与用户放弃继续浏览的概率比值进行排序，然后利用动态规划算法选择最终的广告序列，综合考虑了用户兴趣和网络传播效果。然而，这项研究仍然忽略了广告之间的关联，未考虑到用户对广告的接受程度很可能受其他广告的影响。
 
@@ -47,13 +47,13 @@ Borgs等人\cite{borgs2014maximizing}提出的反向影响力采样（Reverse In
 \end{figure}
 
 
-针对上述问题的第一点和第二点，我们提出了鲁棒序列网络子模最大化算法。这部分工作主要体现在以下几点：(1)将网络子模性质引入广告序列推荐问题。网络子模性质的特点在于序列函数可以等价转化为关于边集的函数。这类函数对于序列的生成边集具有子模性，对于生成点集不一定具有子模性。使用这样的函数作为目标函数，可以使函数在最大化的过程中更加注重广告与广告之间的正向关联。(2)为广告序列推荐加入了鲁棒性考虑，用户可能会选择性不接受部分广告。本文提出了鲁棒序列网络子模最大化问题，最多为用户推荐长度为$k$的序列广告。考虑最差情况下，移除$\tau$个节点，序列剩余价值的最大化。(3)已有的序列贪心算法\cite{tschiatschek2017selecting,mitrovic2018submodularity}选出的序列，其价值往往集中于少数中心节点。只要移除这部分节点即可极大地破坏序列的价值。因此本文提出的鲁棒序列网络子模最大化算法采用两段式推荐，避免序列价值过度集中，从而提升广告序列的鲁棒性。
+针对上述问题的第一点和第二点，本文提出了鲁棒序列网络子模最大化算法。这部分工作主要体现在以下几点：(1)将网络子模性质引入广告序列推荐问题。网络子模性质的特点在于序列函数可以等价转化为关于边集的函数。这类函数对于序列的生成边集具有子模性，对于生成点集不一定具有子模性。使用这样的函数作为目标函数，可以使函数在最大化的过程中更加注重广告与广告之间的正向关联。(2)为广告序列推荐加入了鲁棒性考虑，用户可能会选择性不接受部分广告。本文提出了鲁棒序列网络子模最大化问题，最多为用户推荐长度为$k$的序列广告。考虑最差情况下，移除$\tau$个节点，序列剩余价值的最大化。(3)已有的序列贪心算法\cite{tschiatschek2017selecting,mitrovic2018submodularity}选出的序列，其价值往往集中于少数中心节点。只要移除这部分节点即可极大地破坏序列的价值。因此本文提出的鲁棒序列网络子模最大化算法采用两段式推荐，避免序列价值过度集中，从而提升广告序列的鲁棒性。
 (4)证明并分析了鲁棒序列网络子模最大化算法的近似性。通过三个引理分别证明了算法在$\tau = 1$ 和$1< \tau < k$时的近似比。
 (5)通过Amazon评论数据集上\cite{ni2019justifying}上的广告推荐实验和Wikispeedia数据集\cite{west2009wikispeedia}上的链路预测实验证明了鲁棒序列网络子模最大化算法的有效性。
 
-将鲁棒序列网络子模最大化的工作和社交网络影响力最大化结合起来，我们提出了多轮社交广告序列影响最大化问题。这部分工作主要体现在以下几点：(1)创造性地将广告网络和用户社交网络同时融入模型，综合用户对广告的偏好、广告之间的促进作用以及用户网络的信息传递，并考虑到广告推荐不是一次性过程，加入多轮推荐的模式，建立能够同时为一组用户服务的多轮广告序列影响力最大化问题模型。(2)详细定义了多轮广告序列影响力最大化问题目标函数的计算方法。与鲁棒序列网络子模最大化问题不同的是，由于加入了社交网络信息传播的因素，用户不接受广告的最差情况很难计算，因此对于序列的鲁棒性考虑采用期望的形式来考虑用户对广告的接受程度。(3)提出了基于边贪心的多轮社交广告序列影响最大化推荐算法，并分析了其近似比。(4)边贪心的过程中需要快速估算每一条边的边际收益，为此，本文提出了针对多轮社交广告序列影响最大化问题的多轮反向影响力采样方法。(5)对目标函数的网络子模性进行分析，发现目标函数在边集上并不满足子模性，使用三明治夹逼的方法解决这一问题。并分析了使用多轮反向影响力采样方法和三明治方法的的边贪心算法的近似比和时间复杂度。
+将鲁棒序列网络子模最大化的工作和社交网络影响力最大化结合起来，本文提出了多轮社交广告序列影响最大化问题。这部分工作主要体现在以下几点：(1)创造性地将广告网络和用户社交网络同时融入模型，综合用户对广告的偏好、广告之间的促进作用以及用户网络的信息传递，并考虑到广告推荐不是一次性过程，加入多轮推荐的模式，建立能够同时为一组用户服务的多轮广告序列影响力最大化问题模型。(2)详细定义了多轮广告序列影响力最大化问题目标函数的计算方法。与鲁棒序列网络子模最大化问题不同的是，由于加入了社交网络信息传播的因素，用户不接受广告的最差情况很难计算，因此对于序列的鲁棒性考虑采用期望的形式来考虑用户对广告的接受程度。(3)提出了基于边贪心的多轮社交广告序列影响最大化推荐算法，并分析了其近似比。(4)边贪心的过程中需要快速估算每一条边的边际收益，为此，本文提出了针对多轮社交广告序列影响最大化问题的多轮反向影响力采样方法。(5)对目标函数的网络子模性进行分析，发现目标函数在边集上并不满足子模性，使用三明治夹逼的方法解决这一问题。并分析了使用多轮反向影响力采样方法和三明治方法的的边贪心算法的近似比和时间复杂度。
 (6)扩展了动态多轮社交广告序列影响最大化以适应动态可以观测推荐结果的场景。
-(7)最后再Amazon评论数据集\cite{amazon24}上的商品推荐实验证明了多轮社交广告序列影响最大化推荐算法的有效性。
+(7)最后在Amazon评论数据集\cite{amazon24}上的商品推荐实验证明了多轮社交广告序列影响最大化推荐算法的有效性。
 
 综上所述，本文的主要贡献体现在以下几点：
 
@@ -111,7 +111,7 @@ Borgs等人\cite{borgs2014maximizing}提出的反向影响力采样（Reverse In
 
 上述研究主要聚焦于集合函数，但实际应用中的许多问题往往更为复杂。尤其是元素被添加的顺序在很多场景下非常重要，并可能对目标函数值或实际效果产生很大的影响。近年来，子模性已经被推广到序列函数\cite{zhang2015string,tschiatschek2017selecting,streeter2008online,zhang2013near}。从集合到序列的拓展会导致搜索空间和计算复杂性呈指数级增长，对于一个包含$n$个元素的集合，其所有可能的排列数量为$n!$，远远超过$2^n$个子集的数量。但同时也可以极大的增强模型的表达能力，序列模型能够捕捉元素间的顺序关系，能够处理更加复杂和细致的优化任务。
 
-Tschiatschek等人\cite{tschiatschek2017selecting}和Mitrovic等人\cite{mitrovic2018submodularity}工作中的序列函数最大化设定其中元素通过有向图进行连接，图中的边表示当前相连的元素以特定顺序被选择时产生的额外价值。这种设定的特殊之处在于，这种函数是一个关于序列的函数，而非关于元素集合的函数。它在序列的生成元素集合上可以是非子模的，而需要在序列的生成边集上满足子模性。由于这种函数性质之前并没有命名，在本文中，我们暂且将其称之为网络子模性。Tschiatschek等人\cite{tschiatschek2017selecting}首次考虑最大化网络子模函数，Mitrovic等人\cite{mitrovic2018submodularity}还考虑到了超图上的情况。
+Tschiatschek等人\cite{tschiatschek2017selecting}和Mitrovic等人\cite{mitrovic2018submodularity}工作中的序列函数最大化设定其中元素通过有向图进行连接，图中的边表示当前相连的元素以特定顺序被选择时产生的额外价值。这种设定的特殊之处在于，这种函数是一个关于序列的函数，而非关于元素集合的函数。它在序列的生成元素集合上可以是非子模的，而需要在序列的生成边集上满足子模性。由于这种函数性质之前并没有命名，在本文中，暂且将其称之为网络子模性。Tschiatschek等人\cite{tschiatschek2017selecting}首次考虑最大化网络子模函数，Mitrovic等人\cite{mitrovic2018submodularity}还考虑到了超图上的情况。
 
 \subsection{鲁棒子模最大化问题}
 
@@ -159,7 +159,7 @@ Kempe等人证明了在独立级联模型、线性阈值模型以及触发模型
 
 Leskovec等人提出了CELF(Cost-Effective Lazy Forward)算法\cite{leskovec2007cost}。CELF利用了影响力最大化问题的子模性，减少了计算节点边际收益的次数，从而降低了算法的复杂度。它的优化原理是：如果一轮中如果某个节点上一轮的边际收益小于其他任意节点本轮的边际收益，那么根据边际收益递减，就不必对该节点再次计算。CELF优化大幅提升了算法效率，运行速度提高了700倍。Goyal等人\cite{goyal2011celf++}在此基础上又提出了CELF++算法，通过对边际收益增加标记的方法再次提升了运行效率。还有许多工作在模拟方法的基础上持续优化其运行效率\cite{kumar2022csr,王璿2022基于社交网络的影响力最大化算法}，但是在大规模的图上这类算法仍然需要耗费大量时间。另一个研究方向是启发式算法，利用传播模型的某些特性来提高特定情况下的算法效率\cite{kumar2022mder,lozano2024efficient,chen2009efficient,chen2010scalable,chen2010scalable2,goyal2011simpath}，启发式算法的运行速度提升很大，但是并没有近似比的保证。
 
-Borgs等人\cite{borgs2014maximizing}提出的反向影响力采样（Reverse Influence Sampling，简称RIS）技术做出了突破性的贡献。反向影响力采样是指先随机选一个点，从该节点反向模拟，也就是找到哪些节点作为种子节点时能影响到该节点，这些节点的集合被称为反向可达集合（Reverse Reachable set，简称RR set）。基于RIS的影响力最大化算法先收集足够多的RR set，然后通过贪心找到一个能够覆盖尽可能多的RR set的种子节点集合。该算法给出了相同的近似比$1-1/e-\varepsilon$，时间复杂度仅为$O(k(m+n)log^2n/\varepsilon^2)$。基于这一思路，Tang等人相继提出了TIM/TIM+\cite{tang2014influence}和IMM\cite{tang2015influence}算法，运用鞅论的分析方法，对时间复杂度进行了优化，达到了$O(k(m+n)logn/\varepsilon^2)$。IMM算法的出现使得影响力最大化算法在近似比得到保证的情况下，在庞大的社交网络中也能够具有良好的实用性。
+Borgs等人\cite{borgs2014maximizing}提出的反向影响力采样（Reverse Influence Sampling，简称RIS）技术做出了突破性的贡献。反向影响力采样是指先随机选一个点，从该节点反向模拟，也就是找到哪些节点作为种子节点时能影响到该节点，这些节点的集合被称为反向可达集合（Reverse Reachable set，简称RR set）。基于RIS的影响力最大化算法先收集足够多的RR set，然后通过贪心找到一个能够覆盖尽可能多的RR set的种子节点集合。该算法给出了相同的近似比$1-1/e-\varepsilon$，时间复杂度仅为$O(k(m+n)\log^2n/\varepsilon^2)$。基于这一思路，Tang等人相继提出了TIM/TIM+\cite{tang2014influence}和IMM\cite{tang2015influence}算法，运用鞅论的分析方法，对时间复杂度进行了优化，达到了$O(k(m+n)\log n/\varepsilon^2)$。IMM算法的出现使得影响力最大化算法在近似比得到保证的情况下，在庞大的社交网络中也能够具有良好的实用性。
 
 Sun等人关注实际应用场景，建模了多轮影响力传播模型并提出了多轮影响力最大化问题（Multi-Round Influence Maximization，简称MRIM问题）\parencite{sun2018multi}，将影响力最大化问题扩充为$T$轮传播，每轮选择最多$k$个节点的种子集合，使得传播结束时被激活的节点尽可能多。Sun等人提出了静态和动态两种基于IMM的多轮贪心算法，均能保证$1-e^{-(1-1/e)}-\varepsilon$的近似比。Lozano-Osorio等人\cite{lozano2022multi}在此基础上提出智能邻域搜索策略进一步提高了多轮影响力最大化问题可扩展性。
 
@@ -182,17 +182,17 @@ Sun等人关注实际应用场景，建模了多轮影响力传播模型并提�
 
 \section{鲁棒序列网络子模最大化问题定义}
 \label{sec:3_1}
-在本文中，我们遵循Tschiatschek等人\cite{tschiatschek2017selecting}的设定。令$V={v_1,v_2,...,v_n}$代表$n$个广告节点的集合。一组边\(W\)表示按特定顺序选择某些广告节点会带来额外收益。更具体地，边\(e_{ij} = (v_i,v_j)\)表示在选择\(v_i\)之后选择\(v_j\)会带来额外收益。自环（即起始和结束于同一节点的边）表示选择一个节点本身会带来的收益。
+本文遵循Tschiatschek等人\cite{tschiatschek2017selecting}的设定。令$V={v_1,v_2,...,v_n}$代表$n$个广告节点的集合。一组边\(W\)表示按特定顺序选择某些广告节点会带来额外收益。更具体地，边\(e_{ij} = (v_i,v_j)\)表示在选择\(v_i\)之后选择\(v_j\)会带来额外收益。自环（即起始和结束于同一节点的边）表示选择一个节点本身会带来的收益。
 
 \begin{definition}
-{\bfseries 序列子模最大化问题}是指，给定一个有向图\(N = (V,W)\)，一个非负单调子模集合函数\(h: 2^W \rightarrow \mathbb{R}_{\ge 0}\)，和序列长度限制\(k\)，目标是选择一个不重复的长度为\(k\)的节点序列\(\sigma\)，使目标函数最大化：
+{\bfseries 序列子模最大化问题}是指，给定一个有向图\(N = (V,W)\)，一个非负单调子模集合函数\(h: 2^W \rightarrow \mathbb{R}^{*}\)，和序列长度限制\(k\)，目标是选择一个不重复的长度为\(k\)的节点序列\(\sigma\)，使目标函数最大化：
 \begin{equation}
     f(\sigma)=h(E(\sigma))
 \end{equation}
 \noindent 其中，\(E(\sigma)\) 为序列$\sigma$的生成边集，包含所有满足\((v_i,v_j)\in W\)且在\(\sigma\)中\(v_i\)出现在\(v_j\)之前的边。
 \end{definition}
 
-需要注意的是，函数\(h\)是关于边集的子模函数，而非节点集合。而目标函数\(f\)既不是一个集合函数，关于节点也不一定是子模的，但对于序列的生成边集满足子模性。我们将这样的函数\(f(\sigma)\)称为{\bfseries 网络子模}函数。
+需要注意的是，函数\(h\)是关于边集的子模函数，而非节点集合。而目标函数\(f\)既不是一个集合函数，关于节点也不一定是子模的，但对于序列的生成边集满足子模性。本文将这样的函数\(f(\sigma)\)称为{\bfseries 网络子模}函数。
 
 定义\(f(\sigma - Z)\)为$\sigma$在移除集合\(Z\)中的节点后目标函数的剩余价值。
 \begin{definition}
@@ -207,7 +207,7 @@ Sun等人关注实际应用场景，建模了多轮影响力传播模型并提�
 \section{鲁棒序列网络子模最大化算法}
 \label{sec:3_2}
 
-已有的序列贪心算法\cite{mitrovic2018submodularity}不会考虑节点被删除的情况，直接应用其来解决鲁棒序列网络子模最大化问题效果可能会比较糟糕。我们可以构造一个非常简单的例子来进行说明，如图 \ref{fig:rose_sample} 所示，边$(A,B),(B,C),(B,E),(B,F)$的权重为0.9，边$(C,D),(C,G),(D,G)$的权重为0.5。假设目标网络子模函数\(f\)是所选序列生成边集中所有边的权重总和，要选择一个包含5个节点的序列，使用序列贪心算法，为了最大化总价值，包含更多高权重边的序列\(\langle A,B,C,E,F \rangle\)将会被选中，价值为\((0.9 \times 4 = 3.6)\)。然而，如果设置\(\tau=2\)，即移除两个节点，在最坏情况下，只要移除\(B\)和任意一个其他节点，都会使价值减为$0$。
+已有的序列贪心算法\cite{mitrovic2018submodularity}不会考虑节点被删除的情况，直接应用其来解决鲁棒序列网络子模最大化问题效果可能会比较糟糕。可以构造一个非常简单的例子来进行说明，如图 \ref{fig:rose_sample} 所示，边$(A,B),(B,C),(B,E),(B,F)$的权重为0.9，边$(C,D),(C,G),(D,G)$的权重为0.5。假设目标网络子模函数\(f\)是所选序列生成边集中所有边的权重总和，要选择一个包含5个节点的序列，使用序列贪心算法，为了最大化总价值，包含更多高权重边的序列\(\langle A,B,C,E,F \rangle\)将会被选中，价值为\((0.9 \times 4 = 3.6)\)。然而，如果设置\(\tau=2\)，即移除两个节点，在最坏情况下，只要移除\(B\)和任意一个其他节点，都会使价值减为$0$。
 
 \begin{figure}[th]
     \centering
@@ -216,9 +216,9 @@ Sun等人关注实际应用场景，建模了多轮影响力传播模型并提�
     \label{fig:rose_sample}
 \end{figure}
 
-因此，我们希望设计一个在移除任意$\tau$个已选定节点时仍能保持鲁棒性的算法。我们提出了鲁棒序列网络子模最大化算法，该算法可以近似解决鲁棒序列网络子模最大化问题，如算法 \ref{alg:rosenets} 所示。因为最终的结果需要移除部分节点，我们仅考虑$k \ge 3$的情况。
+因此，希望设计一个在移除任意$\tau$个已选定节点时仍能保持鲁棒性的算法。本文提出了鲁棒序列网络子模最大化算法，该算法可以近似解决鲁棒序列网络子模最大化问题，如算法 \ref{alg:rosenets} 所示。因为最终的结果需要移除部分节点，本文仅考虑$k \ge 3$的情况。
 
-序列贪心算法的局限性在于所选序列的整体价值可能集中在前几个节点上，导致个别节点被删除时对整体价值影响巨大。基于这一观察，算法 \ref{alg:rosenets} 分为两个步骤：第一步（第一个\textit{while}循环,第 \ref{alg:rose_line1} 到 \ref{alg:rose_line2} 行）中，我们以类似于序列贪心的方法从\(V\)中选择一个包含\(\tau\)个节点的序列\(\sigma_1\)。其中$h(e_{ij}|E(\sigma_1))=h(E(\sigma_1)\cup\{e_{ij}\})-h(E(\sigma_1))$，为边$e_{ij}$的边际收益。$\oplus$符号代表将两个序列顺序连接。第二步（第二个\textit{while}循环，第 \ref{alg:rose_line3} 到 \ref{alg:rose_line4} 行）中，以类似于序列贪心的方法从\(V\backslash \sigma_1\)中选择包含\(k-\tau\)个节点的另一个序列\(\sigma_2\)。需要注意的是，当我们选择序列\(\sigma_2\)时，我们会假定序列\(\sigma_1\)根本不存在，这确保了最终返回的序列\(\sigma = \sigma_1 \oplus \sigma_2\) 的价值不会集中在\(\sigma_1\)或\(\sigma_2\)中。算法 \ref{alg:rosenets} 的复杂度为\(O(k|E|)\)，为算法中评估函数$h$值的次数。
+序列贪心算法的局限性在于所选序列的整体价值可能集中在前几个节点上，导致个别节点被删除时对整体价值影响巨大。基于这一观察，算法 \ref{alg:rosenets} 分为两个步骤：第一步（第一个\textit{while}循环,第 \ref{alg:rose_line1} 到 \ref{alg:rose_line2} 行）中，本文以类似于序列贪心的方法从\(V\)中选择一个包含\(\tau\)个节点的序列\(\sigma_1\)。其中$h(e_{ij}|E(\sigma_1))=h(E(\sigma_1)\cup\{e_{ij}\})-h(E(\sigma_1))$，为边$e_{ij}$的边际收益。$\oplus$符号代表将两个序列顺序连接。第二步（第二个\textit{while}循环，第 \ref{alg:rose_line3} 到 \ref{alg:rose_line4} 行）中，以类似于序列贪心的方法从\(V\backslash \sigma_1\)中选择包含\(k-\tau\)个节点的另一个序列\(\sigma_2\)。需要注意的是，当选择序列\(\sigma_2\)时，算法会假定序列\(\sigma_1\)根本不存在，这确保了最终返回的序列\(\sigma = \sigma_1 \oplus \sigma_2\) 的价值不会集中在\(\sigma_1\)或\(\sigma_2\)中。算法 \ref{alg:rosenets} 的复杂度为\(O(k|E|)\)，为算法中评估函数$h$值的次数。
 
 \begin{algorithm}[H]
     \caption{鲁棒序列网络子模最大化算法 \label{alg:rosenets}}
@@ -258,14 +258,14 @@ Sun等人关注实际应用场景，建模了多轮影响力传播模型并提�
 
 回到图 \ref{fig:rose_sample} 中的例子。当\(k=5\)且\(\tau=2\)时，鲁棒序列网络子模最大化算法将选择序列\(\sigma_1=\langle A,B \rangle\)和序列\(\sigma_2=\langle C,D,G \rangle\)。在选择\(\sigma_2\)时，算法不会考虑序列\(\sigma_1\)中的节点\(B\)。因此，节点\(E\)和\(F\)被视为对目标函数没有贡献。算法将返回序列\(\sigma=\langle A,B,C,D,G \rangle\)。移除\(\tau=2\)个节点的最坏情况是移除\(B\)和\(\{C,D,G\}\)中的任意一个节点。剩余价值为0.5。而序列贪心函数得到的结果最坏情况的剩余价值为0。这个例子展现了鲁棒序列网络子模最大化算法的差异与优势。
 
-一个鲁棒的序列应具有复杂的网络结构，其价值不应集中于少数中心节点，而应来源于序列中所有节点之间的边。要选择这样的鲁棒序列，需要进行多次相互独立的贪心选择尝试。这种方法可以避免单一贪心选择可能导致的问题，即高概率选中中心节点及其高边权邻居（如图 \ref{fig:rose_sample} 中的节点$B$），从而使得移除这些节点导致整体价值急剧下降。本文通过两次独立的贪心选择来实现这一策略。理论上，增加贪心选择的次数可能会提高算法的近似比。然而，考虑到这是鲁棒序列网络子模最大化问题研究的初步阶段，且当前的理论分析已相当复杂，我们将多部分选择算法的设计及其近似比分析留作未来研究课题。
+一个鲁棒的序列应具有复杂的网络结构，其价值不应集中于少数中心节点，而应来源于序列中所有节点之间的边。要选择这样的鲁棒序列，需要进行多次相互独立的贪心选择尝试。这种方法可以避免单一贪心选择可能导致的问题，即高概率选中中心节点及其高边权邻居（如图 \ref{fig:rose_sample} 中的节点$B$），从而使得移除这些节点导致整体价值急剧下降。本文通过两次独立的贪心选择来实现这一策略。理论上，增加贪心选择的次数可能会提高算法的近似比。然而，考虑到这是鲁棒序列网络子模最大化问题研究的初步阶段，且当前的理论分析已相当复杂，因此多部分选择算法的设计及其近似比分析将留作未来研究课题。
 
 \section{近似性分析}
 \label{sec:3_3}
 
 令 $\alpha=2 d_{\text{in}}+1$，$\beta=1+d_{\text{in}}+d_{\text{out}}$，$\gamma=e^{\frac{k-3}{k-2}}$，$\eta=e^{\frac{k-2\tau-1}{k-\tau-1}}$。其中，$d_{\text{in}}$ 和 $d_{\text{out}}$ 分别是网络中节点的最大入度和出度。
 
-为了方便，我们用 $f(v|\sigma)$ 和 $f(\sigma'|\sigma)$ 分别表示将 $v$ 和 $\sigma'$ 添加到序列 $\sigma$ 后的边际增益。用 $\sigma^*(V,k,\tau)$ 表示鲁棒序列网络子模最大化问题的最优解，其中 $V$ 是节点集，$k$ 是选择序列的长度，$\tau$ 是鲁棒参数。$g_\tau(\sigma)$ 表示从序列 $\sigma$ 中移除 $\tau$ 个节点后 $f(\sigma)$ 的最小值（即最差情况）。
+为了方便，本文用 $f(v|\sigma)$ 和 $f(\sigma'|\sigma)$ 分别表示将 $v$ 和 $\sigma'$ 添加到序列 $\sigma$ 后的边际增益。用 $\sigma^*(V,k,\tau)$ 表示鲁棒序列网络子模最大化问题的最优解，其中 $V$ 是节点集，$k$ 是选择序列的长度，$\tau$ 是鲁棒参数。$g_\tau(\sigma)$ 表示从序列 $\sigma$ 中移除 $\tau$ 个节点后 $f(\sigma)$ 的最小值（即最差情况）。
 
 \begin{theorem}
 \label{thm:tau1}
@@ -282,15 +282,15 @@ Sun等人关注实际应用场景，建模了多轮影响力传播模型并提�
 \end{equation}
 \end{theorem}
 
-在定理 \ref{thm:tau1} 中，由于两个近似比下限的数学表达式较为复杂，很难直接进行比较。因此，我们考虑特定的情况来展示这两项的大小关系。
+在定理 \ref{thm:tau1} 中，由于两个近似比下限的数学表达式较为复杂，很难直接进行比较。因此，考虑特定的情况来展示这两项的大小关系。
 
-首先，很容易验证这两项都是关于 $k$ 的单调递增函数。当 $k=3$ 时，我们有 $\frac{1-e^{-(1-1/k)}}{\alpha\beta}-\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1} = \frac{1-e^{-2/3}}{\alpha \beta}>0$。因此，我们知道当 $k$ 较小时，第一项更大。当 $k \to \infty$ 时，第一项的极限值为 $(1-1/e)/\alpha\beta$，第二项的极限值为 $\frac{e^{\frac{1}{d_{\text{in}}}}-1}{\beta e^{\frac{1}{d_{\text{in}}}}-1}$。当 $d_{\text{in}}=1$ 时，$\alpha=3$，且 $(1-1/e)/\alpha\beta-\frac{e^{\frac{1}{d_{\text{in}}}}-1}{\beta e^{\frac{1}{d_{\text{in}}}}-1} =(1-1/e)/3\beta-\frac{e-1}{\beta e-1}=\frac{-1-2\beta e +\frac{1}{e}+2\beta}{3\beta(\beta e-1)}<0$。在这种情况下，定理 \ref{thm:tau1} 中的第二项大于第一项。因此，我们可以得出，在特定的网络结构下以及 $k$ 较大时，第二项会更大。
+首先，很容易验证这两项都是关于 $k$ 的单调递增函数。当 $k=3$ 时，有 $\frac{1-e^{-(1-1/k)}}{\alpha\beta}-\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1} = \frac{1-e^{-2/3}}{\alpha \beta}>0$。因此，当 $k$ 较小时，第一项更大。当 $k \to \infty$ 时，第一项的极限值为 $(1-1/e)/\alpha\beta$，第二项的极限值为 $\frac{e^{\frac{1}{d_{\text{in}}}}-1}{\beta e^{\frac{1}{d_{\text{in}}}}-1}$。当 $d_{\text{in}}=1$ 时，$\alpha=3$，且 $(1-1/e)/\alpha\beta-\frac{e^{\frac{1}{d_{\text{in}}}}-1}{\beta e^{\frac{1}{d_{\text{in}}}}-1} =(1-1/e)/3\beta-\frac{e-1}{\beta e-1}=\frac{-1-2\beta e +\frac{1}{e}+2\beta}{3\beta(\beta e-1)}<0$。在这种情况下，定理 \ref{thm:tau1} 中的第二项大于第一项。因此可以得出，在特定的网络结构下以及 $k$ 较大时，第二项会更大。
 
-类似地，对于定理 \ref{thm:tau2}，当 $k=3$ 且 $\tau=1$ 时，$\frac{1-e^{-(1-1/k)}}{\alpha\beta}-\frac{\tau\alpha\beta(\eta^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha\eta^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-(1-1/k)})} = \frac{1-e^{-2/3}}{\alpha \beta}>0$。因此，我们知道当 $k$ 和 $\tau$ 较小时，第一项更大。当 $k \to \infty$ 而 $\tau$ 保持常数时，第一项的极限值为 $(1-1/e)/\alpha\beta$，第二项的极限值为 $\frac{\tau\alpha\beta(e^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha e^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-1}) }$。当 $d_{\text{in}}=1$ 且 $d_{\text{out}}<\frac{3\tau e^2}{e-1}-2$ 时，则 $\alpha=3$，$\beta < \frac{3\tau e^2}{e-1}$，且 $(1-1/e)/\alpha\beta-\frac{\tau\alpha\beta(e^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha e^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-1}) } = \frac{(1-\frac{1}{e})(3\tau e -\beta(1-\frac{1}{e}))-9\beta^2 \tau(e-1)}{3\beta(3\tau e -\beta(1-\frac{1}{e}))}<0$。在这种情况下，定理 \ref{thm:tau2} 中的第二项大于第一项。因此，我们可以得出，在特定的网络结构以及 $k$ 较大时，第二项会更大。
+类似地，对于定理 \ref{thm:tau2}，当 $k=3$ 且 $\tau=1$ 时，$\frac{1-e^{-(1-1/k)}}{\alpha\beta}-\frac{\tau\alpha\beta(\eta^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha\eta^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-(1-1/k)})} = \frac{1-e^{-2/3}}{\alpha \beta}>0$。因此，当 $k$ 和 $\tau$ 较小时，第一项更大。当 $k \to \infty$ 而 $\tau$ 保持常数时，第一项的极限值为 $(1-1/e)/\alpha\beta$，第二项的极限值为 $\frac{\tau\alpha\beta(e^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha e^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-1}) }$。当 $d_{\text{in}}=1$ 且 $d_{\text{out}}<\frac{3\tau e^2}{e-1}-2$ 时，则 $\alpha=3$，$\beta < \frac{3\tau e^2}{e-1}$，且 $(1-1/e)/\alpha\beta-\frac{\tau\alpha\beta(e^{\frac{1}{d_{\text{in}}}}-1)}{\tau\alpha e^{\frac{1}{d_{\text{in}}}}- \beta (1-e^{-1}) } = \frac{(1-\frac{1}{e})(3\tau e -\beta(1-\frac{1}{e}))-9\beta^2 \tau(e-1)}{3\beta(3\tau e -\beta(1-\frac{1}{e}))}<0$。在这种情况下，定理 \ref{thm:tau2} 中的第二项大于第一项。因此可以得出，在特定的网络结构以及 $k$ 较大时，第二项会更大。
 
 根据上述分析，可知 $k$ 和 $\tau$ 的值以及网络拓扑结构，都对近似比产生显著影响。进一步探究参数变化和网络拓扑结构改变时近似比的动态变化规律，也是一个有趣的未来研究方向。
 
-接下来证明定理 \ref{thm:tau1} 和定理 \ref{thm:tau2}，我们需要以下三个引理辅助证明。
+接下来证明定理 \ref{thm:tau1} 和定理 \ref{thm:tau2}，需要以下三个引理辅助证明。
 
 \begin{lemma}
 \label{lem:lem1}
@@ -331,7 +331,7 @@ f(v|\sigma_1) \ge \frac{1}{d_{\text{in}}|\sigma_2|}f(\sigma_2|\sigma_1)
 \end{lemma}
 
 \noindent 证明：
-令 $v_2^i$ 表示序列 $\sigma_2$ 中的第 $i$ 个顶点。令 $\sigma_2^i$ 表示由序列 $\sigma_2$ 的前 $i$ 个顶点组成的序列。我们可以合理假设 $|\sigma^*(V,k,0)|=k$。
+令 $v_2^i$ 表示序列 $\sigma_2$ 中的第 $i$ 个顶点。令 $\sigma_2^i$ 表示由序列 $\sigma_2$ 的前 $i$ 个顶点组成的序列。可以合理假设 $|\sigma^*(V,k,0)|=k$。
 
 \begin{align}
 f(\sigma_1 \oplus \sigma_2^i) &- f(\sigma_1 \oplus \sigma_2^{i-1}) = f(v_2^i|\sigma_1 \oplus \sigma_2^{i-1}) \ge h(e_2^i|E(\sigma_1 \oplus \sigma_2^{i-1})) \label{equ:lem2_line1}\\
@@ -385,7 +385,7 @@ g_\tau (\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))
 
 \noindent 证明：
 
-令 $Z_{\tau}(\sigma)$ 为使 $g_{\tau}(\sigma)$ 最小化的集合。我们可以合理假设 $|Z_{\tau}(\sigma)|=\tau$。
+令 $Z_{\tau}(\sigma)$ 为使 $g_{\tau}(\sigma)$ 最小化的集合。可以合理假设 $|Z_{\tau}(\sigma)|=\tau$。
 
 令 $\mathcal{U}=V(\sigma^*(V,k,\tau)) \cap Z$ 且 $\tau'=|\mathcal{U}|$。显然，$\mathcal{U}\subseteq V(\sigma^*(V,k,\tau))$。且有
 \begin{equation}
@@ -405,12 +405,12 @@ g_\tau (\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))
 Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - \mathcal{U}) = Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)
 \end{equation}
 
-因为$Z-\mathcal{U}$ 中的元素不在 $\sigma^*(V,k,\tau)$ 中，所以我们有
+因为$Z-\mathcal{U}$ 中的元素不在 $\sigma^*(V,k,\tau)$ 中，所以有
 \begin{equation}
     f( \sigma^*(V,k,\tau) - \mathcal{U} \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - \mathcal{U}) ) = f( \sigma^*(V,k,\tau) - Z \cup Z_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z))
 \end{equation}
 
-注意序列 $\sigma^*(V,k,\tau) - Z$ 不包含 $Z$ 中的任何元素，并且有 $k-\tau'$ 个元素。它是在 $V-Z,k-\tau'$ 和 $\tau-\tau'$ 条件下最小化函数 $g_\tau(\sigma)$ 的一个可行解。因此我们有
+注意序列 $\sigma^*(V,k,\tau) - Z$ 不包含 $Z$ 中的任何元素，并且有 $k-\tau'$ 个元素。它是在 $V-Z,k-\tau'$ 和 $\tau-\tau'$ 条件下最小化函数 $g_\tau(\sigma)$ 的一个可行解。因此有
 \begin{equation}
 g_{\tau-\tau'}(\sigma^*(V,k,\tau) - Z)  \le g_{\tau-\tau'}(\sigma^*(V-Z,k-\tau',\tau-\tau')) \le f(\sigma^*(V-Z,k-\tau,0))
 \end{equation}
@@ -432,9 +432,9 @@ $g_{\tau}(\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))$得证。
 \max\{\frac{1-e^{-(1-1/k)}}{\alpha\beta},\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1}\}\end{equation*}
 
 \noindent 证明：
-由于 $\tau=1$，所以算法选择的序列 $\sigma_1$ 只有一个元素。并且我们有 $\sigma_2=k-1$。令 $\sigma_1=\{v_1\}$。那么最终的序列为 $\sigma= \{v_1\} \oplus \sigma_2$。假设从序列中移除的顶点是 $z$。
+由于 $\tau=1$，所以算法选择的序列 $\sigma_1$ 只有一个元素。并且有 $\sigma_2=k-1$。令 $\sigma_1=\{v_1\}$。那么最终的序列为 $\sigma= \{v_1\} \oplus \sigma_2$。假设从序列中移除的顶点是 $z$。
 
-首先，我们可以给出$f(\sigma_2)$的一个下界：
+首先，可以给出$f(\sigma_2)$的一个下界：
 \begin{equation}
     f(\sigma_2)  \ge \frac{1-e^{-(1-1/k)}}{\alpha} f(\sigma^*(V\backslash v_1,k-1,0))
      \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \label{equ:tau1_line2}
@@ -444,16 +444,16 @@ $g_{\tau}(\sigma^*(V,k,\tau)) \le f(\sigma^*(V-Z,k-\tau,0))$得证。
 
 被移除的元素 $z$ 可能是 $v_1$ 或者是 $\sigma_2$ 中的一个元素。考虑这两种情况：
 
-\textbf{情况 1.} $z=v_1$。那么我们有
+\textbf{情况 1.} $z=v_1$。那么有
 \begin{equation}
 f(\sigma -z ) = f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
 \end{equation}
 
-\textbf{情况 2.} $z\in \sigma_2$。我们进一步考虑两种情况：
+\textbf{情况 2.} $z\in \sigma_2$。进一步考虑两种情况：
 
 \textbf{情况 2.1.} $f(\sigma_2) \le f(\sigma_2-z)$。
 
-在这种情况下，移除操作不会减少剩余序列 $\sigma_2-\{z\}$ 的整体价值。那么我们有
+在这种情况下，移除操作不会减少剩余序列 $\sigma_2-\{z\}$ 的整体价值。那么有
 \begin{equation}
     f(\sigma-z)  =f(v_1 \oplus (\sigma_2-z)) \ge f(\sigma_2-z)
      \ge f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
@@ -473,7 +473,7 @@ f(\sigma -z ) = f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,
 \end{align}
 \noindent 其中 $h(e_z^{\text{in}})$/$h(e_z^{\text{out}})$ 是 $z$ 的所有入边/出边中具有最大价值的边。不等式 \ref{equ:tau1_line3} 是由于顶点 $z$ 对前面和后续序列的边际增益最多为 $d_{\text{in}} h(e_z^{\text{in}})$ 和 $d_{\text{out}} h(e_z^{\text{out}})$。不等式 \ref{equ:tau1_line4} 成立较为显然。
 
-首先，假设 $\sigma_2$ 的第一个顶点是 $v_2$。根据函数 $f(\cdot)$ 的单调性和式 \ref{equ:tau1_line4}，我们有
+首先，假设 $\sigma_2$ 的第一个顶点是 $v_2$。根据函数 $f(\cdot)$ 的单调性和式 \ref{equ:tau1_line4}，有
 \begin{align}
     f(\sigma-\{z\}) & \ge f(v_1 \oplus v_2) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\sigma_2) \\
     f(\sigma-\{z\}) & = f(v_1 \oplus (\sigma_2-z)) \ge f(\sigma_2 -z) \ge (1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)
@@ -484,7 +484,7 @@ f(\sigma -z ) = f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,
     f(\sigma-z)\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \label{equ:tau1_ine1}
 \end{equation}
 
-对于 $x\in (0,\frac{1}{b}]$ 和 $b>0$，有 $\max\{x,1-bx\} \ge \frac{1}{1+b}$。因此，我们得到下式：
+对于 $x\in (0,\frac{1}{b}]$ 和 $b>0$，有 $\max\{x,1-bx\} \ge \frac{1}{1+b}$。因此，得到下式：
 \begin{equation}
     \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \ge 1/\beta
 \end{equation}
@@ -494,7 +494,7 @@ $\sigma_2$ 中的前两个元素 $v_2$ 和 $v_3$ 满足：
 f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\sigma_2) \label{equ:tau1_ine2}
 \end{equation}
 
-则通过替换引理 \ref{lem:lem2} 和引理 \ref{lem:lem3} 中的参数，我们得到以下结果:
+则通过替换引理 \ref{lem:lem2} 和引理 \ref{lem:lem3} 中的参数，得到以下结果:
 
 \begin{equation}
     f(\sigma_2) \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} f(\sigma^*(V\backslash v_1,k-\tau,0)) \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} g_{\tau} (\sigma^*(V,k,\tau)) \label{equ:tau1_ine3}
@@ -504,25 +504,25 @@ f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\si
 
 容易验证，对于 $k\ge 3$ 且 $q\in (0,\frac{1}{d_{\text{in}}+d_{\text{out}}}]$，$\ell_1(q)$ 单调递增，而 $\ell_2(q)$ 单调递减。当 $q=\frac{1}{\beta}$ 时，$\ell_1(q)=\ell_2(q)=\frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1}$。
 
-我们考虑 $q$ 的两种情况：
+考虑 $q$ 的两种情况：
 
-(1) 当 $q \in (0,\frac{1}{\beta}]$ 时，由于 $\ell_2(q)$ 单调递减，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_2(\frac{1}{\beta})$；
+(1) 当 $q \in (0,\frac{1}{\beta}]$ 时，由于 $\ell_2(q)$ 单调递减，有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_2(\frac{1}{\beta})$；
 
-(2) 当 $q \in (\frac{1}{\beta},\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，由于 $\ell_1(q)$ 单调递增，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_1(\frac{1}{\beta})$。
+(2) 当 $q \in (\frac{1}{\beta},\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，由于 $\ell_1(q)$ 单调递增，有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_1(\frac{1}{\beta})$。
 
 因此，得到如下不等式：
 \begin{equation}
     \max\{ q \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} \} \ge \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\beta \gamma^{\frac{1}{d_{\text{in}}}}-1} \label{equ:tau1_ine4}    
 \end{equation}
 
-结合不等式 \ref{equ:tau1_line2}、不等式 \ref{equ:tau1_ine1} 和不等式 \ref{equ:tau1_ine2}，我们可以得到定理 \ref{thm:tau1} 中的第一个下界：
+结合不等式 \ref{equ:tau1_line2}、不等式 \ref{equ:tau1_ine1} 和不等式 \ref{equ:tau1_ine2}，可以得到定理 \ref{thm:tau1} 中的第一个下界：
 \begin{align}
     f(\sigma -z ) \ge & \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)\} \\
     \ge & \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \\
     \ge & \frac{1-e^{-(1-1/k)}}{\alpha\beta} g_\tau(\sigma^*(V,k,\tau))
 \end{align}
 
-结合不等式 \ref{equ:tau1_ine1}、不等式 \ref{equ:tau1_ine3} 和不等式 \ref{equ:tau1_ine4}，我们可以得到定理 \ref{thm:tau1} 中的第二个下界：
+结合不等式 \ref{equ:tau1_ine1}、不等式 \ref{equ:tau1_ine3} 和不等式 \ref{equ:tau1_ine4}，可以得到定理 \ref{thm:tau1} 中的第二个下界：
 \begin{align}
      f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
     & \ge \max\{ q \cdot \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} , (1-(d_{\text{in}} + d_{\text{out}})q) \frac{\gamma^{\frac{1}{d_{\text{in}}}}-1}{\gamma^{\frac{1}{d_{\text{in}}}}-q} \} g_\tau(\sigma^*(V,k,\tau)) \\
@@ -543,7 +543,7 @@ f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\si
 证明过程与定理 \ref{thm:tau1} 的证明流程类似。
 在执行鲁棒序列网络子模最大化算法后，选定的序列为 $\sigma=\sigma_1 \oplus \sigma_2$，其中 $|\sigma_1|=\tau$ ， $|\sigma_2|=k-\tau$。定义 $Z_{\tau} = Z_{\tau}^1 \cup Z_{\tau}^2$ 为能最小化 $f(\sigma-Z_{\tau})$ 的被移除节点集，其中 $Z_{\tau}^1 = Z_{\tau} \cap \sigma_1$ 且 $Z_{\tau}^2 = Z_{\tau} \cap \sigma_2$。
 
-首先，我们给出 $f(\sigma_2)$ 的一个下界：
+首先，给出 $f(\sigma_2)$ 的一个下界：
 \begin{equation}
     f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} f(\sigma^*(V\backslash \sigma_1,k-\tau,0)) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \label{equ:tau2_line1}
 \end{equation}
@@ -555,11 +555,11 @@ f(v_2\oplus v_3) \ge \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\si
     f(\sigma-Z_\tau(\sigma))=f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
 \end{equation}
 
-\textbf{情况2.} $Z^2_{\tau} \neq \emptyset$，我们进一步考虑两种情况：
+\textbf{情况2.} $Z^2_{\tau} \neq \emptyset$，进一步考虑两种情况：
 
 \textbf{情况2.1.} $f(\sigma_2) \le f(\sigma_2 - Z^2_\tau(\sigma))$。
 
-在这种情况下，移除 $Z^2_\tau(\sigma)$ 中的节点不会减少剩余序列的总体价值。那么我们有
+在这种情况下，移除 $Z^2_\tau(\sigma)$ 中的节点不会减少剩余序列的总体价值。那么有
 \begin{align}
 f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \\
 & \ge f(\sigma_2 -Z_\tau^2(\sigma)) \ge f(\sigma_2) \ge \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau))
@@ -567,11 +567,11 @@ f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - 
 
 \textbf{情况2.2.}  $f(\sigma_2) \ge f(\sigma_2 - Z^2_\tau(\sigma))$。
 
-令 $\tau_1 = |Z_\tau^1(\sigma)|$ 且 $\tau_2=|Z_\tau^2(\sigma)|$。那么我们有 $\tau=\tau_1+\tau_2$ 以及 $k=|\sigma|=|\sigma_1|+|\sigma_2|\ge \tau+\tau_2$。
+令 $\tau_1 = |Z_\tau^1(\sigma)|$ 且 $\tau_2=|Z_\tau^2(\sigma)|$。那么有 $\tau=\tau_1+\tau_2$ 以及 $k=|\sigma|=|\sigma_1|+|\sigma_2|\ge \tau+\tau_2$。
 
 令 $q= \frac{f(\sigma_2)-f(\sigma_2-Z_\tau^2(\sigma))}{(d_{\text{in}}+d_{\text{out}})f(\sigma_2)}$，表示从序列 $\sigma_2$ 中移除 $Z_\tau^2(\sigma)$ 中元素所造成的损失与序列 $\sigma_2$ 的价值之比。则有 $q\in (0,\frac{1}{(d_{\text{in}}+d_{\text{out}})}]$，因为 $f(\sigma_2) > f(\sigma_2-Z_\tau^2(\sigma))$。
 
-假设 $Z^2_\tau(\sigma)$ 中的元素根据它们在序列 $\sigma_2$ 中的顺序被表示为 $z_1,z_2,...,z_{\tau_2}$。那么我们可以将 $\sigma_2$ 重写为 $\sigma_2=\sigma_2^1\oplus z_1 \oplus \sigma_2^2 \oplus z_2 \oplus ... \oplus \sigma_2^{\tau_2+1}$，其中 $\sigma_2^i$ 是位于元素 $z_{i-1}$ 和 $z_i$ 之间的子序列，对于 $i=1,2,...,\tau_2+1$，而 $z_0$ 和 $z_{\tau_2+1}$ 是空序列。需要注意对于任意 $i$，$\sigma_2^i$ 可以是空序列。然后我们有
+假设 $Z^2_\tau(\sigma)$ 中的元素根据它们在序列 $\sigma_2$ 中的顺序被表示为 $z_1,z_2,...,z_{\tau_2}$。那么可以将 $\sigma_2$ 重写为 $\sigma_2=\sigma_2^1\oplus z_1 \oplus \sigma_2^2 \oplus z_2 \oplus ... \oplus \sigma_2^{\tau_2+1}$，其中 $\sigma_2^i$ 是位于元素 $z_{i-1}$ 和 $z_i$ 之间的子序列，对于 $i=1,2,...,\tau_2+1$，而 $z_0$ 和 $z_{\tau_2+1}$ 是空序列。需要注意对于任意 $i$，$\sigma_2^i$ 可以是空序列。然后有
 \begin{align}
 (d_{\text{in}} & + d_{\text{out}}) q f(\sigma_2) = f(\sigma_2) - f(\sigma_2-Z_\tau^2(\sigma)) \\
 & = f(\sigma_2^1) + f(z_1|\sigma_2^1)+f(\sigma_2^2| \sigma_2^1\oplus z_1) + ... + f(\sigma_2^{\tau_2+1}| \sigma_2^1\oplus z_1 \oplus ... \oplus \sigma_2^{\tau_2}) \nonumber \\
@@ -583,7 +583,7 @@ f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - 
 \end{align}
 \noindent 其中 $d_{\text{in}}$/$d_{\text{out}}$ 是网络的最大入度/出度，$h(e_z^{\text{in}})$/$h(e_z^{\text{out}})$ 是在所有被移除节点 $\{z_i\}_{i=1,2,...,\tau_2}$ 的所有入边/出边中具有最大价值的边。第一个不等式是由于顶点 $z$ 对前缀和后续序列的边际增益最多为 $d_{\text{in}} h(e_z^{\text{in}})$ 和 $d_{\text{out}} h(e_z^{\text{out}})$。后两个不等式成立比较显然。
 
-根据函数 $f(\cdot)$ 的单调性和上述不等式，我们有
+根据函数 $f(\cdot)$ 的单调性和上述不等式，有
 \begin{align}
 f(\sigma- Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \\ &\ge f(\sigma_1 - Z_\tau^1(\sigma)) = f(\sigma_1^{\tau_2}) \ge \tau_2 \max \{h(e_z^{\text{in}}),h(e_z^{\text{out}})\} \ge q f(\sigma_2) \\
 f(\sigma-Z_\tau(\sigma)) & = f((\sigma_1 - Z_\tau^1(\sigma)) \oplus (\sigma_2 - Z_\tau^2(\sigma))) \\ & \ge f(\sigma_2 -Z_\tau^2(\sigma)) \ge (1-(d_{\text{in}} + d_{\text{out}})q) f(\sigma_2)
@@ -599,7 +599,7 @@ f(\sigma-z)\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) 
     \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \ge 1/\beta \label{equ:tau2_ine2}
 \end{equation}
 
-用 $\sigma_2^{\tau_2}$ 表示由序列 $\sigma_2$ 的前 $\tau_2$ 个元素组成的序列。那么我们有
+用 $\sigma_2^{\tau_2}$ 表示由序列 $\sigma_2$ 的前 $\tau_2$ 个元素组成的序列。那么有
 \begin{equation}
 f(\sigma_2^{\tau_2}) \ge \frac{1-e^{-(1-1/k)}}{\alpha} f(\sigma^*(V\backslash \sigma_1,\tau_2,0)) \ge  \frac{1-e^{-(1-1/k)}}{\alpha} f(Z_\tau^2(\sigma)) \ge q \frac{1-e^{-(1-1/k)}}{\tau_2 \alpha} f(\sigma_2)
 \end{equation}
@@ -616,13 +616,13 @@ f(\sigma_2) &\ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{
 容易验证，当 $k\ge 3$ 且 $q\in (0,\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，$\ell_1(q)$ 单调递增，而 $\ell_2(q)$ 单调递减。当 $q=\frac{1}{\beta}$ 时，$\ell_1(q)=\ell_2(q)=\frac{\beta(e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1)}{e^{\frac{k-\tau-\tau_2-1}
 {d_{\text{in}}(k-\tau_2-1)}}-\beta \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} }$。
 
-我们考虑 $q$ 的两种情况：
+考虑 $q$ 的两种情况：
 
-(1) 当 $q \in (0,\frac{1}{\beta}]$ 时，由于 $\ell_2(q)$ 单调递减，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_2(\frac{1}{\beta})$；
+(1) 当 $q \in (0,\frac{1}{\beta}]$ 时，由于 $\ell_2(q)$ 单调递减，有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_2(\frac{1}{\beta})$；
 
-(2) 当 $q \in (\frac{1}{\beta},\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，由于 $\ell_1(q)$ 单调递增，我们有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_1(\frac{1}{\beta})$。
+(2) 当 $q \in (\frac{1}{\beta},\frac{1}{d_{\text{in}}+d_{\text{out}}}]$ 时，由于 $\ell_1(q)$ 单调递增，有 $\max\{\ell_1(q),\ell_2(q)\}\ge \ell_1(\frac{1}{\beta})$。
 
-因此，我们得到如下的不等式：
+因此，得到如下的不等式：
 \begin{align}
 \max\{ q \cdot \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
 {d_{\text{in}}(k-\tau_2-1)}}-q \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } ,& (1-(d_{\text{in}} + d_{\text{out}})q) \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{e^{\frac{k-\tau-\tau_2-1}
@@ -631,14 +631,14 @@ f(\sigma_2) &\ge \frac{e^{\frac{k-\tau-\tau_2-1}{(k-\tau_2-1)d_{\text{in}}}}-1}{
 {d_{\text{in}}(k-\tau_2-1)}}-\beta \frac{1-e^{-(1-1/k)}}{\tau_2\alpha} } \label{equ:tau2_ine4}
 \end{align}
 
-结合不等式 \ref{equ:tau2_line1}、不等式 \ref{equ:tau2_ine1} 和不等式 \ref{equ:tau2_ine2}，我们可以得到定理 \ref{thm:tau2} 中的第一个下界：
+结合不等式 \ref{equ:tau2_line1}、不等式 \ref{equ:tau2_ine1} 和不等式 \ref{equ:tau2_ine2}，可以得到定理 \ref{thm:tau2} 中的第一个下界：
 \begin{align}
 f(\sigma -z ) & \ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
 & \ge \max\{q,1-(d_{\text{in}} + d_{\text{out}})q\} \cdot \frac{1-e^{-(1-1/k)}}{\alpha} g_\tau(\sigma^*(V,k,\tau)) \\
 & \ge \frac{1-e^{-(1-1/k)}}{\alpha\beta} g_\tau(\sigma^*(V,k,\tau))
 \end{align}
 
-结合不等式 \ref{equ:tau2_ine1}、不等式 \ref{equ:tau2_ine3} 和不等式 \ref{equ:tau2_ine4}，我们可以得到定理 \ref{thm:tau2} 中的第二个下界：
+结合不等式 \ref{equ:tau2_ine1}、不等式 \ref{equ:tau2_ine3} 和不等式 \ref{equ:tau2_ine4}，可以得到定理 \ref{thm:tau2} 中的第二个下界：
 
 \begin{align}
 f(\sigma -z ) &\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}})q) \cdot f(\sigma_2)\} \\
@@ -663,7 +663,7 @@ f(\sigma -z ) &\ge \max\{ q \cdot f(\sigma_2),(1-(d_{\text{in}} + d_{\text{out}}
 
 多轮广告序列影响最大化问题的最终目标为，从广告推荐平台的角度，对于一组具有相似特性的特定用户，基于广告之间的关联，向他们推荐相同的多轮序列广告，经过社交网络传播，达到广告收益的最大化。
 
-用$U_S$表示需要推送广告的这组特定用户的集合。定义广告网络$N=(V,W)$，其中$V$代表可推荐的广告集合；$W\subseteq V \times V$为广告和广告之间的有向边（包括自环，自环的存在是为后文$w$函数的定义和算法的需要提供便利，不具有关系性的含义），除自环以外的其他边代表两个广告之间具有相关关系。例如，我们在同一个广告序列中先后向用户$u$推荐了广告$v_1$和$v_2$，并且$v_1$和$v_2$之间有一条有向边，那么如果用户接受了$v_1$，则会有更大的几率接受广告$v_2$。但是不同用户对于广告的接受程度，以及接受了一个广告对接受另一个广告的促进程度可能不尽相同，我们使用函数$w:U_S \times W \to \mathbb{R}$来衡量这一程度。 对于$U_S \times W$中的每个元素$(u,(v_1,v_2))$都有函数值$w(u,(v_1,v_2))$：
+用$U_S$表示需要推送广告的这组特定用户的集合。定义广告网络$N=(V,W)$，其中$V$代表可推荐的广告集合；$W\subseteq V \times V$为广告和广告之间的有向边（包括自环，自环的存在是为后文$w$函数的定义和算法的需要提供便利，不具有关系性的含义），除自环以外的其他边代表两个广告之间具有相关关系。例如，在同一个广告序列中先后向用户$u$推荐了广告$v_1$和$v_2$，并且$v_1$和$v_2$之间有一条有向边，那么如果用户接受了$v_1$，则会有更大的几率接受广告$v_2$。但是不同用户对于广告的接受程度，以及接受了一个广告对接受另一个广告的促进程度可能不尽相同，使用函数$w:U_S \times W \to \mathbb{R}$来衡量这一程度。 对于$U_S \times W$中的每个元素$(u,(v_1,v_2))$都有函数值$w(u,(v_1,v_2))$：
 
 当$v_1=v_2$时，$w(u,(v_1,v_2))=$无其他广告影响时用户$u$接受广告$v_2$的概率；
 
@@ -676,7 +676,7 @@ b. $\forall u,v_1,v_2$ 有$w(u,(v_1,v_2))\le 1/w(u,(v_2,v_2))-1$。
 
 在影响力传播的研究中，IC模型和LT模型是较为常用的两种模型，都是触发模型的一种特例\cite{kempe2003maximizing}。为保证传播模型的全面性，本文将使用更为通用的触发模型作为传播模型的基础。定义社交网络$G=(U,E)$， 其中$U$代表社交网络$G$中用户的集合，每个用户为一个节点；$E\subseteq U\times U$ 为用户与用户之间的有向边，每一条边都关联一个概率$b_{u_1,u_2}$。信息的传播会在每个离散的时刻$\tau =0,1,2, ...$上进行。当$\tau = 0$时，在种子集合$S$中的节点将会被激活，并且每个$U$中的节点$u$会独立地根据其入边关联的概率随机选择一个触发集合（triggering set）$T(u)$，$u$的入边邻居集合的一个子集。当$\tau \ge 1$时，对于每个未被激活的节点$u$，如果在$\tau -1$时刻，$T(u)$中有至少一个节点已被激活，那么该节点$u$将会被在$\tau$时刻激活。传播会不断进行，直到某一时刻，网络中没有任何新增激活节点，则传播结束。种子集合$S$的影响力为最终被激活点的期望数量。
 
-触发模型可以用活跃边图（live-edge graph）上的方法等价表示。给定一组触发集合$\{T(u)\}_{u\in U}$，我们可以构造一个活跃边图$L=(U,E(L))$，其中$E(L)=\{(u_1,u_2)|u_2\in U, u_1\in T(u_2)\}$，每条边$(u_1,u_2)$都被称为一条活跃边（live-edge）。令$\Gamma(G,S)$代表图$G$中可以被$S$到达的点的集合。由于触发模型和活跃边图的等价性，触发模型中种子集合$S$的影响力等价于$\mathbb{E}[|\Gamma(L,S)|]$，该期望值取决于生成的活跃边图$L$的分布。
+触发模型可以用活跃边图（live-edge graph）上的方法等价表示。给定一组触发集合$\{T(u)\}_{u\in U}$，可以构造一个活跃边图$L=(U,E(L))$，其中$E(L)=\{(u_1,u_2)|u_2\in U, u_1\in T(u_2)\}$，每条边$(u_1,u_2)$都被称为一条活跃边（live-edge）。令$\Gamma(G,S)$代表图$G$中可以被$S$到达的点的集合。由于触发模型和活跃边图的等价性，触发模型中种子集合$S$的影响力等价于$\mathbb{E}[|\Gamma(L,S)|]$，该期望值取决于生成的活跃边图$L$的分布。
 \begin{definition}
 {\bfseries 多轮广告序列推荐影响最大化问题}是指，在给定用户网络$G=(U,E)$、生成触发集合的概率分布、广告网络$N = (V, W)$、用户组$U_S$、函数$w:U_S \times W \to \mathbb{R}$、轮数$T$、每轮的预算$k$、广告被接受的收益函数$revenue:V->\mathbb{R}$的情况下，找到$T$轮广告序列$\sigma_1^*,\sigma_2^*,...,\sigma_T^*$，每轮至多$k$个，使得平台推荐广告的总收益最大化，即：
 \begin{equation}
@@ -685,7 +685,7 @@ b. $\forall u,v_1,v_2$ 有$w(u,(v_1,v_2))\le 1/w(u,(v_2,v_2))-1$。
 \noindent 其中$\rho(\sigma)$代表平台推荐广告带来的总收益。
 \end{definition}
 
-后续内容中会频繁使用一组解中的某个广告及广告之间的边，因此我们先定义如下符号来方便描述：
+后续内容中会频繁使用一组解中的某个广告及广告之间的边，因此先定义如下符号来方便描述：
 用$\sigma_{t,i}$表示一组解$\sigma$中第$t$轮广告序列中的第$i$个广告。使用符号$E$来表示广告序列的生成边集，即
 \begin{equation}
 E(\sigma_t)=\{(\sigma_{t,i},\sigma_{t,j},t)|i \le j, (\sigma_{t,i},\sigma_{t,j})\in W\}
@@ -704,7 +704,7 @@ f(E(\sigma),v)=\mathbb{E}[|\bigcup_{t=1}^T\Gamma(L_t,S_{v,t})|]
 \end{equation}
 \noindent 其中$L_t$为在用户网络上随机生成的活跃边图，$S_{v,t}$是$U_S$的子集，为第$t$轮时用户组$U_S$中接受了广告$v$的用户集合。由于用户对于广告是概率接受的，因此$S_{v,t}$并不是确定的。所以$f(\sigma,v)$的值取决于$L_1,L_2,\ldots,L_T$以及$S_{v,1},S_{v,2},\ldots,S_{v,T}$的分布。
 
-为了得到$S_{v,t}$的分布，我们需要计算$U_S$中每个用户对于被推送的一组广告$\sigma_t$中每个广告接受的概率，使用$p_{u,v,t}$代表用户$u$在第$t$轮接受广告$v$的概率,则\label{sec:puvt}：
+为了得到$S_{v,t}$的分布，需要计算$U_S$中每个用户对于被推送的一组广告$\sigma_t$中每个广告接受的概率，使用$p_{u,v,t}$代表用户$u$在第$t$轮接受广告$v$的概率,则\label{sec:puvt}：
 \begin{equation}
 p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\in E(\sigma_t)}w(u,(v,v))\cdot w(u,(v',v))\cdot P_{\max}(u,v',v,t)
 \end{equation}
@@ -758,9 +758,9 @@ p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\
     \ENDFOR
     \end{algorithmic}
 \end{algorithm}
-\noindent 证明:我们的算法可以看成对每个时间轮$t$，都贪心的选择一个的$\sigma_t$来最大化$\rho(\{\sigma_1\}\cup \{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}\cup\{\sigma_t\})-\rho(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\})$。每一轮内部再每次选择边际收益最大的边加入进来最终形成$\sigma_t$。由于$h$是单调子模的，那么每一轮内的目标函数$h_t(E')=h(E'|E(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}))$也是单调子模的。对于目标函数为单调子模函数的基于边的贪心算法，Marko Mitrovic等人在\parencite{mitrovic2018submodularity}中证明其近似比至少为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$。
+\noindent 证明:边贪心算法可以看成对每个时间轮$t$，都贪心的选择一个的$\sigma_t$来最大化$\rho(\{\sigma_1\}\cup \{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}\cup\{\sigma_t\})-\rho(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\})$。每一轮内部再每次选择边际收益最大的边加入进来最终形成$\sigma_t$。由于$h$是单调子模的，那么每一轮内的目标函数$h_t(E')=h(E'|E(\{\sigma_1\}\cup\{\sigma_2\}\cup\ldots \cup \{\sigma_{t-1}\}))$也是单调子模的。对于目标函数为单调子模函数的基于边的贪心算法，Marko Mitrovic等人在\parencite{mitrovic2018submodularity}中证明其近似比至少为$\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1}$。
 
-对于贪心的每一步，如果我们无法找到最优的答案，但是能够找到一个近似比至少为$\alpha$的答案，那么对于一个子模的问题来说，这样的贪心算法也可以达到$1-e^{-\alpha}$的近似比。这个结论在\parencite{mrim}和\parencite{goundan2007revisiting}中都已经被提及并使用，是\parencite{nemhauser1978analysis}中部分结论的延伸。应用该结论即可得到$\rho(\sigma)\ge (1-e^{-(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1})})\rho(\sigma^*)$。
+对于贪心的每一步，如果无法找到最优的答案，但是能够找到一个近似比至少为$\alpha$的答案，那么对于一个子模的问题来说，这样的贪心算法也可以达到$1-e^{-\alpha}$的近似比。这个结论在\parencite{mrim}和\parencite{goundan2007revisiting}中都已经被提及并使用，是\parencite{nemhauser1978analysis}中部分结论的延伸。应用该结论即可得到$\rho(\sigma)\ge (1-e^{-(\frac{1-e^{-(1-\frac{1}{k})}}{2d_{in}+1})})\rho(\sigma^*)$。
 
 \noindent 证明完毕。
 
@@ -781,7 +781,7 @@ p_{u,v,t}=\mathbb{I}\{(v,v,t)\in E(\sigma_t)\}\cdot w(u,(v,v)) + \sum_{(v',v,t)\
     f(E(\sigma), v)=n_u \cdot\mathbb{E}[\mathbb{I}\{S_v\cap\mathcal{R}\ne \varnothing \}]
 \end{equation}
 \end{lemma}
-\noindent 其中$n_u=|U|$代表用户的数量。由公式 \ref{equ:fesigmav} 可见，$f(E(\sigma),v)$的值取决于$S_v$和$\mathcal{R}$的分布。需要注意的是，对于$f$来说，$f(E(\sigma),t)$中的$E(\sigma)$并不需要一定是$\sigma$的生成边集，可以为任意地满足拓扑性质的边集，例如在算法进行过程中，需要计算$E(\sigma)$的某些子集的期望收益，后文中我们使用$E'$来表示这一参数，即：
+\noindent 其中$n_u=|U|$代表用户的数量。由公式 \ref{equ:fesigmav} 可见，$f(E(\sigma),v)$的值取决于$S_v$和$\mathcal{R}$的分布。需要注意的是，对于$f$来说，$f(E(\sigma),t)$中的$E(\sigma)$并不需要一定是$\sigma$的生成边集，可以为任意地满足拓扑性质的边集，例如在算法进行过程中，需要计算$E(\sigma)$的某些子集的期望收益，后文中使用$E'$来表示这一参数，即：
 
 \begin{equation}
     h(E')=\sum_{v \in V}f(E',v)\cdot revenue(v)
@@ -851,16 +851,16 @@ Tang等人\cite{IMM}使用了鞅论的方法来分析反向可达集估计信息
 
 \begin{lemma}
 \label{lem:ris}
-对于任意的$\varepsilon>0$和$\ell> 0$，如果$\theta \ge \frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+ln(2T))R}{\varepsilon^2h(E')} $,则
+对于任意的$\varepsilon>0$和$\ell> 0$，如果$\theta \ge \frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+\ln (2T))R}{\varepsilon^2h(E')} $,则
 \begin{equation}
 \Pr[|\tilde{h}(E')-h(E')|\ge \varepsilon h(E')] \le \frac{1}{n^{\ell}T}
 \end{equation}
 \end{lemma}
-\noindent 其中$R=Tk\cdot \max_{v \in V}\{revenue(V)\}$，代表每个采样值的上界。$h(E')$是我们所求，不能精准获取其值，但是我们可以找到一个尽可能大的下界，使得在能够保证$1-1/n^\ell T$的置信度的同时，使采样的次数尽可能少，提升时间效率。对于$U_S$中的用户，我们至少可以计算在没有传播的情况下接受广告$v$的人数期望，即
+\noindent 其中$R=Tk\cdot \max_{v \in V}\{revenue(V)\}$，代表每个采样值的上界。$h(E')$为所求，不能精准获取其值，但是可以找到一个尽可能大的下界，使得在能够保证$1-1/n^\ell T$的置信度的同时，使采样的次数尽可能少，提升时间效率。对于$U_S$中的用户，至少可以计算在没有传播的情况下接受广告$v$的人数期望，即
 \begin{equation}
     h(E')=\sum_{v\in V}f(E',v)\cdot revenue(v)\ge\sum_{v\in V}\sum_{u \in U_S}[1-\prod_{t=1}^{T}(1-p_{u,v,t})]\cdot revenue(v)\triangleq LB
 \end{equation}
-在算法 \ref{alg:mrris} 中，我们将使用$LB$作为$h(E')$的一个下界计算$\theta$，并进行$\theta$次反向采样，结合对$S_v$分布的计算，最终有$1-1/n^\ell T$的概率，得出函数$h$的估计值的偏差与真实值相比不超过$\varepsilon$。
+在算法 \ref{alg:mrris} 中，将使用$LB$作为$h(E')$的一个下界计算$\theta$，并进行$\theta$次反向采样，结合对$S_v$分布的计算，最终有$1-1/n^\ell T$的概率，得出函数$h$的估计值的偏差与真实值相比不超过$\varepsilon$。
 
 \noindent 证明：
 
@@ -877,11 +877,11 @@ h(E')=\frac{n}{\theta}\left[\sum_{i=1}^{\theta}x_i\right]
 \mathbb{E}[x_i|x_1,x_2,\ldots,x_{i-1}]=\mathbb{E}[x_i]=h(E')/n
 \end{equation}
 
-任意的$x_i$都有上界，对于$R_i$的初始节点$u$，最多会被推送到$Tk$个广告，最好的情况下$u$恰好看到了所有的这些广告并且进行了点击动作，平台获取收益，每个广告的收益不同，我们取最大值，即
+任意的$x_i$都有上界，对于$R_i$的初始节点$u$，最多会被推送到$Tk$个广告，最好的情况下$u$恰好看到了所有的这些广告并且进行了点击动作，平台获取收益，每个广告的收益不同，取其最大值，即
 \begin{equation}
 x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 \end{equation}
-\noindent 我们用$R$来代表这个上界。
+\noindent 用$R$来代表这个上界。
 
 令 $p=h(E')/nR$，$M_i=\sum_{j=1}^{i}(x_j-pR)$。则有$\mathbb{E}[M_i]=0$，$\mathbb{E}[M_i|M1,M2,\ldots,M_{i-1}]=M_{i-1}$，根据定义 \ref{def:marginal}，$M_1,M2,\ldots,M_\theta$是鞅。
 
@@ -891,7 +891,7 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
     Var[M_1]+\sum_{j=2}^{\theta}Var[M_j|M_1,M_2,\ldots,M_{j-1}]=\sum_{j=1}^{\theta}Var[M_j] \le \theta p(1-p)\cdot R^2
 \end{equation}
 
-将$M_\theta$代入引理 \ref{lem:mar} 中，我们能得到如下结论:
+将$M_\theta$代入引理 \ref{lem:mar} 中，可以得到如下结论:
 
 对于任意的$\varepsilon > 0$，有
 
@@ -899,7 +899,7 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 \Pr\left[\sum_{i=1}^{\theta}x_i- \theta pR \ge \varepsilon \cdot \theta p R\right] \le \exp(-\frac{\varepsilon^2}{2+\frac{2}{3}\varepsilon}\cdot \theta p)
 \end{equation}
 
-同样地，$-M_1,-M_2,\ldots,-M_\theta$也是鞅，如果我们将引理 \ref{lem:mar} 应用于$-M_{\theta}$，则可以得到：
+同样地，$-M_1,-M_2,\ldots,-M_\theta$也是鞅，如果将引理 \ref{lem:mar} 应用于$-M_{\theta}$，则可以得到：
 
 对于任意的$\varepsilon>0$，有
 
@@ -917,7 +917,7 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 
 若使不等式 \ref{neq:line3} 中的不等号成立，只需使
 \begin{equation}
-\theta \ge \frac{(2+\frac{2}{3}\varepsilon)(\ell\ln n+ln(2T))}{\varepsilon^2\cdot p}=\frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+ln(2T)) R}{\varepsilon^2f(E')}
+\theta \ge \frac{(2+\frac{2}{3}\varepsilon)(\ell\ln n+\ln(2T))}{\varepsilon^2\cdot p}=\frac{(2+\frac{2}{3}\varepsilon)n(\ell\ln n+\ln(2T)) R}{\varepsilon^2f(E')}
 \end{equation}
 
 \noindent 证明完毕。
@@ -948,7 +948,7 @@ x_i\le Tk\cot \max_{v\in V}\{revenue(v)\}\triangleq R
 
 \noindent 其中$p_{u,v,t}$是第 \ref{sec:puvt} 节中定义的在选择边集$E'$的条件下，用户$u$在第$t$轮接受$v$的概率；$g(\mathcal{S}_v)=\mathbb{E}\left[\left|\bigcup_{t=1}^{T}\Gamma(L_t,\mathcal{S}_{v,t})\right|\right] $，$g(\mathcal{S}_v)$中的$\mathcal{S}_{v,t}$与上式中的$S_{v,t}$不同，上式中的$S_{v,t}$是随机变量，上式中的期望值同时取决于$L_1,L2,\ldots,L_T$和$S_{v,1},S_{v,2},\ldots,S_{v,T}$的分布，此处$g(\mathcal{S}_v)$中的$\mathcal{S}_{v,t}$是取决于$S_v$的确定集合，即$\mathcal{S}_{v,t}=\{v|(v,t)\in \mathcal{S}_v\}$，$\mathcal{S}_v$是$\mathcal{U}$的子集，其中每个元素$(u,t)$代表用户$u$在第$t$轮接受了广告$v$，$g(\mathcal{S}_v)$中的期望值也只取决于$L_1,L_2,\ldots,L_T$。$\Pr(\mathcal{S}_v)$代表$\mathcal{S}_v$出现的概率，上式的最后一步相当于对$S_{v,t}$的分布概率进行展开。
 
-为了方便，我们使用$p_{u,v,t}$表示$h(A)$中用户$u$在第$t$轮接受广告$v$的概率， $P_{max}$ $(u,v',v,t)$（同在第 \ref{sec:puvt} 节中定义）表示$h(A)$中$(v',v)$为用户$u$第$t$轮中对$v$增益最大的边的概率，用$p_{u,v,t}'$和$P_{max}'(u,v',v,t)$代表$h(A\cup\{(v_1,v_2,t_0)\})$中同样的部分。
+为了方便，使用$p_{u,v,t}$表示$h(A)$中用户$u$在第$t$轮接受广告$v$的概率， $P_{max}$ $(u,v',v,t)$（同在第 \ref{sec:puvt} 节中定义）表示$h(A)$中$(v',v)$为用户$u$第$t$轮中对$v$增益最大的边的概率，用$p_{u,v,t}'$和$P_{max}'(u,v',v,t)$代表$h(A\cup\{(v_1,v_2,t_0)\})$中同样的部分。
 
 根据定义，加入一条边$(v_1,v_2,t_0)$，只会改变第$t$轮中用户们对$v_2$的 接受概率。也就是，当$t\ne t_0$或者$v \ne v_2$时$p_{u,v,t}=p_{u,v,t}'$。
 
@@ -1017,13 +1017,13 @@ h_i(E')= \sum_{v\in V} \sum_{\mathcal{S}_v \subseteq U_S \times T} \left[Pr_i(\m
 
 然而，目标函数$h$并{\bfseries 不满足子模性}，这一点很容易通过举反例得到。
 
-如图 \ref{fig:nonsub_sample} 所示，节点$A$、$B$、$C$是可以选择推荐的三个广告，每条边上的数字，如果该边是自环，则代表用户愿意接受该广告的概率，如果是非自环，则代表用户接受边的头部节点对尾部节点的增益倍率。我们先把问题简化为只有一个轮次$t$， 并且用户网络中只有一个用户节点$u$，所有广告单次点击收益均为$1$。在此例中，由于$u$和$t$的值是相同的，为了方便，我们暂时用$p_{v}$代表$p_{u,v,t}$，用图中边上的小写字母代表边两侧的节点和时间的三元组，如$a$表示$(A,A,t)$。
+如图 \ref{fig:nonsub_sample} 所示，节点$A$、$B$、$C$是可以选择推荐的三个广告，每条边上的数字，如果该边是自环，则代表用户愿意接受该广告的概率，如果是非自环，则代表用户接受边的头部节点对尾部节点的增益倍率。先把问题简化为只有一个轮次$t$， 并且用户网络中只有一个用户节点$u$，所有广告单次点击收益均为$1$。在此例中，由于$u$和$t$的值是相同的，为了方便，暂时用$p_{v}$代表$p_{u,v,t}$，用图中边上的小写字母代表边两侧的节点和时间的三元组，如$a$表示$(A,A,t)$。
 
-图 \ref{fig:nonsub_a} 中虚线边代表该边未被选中，黑实线边代表已被选中，计算棕色实线边$e$的边际收益$h(e|\{b\})$。先算每个被推荐的广告被接受的概率：$p_B=0.4$，$h(\{b\})=p_B \cdot revenue(B)=0.4$。加入边$e$后，广告$C$也会被推荐，$p_C=0.4 \cdot 1 \cdot 0.5=0.2$，虽然如果推荐了$C$，最终边$c$一定也会在边集里，但此时我们只计算$e$带来的收益，所以要忽略掉用户本身对广告$C$的接受程度，不计算边$c$的收益。$h(\{b,e\})=p_B\cdot revenue(B)+p_C\cdot revenue(C)=0.4\cdot 1+0.2\cdot 1=0.6$。在图 \ref{fig:nonsub_a} 的情况下，$e$的边际收益为$h(e|\{b\})=h(\{b,e\})-h(\{e\})=0.2$。
+图 \ref{fig:nonsub_a} 中虚线边代表该边未被选中，黑实线边代表已被选中，计算棕色实线边$e$的边际收益$h(e|\{b\})$。先算每个被推荐的广告被接受的概率：$p_B=0.4$，$h(\{b\})=p_B \cdot revenue(B)=0.4$。加入边$e$后，广告$C$也会被推荐，$p_C=0.4 \cdot 1 \cdot 0.5=0.2$，虽然如果推荐了$C$，最终边$c$一定也会在边集里，但此时只计算$e$带来的收益，所以要忽略掉用户本身对广告$C$的接受程度，不计算边$c$的收益。$h(\{b,e\})=p_B\cdot revenue(B)+p_C\cdot revenue(C)=0.4\cdot 1+0.2\cdot 1=0.6$。在图 \ref{fig:nonsub_a} 的情况下，$e$的边际收益为$h(e|\{b\})=h(\{b,e\})-h(\{e\})=0.2$。
 
 图 \ref{fig:nonsub_b} 中的图结构与图 \ref{fig:nonsub_a} 中一致，但是多选择了两条边$a,b$，同样地，计算棕色实线边$e$的边际收益$h(e|{a,b,d})$。$p_A=0.5$，$p_B=0.4+0.5\cdot 1\cdot 0.4=0.6$，$h(\{a,b,d\})=p_A\cdot revenue(A)+p_B\cdot revenue(B)=0.5\cdot 1 + 0.6 \cdot 1 = 1.1$。$p_C=0.6 \cdot 1\cdot 0.5 = 0.3$，$h(\{a,b,d,e\})=1.4$。$h(e|{a,b,d})=h(\{a,b,d,e\})-h(\{a,b,d\})=1.4-1.1=0.3$。
 
-$h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，子模性一般代表边际收益随答案集合变大而递减，在这个例子中，$e$的价值会随着$B$被接受的概率提高而提高，答案集合的变大又导致了$B$被接受的概率提高，那么$e$的收益就随着答案集合变大而提升了，显然不满足子模性，所以对于我们上述问题中的函数$h$，并不能满足定理 \ref{thm:greedy}。
+$h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，子模性一般代表边际收益随答案集合变大而递减，在这个例子中，$e$的价值会随着$B$被接受的概率提高而提高，答案集合的变大又导致了$B$被接受的概率提高，那么$e$的收益就随着答案集合变大而提升了，显然不满足子模性，所以对于上述问题中的函数$h$，并不能满足定理 \ref{thm:greedy}。
 
 对于满足单调性但不满足子模性的目标函数，为了保证算法具有合理的近似比，需要引入\parencite{sandwich}中提到的三明治算法来解决,先令：
 
@@ -1057,7 +1057,7 @@ $h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，�
     \end{algorithmic}
 \end{algorithm}
 
-根据\parencite{sandwich}中三明治算法近似比的证明，我们可以得到：
+根据\parencite{sandwich}中三明治算法近似比的证明，可以得到：
 
 \begin{theorem}
 \label{thm:sand}
@@ -1083,7 +1083,7 @@ $h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，�
 函数$\Delta h_t^\mu$和$ \Delta h_t^\nu$在其定义域上都是单调并子模的。
 \end{lemma}
 
-\noindent 证明：与引理 \ref{lem:h_mon} 类似，单调性较为显然。我们找到的$\Delta h_t^\mu$和$ \Delta h_t^\nu$，边不会由于新边的加入而体现出更大的价值，反之会稀释其增益，导致边际收益随着集合的增大而下降，直观上是满足子模性的。具体理论证明如下：
+\noindent 证明：与引理 \ref{lem:h_mon} 类似，单调性较为显然。对于$\Delta h_t^\mu$和$ \Delta h_t^\nu$，边不会由于新边的加入而体现出更大的价值，反之会稀释其增益，导致边际收益随着集合的增大而下降，直观上是满足子模性的。具体理论证明如下：
 
 令$\mathcal{W}_t=\{(v_1,v_2,t_0) |(v_1,v_2,t_0) \in \mathcal{W},t_0=t\}$。
 
@@ -1091,7 +1091,7 @@ $h(e|\{b\})\le h(e|\{a,b,d\})$，显然不满足子模性。直观地理解，�
 
 要证明$\Delta h_t^\mu$子模性，即证明：对于任意两个集合$A\subseteq B \subseteq \mathcal{W}_t$和边$(v_1,v_2,t_0) \in \mathcal{W}_t \setminus B$，都有$\Delta h_t^\mu(A \cup \{(v_1,v_2,t_0)\})-\Delta h_t^\mu(A) \ge \Delta h_t^\mu(B\cup \{(v_1,v_2,t_0)\})- \Delta h_t^\mu(B)$；对于$h_t^\nu$也一样，把上标换成$\nu$即可。
 
-为了方便，我们使用$p_{u,v,t}^{\mu,A}$和$p_{u,v,t}^{\mu,A'}$分别代表在$h_t^\mu(A)$和$h_t^\mu(A\cup\{(v_1,v_2,t_0)\})$边集下，用户$u$在第$t$轮接受广告$v$的概率，即式 \ref{equ:def_mu} 中所定义的$p_{u,v,t}^\mu$的含义。对于$\nu$和$B$也是类似的。
+为了方便，使用$p_{u,v,t}^{\mu,A}$和$p_{u,v,t}^{\mu,A'}$分别代表在$h_t^\mu(A)$和$h_t^\mu(A\cup\{(v_1,v_2,t_0)\})$边集下，用户$u$在第$t$轮接受广告$v$的概率，即式 \ref{equ:def_mu} 中所定义的$p_{u,v,t}^\mu$的含义。对于$\nu$和$B$也是类似的。
 
 根据定义，加入一条边$(v_1,v_2,t_0)$，只会改变第$t$轮中用户们对$v_2$的 接受概率。也就是, 当$t\ne t_0$或者$v \ne v_2$时$p_{u,v,t}^{\mu,A}=p_{u,v,t}^{\mu,A'}$，$p_{u,v,t}^{\nu,A}=p_{u,v,t}^{\nu,A'}$。
 
@@ -1153,7 +1153,7 @@ p_{u,v_2,t_0}^{\nu,A'}-p_{u,v_2,t_0}^{\nu,A}\ge 0 = p_{u,v_2,t_0}^{\nu,B'}-p_{u,
     \cdot \sum_{\mathcal{S}_{v_2}\subseteq \mathcal{U}\setminus \{(i,t_0)\}}\left[\left(\frac{Pr_{i-1}^{\mu,A}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,A}}-\frac{Pr_{i-1}^{\mu,B}(\mathcal{S}_{v_2})}{1-p_{i,v_2,t_0}^{\mu,B}}\right) \cdot g(\{(i,t_0)\} |\mathcal{S}_{v_2})\right] \label{equ:prof_sub1}
 \end{align}
 
-为了方便，我们对$\mathcal{S}_v$中的每一个$(u,t)$进行标号，标号由$1$到$|\mathcal{U}|。$用$(u_j,t_j)$代表的标号为$j$的$(u,t)$对，即$idx(u_j,t_j)=j$。
+为了方便，对$\mathcal{S}_v$中的每一个$(u,t)$进行标号，标号由$1$到$|\mathcal{U}|。$用$(u_j,t_j)$代表的标号为$j$的$(u,t)$对，即$idx(u_j,t_j)=j$。
 
 令：$p_{u,v,t}^{\mu,A,i}=\begin{cases}p_{u,v,t}^{\mu,A'}, u<i,\\p_{u,v,t}^{\mu,A},u\ge i \end{cases}$
 
@@ -1221,7 +1221,8 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 \section{近似性与复杂度分析}
 \label{sec:ana}
 
-针对第 \ref{sec:def} 节中定义的多轮社交广告序列影响最大化问题，第 \ref{sec:greedy} 节给出了基于广告边的贪心策略。第 \ref{sec:mrris} 节中提出的多轮反向影响力采样算法能够解决估算广告边在社交网络中造成的影响力的问题，保证算法的时间复杂度。第 \ref{sec:sand} 节使用三明治算法解决了原问题函数$h$不子模的问题，保证了算法的近似性。将多轮反向影响力采样算法和三明治算法应用于边贪心策略，才能在保证复杂度和近似性的情况下解决多轮社交广告序列影响最大化问题。
+针对第 \ref{sec:def} 节中定义的多轮社交广告序列影响最大化问题，第 \ref{sec:greedy} 节给出了基于广告边的贪心策略。第 \ref{sec:mrris} 节中提出的多轮反向影响力采样算法能够解决估算广告边在社交网络中造成的影响力的问题，保证算法的时间复杂度。第 \ref{sec:sand} 节使用三明治算法解决了原问题函数$h$不子模的问题，保证了算法的近似性。将多轮反向影响力采样算法和三明治算法应用于边贪心策略，才能在保证复杂度和近似性的情况下解决多轮社交广告序列影响最大化问题，该策略的流程框架示意如图\ref{fig:sasim_frame} 所示。
+
 
 \begin{theorem}
 \label{thm:nonadptive}
@@ -1235,20 +1236,24 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 \noindent 证明完毕。
 
+\begin{figure}[th]
+    \centering
+    \includegraphics[width=.89\linewidth]{figure/sasim/frame}
+    \caption{使用多轮反向影响力采样和三明治方法的边贪心算法流程框架图}
+    \label{fig:sasim_frame}
+\end{figure}
+
 纵观算法过程，使用了多轮反向影响力采样方法和三明治方法的边贪心的时间复杂度为$O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$,其中$m_v=|W|$代表广告网络的边数，$m_u=|E|$代表用户网络边数，$n_u=|G|$为用户网络节点数，$n_s=|U_S|$为特殊用户集合大小，$R$与$LB$含义与引理 \ref{lem:ris} 中一致，$LB_{\min}$代表$LB$可能得最小值。算法需进行$T$轮，每轮至多$k$次选边，选边需遍历大小为$m_v$的广告边集，在估算一条边的边际收益时，需要遍历$\theta$个多轮反向可达集，统计采样结果需要计算已经被选择的广告，不会超过$Tk$个，只要统计有哪些特殊用户在该广告出现的那一轮接受了这个广告即可，因此统计其结果的时间为$Tkn_S$，总复杂度为$O(T^2k^2m_vn_S\theta)$。对于生成采样的部分，沿用上一次生成过的采样结果不会影响其估算的准确性，故只需按照最大的$\theta$生成一次即可。生成一个采样的时间是$Tm_u$，这部分时间复杂度为$O(\theta Tm_u)$。综上，根据引理 \ref{lem:ris}，代入$\theta$，总时间复杂度即为$O(Tkm_v\cdot Tk(n_u+m_u)\theta) = O\left(\frac{(Tk^2 m_v n + m_u)Tn_u(\ell \ln n_u + \ln (2T))}{\varepsilon^2}\cdot\frac{R}{LB_{\min}}\right)$。
 
 
 \section{动态多轮社交广告序列影响最大化}
 \label{sec:ada}
 
-在部分实际场景中，在算法进行每一轮决策后，可以观测用户对广告的接受情况和在用户网络中的传播结果。在这种允许动态观测的情况下，可以收集这些信息做出更准确的判断。令$ A_t = \{(u,v) |  u \in U, v \in V ,u \text{在前}t\text{轮接受过广告}v\} $ 代表前$t$轮广告序列信息在用户网络中传播的观测结果。则动态多轮社交广告序列影响最大化问题的目标则是找到 $\sigma_t = arg max_{\sigma_t} \Delta(E(\sigma_t) | A_{t-1})$，即$\Delta(E(\sigma_t) | A_{t-1})$为每一轮需要最大化的目标函数：
+在部分实际场景中，在算法进行每一轮决策后，可以观测用户对广告的接受情况和在用户网络中的传播结果。在这种允许动态观测的情况下，可以收集这些信息做出更准确的判断。令$ A_t = \{(u,v) |  u \in U, v \in V ,u \text{在前}t\text{轮接受过广告}v\} $ 代表前$t$轮广告序列信息在用户网络中传播的观测结果。则动态多轮社交广告序列影响最大化问题的目标则是找到 $\sigma_t = \arg \max_{\sigma_t} \Delta(E(\sigma_t) | A_{t-1})$，即$\Delta(E(\sigma_t) | A_{t-1})$为每一轮需要最大化的目标函数：
 \begin{equation}
     \Delta(E(\sigma_t) | A_{t-1}) = \sum_{v \in V} ( f(E(\sigma_t), v) \cup \{u | (u,v) \ in A_{t-1}\}) \cdot revnue(v) - \sum_{(u,v) \in A_{t-1}} revenue(v) 
 \end{equation}
 
-针对动态多轮社交广告序列影响最大化，我们提出了动态边贪心策略，如算法 \ref{alg:ada} 所示。算法结构整体上与非动态的贪心算法 \ref{alg:edge_greedy} 类似，只需在估算边际收益时考虑到$A_{t-1}$的信息，并且在每一轮传播后更新新一轮用户对广告的接受情况$A_{t}$。
-
-同样的，在动态观测情况下，也需要使用多轮反向影响力采样加速估计广告边的边际收益。当使用算法 \ref{alg:mrris} 估算$v$的边际收益时，如果一个多轮反向可达集的其实节点为$u$，且$(u,v) \in A_{t-1}$，则跳过第 \ref{alg:mrrisline1} 到 \ref{alg:mrrisline2} 行，使这个多轮反向可达集的贡献为$1$。如果$(u,v) \notin A_{t-1}$，当$t_0 < t$时，令$p_{u,v,t_0} = 0$。这样可以保证估算结果准确性的同时复用多轮反向影响力算法生成的多轮反向可达集。
 
 \begin{algorithm}[H]
     \caption{动态边贪心算法\label{alg:ada}}
@@ -1271,6 +1276,11 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
         \STATE 观察 $\sigma_t$的传播结果，更新 $A_t$。
     \end{algorithmic}
 \end{algorithm}
+
+针对动态多轮社交广告序列影响最大化，本文提出了动态边贪心策略，如算法 \ref{alg:ada} 所示。算法结构整体上与非动态的贪心算法 \ref{alg:edge_greedy} 类似，只需在估算边际收益时考虑到$A_{t-1}$的信息，并且在每一轮传播后更新新一轮用户对广告的接受情况$A_{t}$。
+
+
+同样的，在动态观测情况下，也需要使用多轮反向影响力采样加速估计广告边的边际收益。当使用算法 \ref{alg:mrris} 估算$v$的边际收益时，如果一个多轮反向可达集的其实节点为$u$，且$(u,v) \in A_{t-1}$，则跳过第 \ref{alg:mrrisline1} 到 \ref{alg:mrrisline2} 行，使这个多轮反向可达集的贡献为$1$。如果$(u,v) \notin A_{t-1}$，当$t_0 < t$时，令$p_{u,v,t_0} = 0$。这样可以保证估算结果准确性的同时复用多轮反向影响力算法生成的多轮反向可达集。
 
 第 \ref{sec:sand} 节中对$h$的分析，同样使用于动态情况下的目标函数$\Delta$，因此也需要使用三明治方法，分别使用$\Delta_\mu$、$\Delta$、$\Delta_\nu$运行算法 \ref{alg:ada} 得到三个结果然后取最优。同样地，$\Delta_\mu$和$\Delta_\nu$的定义与$\Delta$类似，只需依照$h_\mu$和$h_\nu$的定义，修改$p_{u,v,t}$的计算方法即可。
 
@@ -1300,32 +1310,34 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 \subsection{实验数据集}
 
+本文遵循Mitrovic\cite{mitrovic2018submodularity}等人序列贪心工作的实验，在最新的Amazon评论数据集上展开了广告推荐实验，并在经典的Wikispeedia数据集上进行了链路预测实验。
+
 {\bfseries Amazon评论数据集}：基于亚马逊视频游戏评论数据集\cite{ni2019justifying}进行了广告推荐实验。实验的具体目标是，给定用户已经购买的商品，预测他们接下来可能想购买的商品为它们推荐广告。
 
-为此，我们构建了一个图模型$N = (V,W)$。其中，$V$代表所有产品的集合，$W$表示产品之间的边集。每条边的权重$w_{ij}$定义为条件概率：即用户在购买产品$i$后购买产品$j$的概率。通过计算所有购买过产品$i$的用户中，随后又购买产品$j$的用户比例来确定$w_{ij}$。此外，图中还包含自环，其权重$w_{ii}$表示在所有用户中购买产品$i$的比例。为了确保数据的可靠性，我们只考虑了被购买至少50次的商品，最终得到9383种独立商品。同时，选取了至少购买过29种商品的用户，共909名。对这909名用户进行广告推荐任务，并计算每个评估指标的平均值来衡量推荐效果。
+为此，构建了一个图模型$N = (V,W)$。其中，$V$代表所有产品的集合，$W$表示产品之间的边集。每条边的权重$w_{ij}$定义为条件概率：即用户在购买产品$i$后购买产品$j$的概率。通过计算所有购买过产品$i$的用户中，随后又购买产品$j$的用户比例来确定$w_{ij}$。此外，图中还包含自环，其权重$w_{ii}$表示在所有用户中购买产品$i$的比例。为了确保数据的可靠性，只考虑了被购买至少50次的商品，最终得到9383种独立商品。同时，选取了至少购买过29种商品的用户，共909名。对这909名用户进行广告推荐任务，并计算每个评估指标的平均值来衡量推荐效果。
 
-{\bfseries Wikispeedia数据集}：使用Wikispeedia数据集\cite{west2009wikispeedia}，考虑用户在维基百科中浏览并通过链接跳转试图找到某个目标文章的情况。我们的任务是，根据用户之前访问过的一系列文章，预测并为他们推荐链接，引导他们到达目标页面。这个任务的关键在于页面访问顺序，因为不同页面包含不同的有效链接。具体而言，我们会基于用户访问的前4个页面，预测他们接下来点击的链接和试图到达的页面。
+{\bfseries Wikispeedia数据集}：使用Wikispeedia数据集\cite{west2009wikispeedia}，考虑用户在维基百科中浏览并通过链接跳转试图找到某个目标文章的情况。实验任务是，根据用户之前访问过的一系列文章，预测并为他们推荐链接，引导他们到达目标页面。这个任务的关键在于页面访问顺序，因为不同页面包含不同的有效链接。具体而言，算法会基于用户访问的前4个页面，预测他们接下来点击的链接和试图到达的页面。
 
-我们构建了一个图模型$N = (V,W)$。其中$V$代表所有页面的集合，$W$表示页面之间现有链接的集合。对于每条边$(i,j)\in W$，其权重$w_{ij}$定义为条件概率：即用户当前在页面$i$的情况下移动到页面$j$的概率。这个概率通过计算从$i$到$j$的移动次数占所有访问$i$次数的比例来得出。值得注意的是，在链路预测图模型中我们没有构建自环，因为我们假设用户只能通过现有链接进行页面间的跳转，而不能随机访问页面。将数据集压缩为仅包含出现在实际浏览路径中的文章和边，最终得到4170个独立页面和55147条边。选取了长度至少为29的路径进行分析，共得到271条符合条件的路径。对这271条路径进行链接预测任务，并计算每个评估指标的平均值来衡量预测效果。
+对该数据集构建一个图模型$N = (V,W)$。其中$V$代表所有页面的集合，$W$表示页面之间现有链接的集合。对于每条边$(i,j)\in W$，其权重$w_{ij}$定义为条件概率：即用户当前在页面$i$的情况下移动到页面$j$的概率。这个概率通过计算从$i$到$j$的移动次数占所有访问$i$次数的比例来得出。值得注意的是，在链路预测图模型中没有构建自环，因为该实验假设用户只能通过现有链接进行页面间的跳转，而不能随机访问页面。将数据集压缩为仅包含出现在实际浏览路径中的文章和边，最终得到4170个独立页面和55147条边。选取了长度至少为29的路径进行分析，共得到271条符合条件的路径。对这271条路径进行链接预测任务，并计算每个评估指标的平均值来衡量预测效果。
 
 
 
 \subsection{实验设置与评估标准}
 
-为了有效评估和对比算法的性能，我们使用了三个评估指标：
+为了有效评估和对比算法的性能，本实验使用了三个评估指标：
 
 \begin{itemize}
     \item \textbf{准确度得分}：这个指标简单地计算准确推荐项目的数量，是一个很合理的衡量标准，但它的局限性在于没有明确考虑序列的顺序。
-    \item \textbf{序列得分}：为了弥补准确度得分的不足，我们引入了基于Kendall-Tau距离\cite{kendall1938new}的度量。它通过计算在预测序列和真实序列中都出现的有序对的数量来评估序列的相似度。这个指标更好地反映了推荐序列的质量。
-    \item \textbf{目标函数值}：我们采用如下概率价值函数作为目标网络子模函数$f$:
+    \item \textbf{序列得分}：为了弥补准确度得分的不足，引入了基于Kendall-Tau距离\cite{kendall1938new}的度量。它通过计算在预测序列和真实序列中都出现的有序对的数量来评估序列的相似度。这个指标更好地反映了推荐序列的质量。
+    \item \textbf{目标函数值}：采用如下概率价值函数作为目标网络子模函数$f$:
 \begin{equation}
     f(\sigma)=h(E(\sigma))=\sum_{j\in V} [1- \prod_{(i,j)\in E(\sigma)} (1-w_{ij})]
 \end{equation}
 \end{itemize}
 
-前两个指标在\parencite{mitrovic2019adaptive}中也有使用。对于全部的评估指标，我们会尝试对$\sigma$所有大小为$\tau$的子集进行移除，选择最低的得分或函数值作为最终评估指标，以衡量序列的稳定性。
+前两个指标在\parencite{mitrovic2019adaptive}中也有使用。对于全部的评估指标，会尝试对$\sigma$所有大小为$\tau$的子集进行移除，选择最低的得分或函数值作为最终评估指标，以衡量序列的稳定性。
 
-我们对以下算法的性能进行对比：
+本实验对以下算法的性能进行对比：
 
 \begin{itemize}
 \item {\bfseries 鲁棒序列}：本文提出的鲁棒序列网络子模最大化算法，简称鲁棒序列算法。
@@ -1349,11 +1361,11 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 \subsection{对比实验结果}
 
-图 \ref{fig:rec} 展示了几种算法在广告推荐任务中的表现，分别从准确度得分、序列得分和目标函数值三个方面进行了比较。在图 \ref{fig:rec-acc}、\ref{fig:rec-acc-t}、\ref{fig:rec-seq} 和 \ref{fig:rec-seq-t} 中，我们观察到在移除$\tau$个元素后，鲁棒序列算法的性能优于所有对比算法。考虑到准确度分数和序列分数是实际应用中常用的评估指标，这一结果充分证明了鲁棒序列算法在广告推荐任务中的有效性和鲁棒性。
+图 \ref{fig:rec} 展示了几种算法在广告推荐任务中的表现，分别从准确度得分、序列得分和目标函数值三个方面进行了比较。在图 \ref{fig:rec-acc}、\ref{fig:rec-acc-t}、\ref{fig:rec-seq} 和 \ref{fig:rec-seq-t} 中，可以观察到在移除$\tau$个元素后，鲁棒序列算法的性能优于所有对比算法。考虑到准确度分数和序列分数是实际应用中常用的评估指标，这一结果充分证明了鲁棒序列算法在广告推荐任务中的有效性和鲁棒性。
 
 图 \ref{fig:rec-fun} 和 \ref{fig:rec-fun-t} 有区别的是，当$\tau$较小或$k$较大时，OMegA算法表现更为出色。OMegA算法致力于寻找全局最优解，它在每次选择元素后都会对所有候选对象进行拓扑重排。当$k$较大且$\tau$较小时，OMegA能够返回具有更优目标函数值的解，但其运行速度显著慢于鲁棒序列和序列贪心算法，而且OMegA在准确度和序列分数方面的表现相对较差。综合考虑，鲁棒序列算法在实际应用中仍然展现出更高的效率和鲁棒性。
 
-我们还特别关注了鲁棒序列和序列贪心算法在$\tau=0$时的情况。可能需要解释的一点是，在图 \ref{fig:rec-acc-t}、\ref{fig:rec-seq-t} 和 \ref{fig:rec-fun-t} 中，序列贪心($\tau=0$)由于算法运行与$\tau$无关，且评估时固定$\tau=0$，所以结果成一条直线。而鲁棒序列($\tau=0$)由于在算法运行时仍然会正常使用$\tau$,因此即使评估时固定$\tau=0$,得出的结果也会随$\tau$变化而变化。
+鲁棒序列和序列贪心算法在$\tau=0$时的情况也值得关注。可能需要解释的一点是，在图 \ref{fig:rec-acc-t}、\ref{fig:rec-seq-t} 和 \ref{fig:rec-fun-t} 中，序列贪心($\tau=0$)由于算法运行与$\tau$无关，且评估时固定$\tau=0$，所以结果成一条直线。而鲁棒序列($\tau=0$)由于在算法运行时仍然会正常使用$\tau$,因此即使评估时固定$\tau=0$,得出的结果也会随$\tau$变化而变化。
 
 实验结果显示，在目标函数值方面，序列贪心($\tau=0$)略胜一筹；但在准确度分数和序列分数上，鲁棒序列($\tau=0$)与序列贪心($\tau=0$)的表现非常接近，有时甚至更优。序列贪心($\tau=0$)在目标函数值上的优势源于贪心框架的有效性。鲁棒序列算法虽然独立调用了两次序列贪心算法，但由于网络子模性的影响，难以达到单次序列贪心执行的性能水平。然而，准确度和序列分数上的结果表明，直接应用贪心选择并非总是最优策略。这反映了贪心算法的内在特性：尽管$1-1/e$接近最佳近似比，但在特定场景下，某些启发式算法可能会有更好的表现。
 \begin{figure}[H]
@@ -1400,7 +1412,7 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
     \caption{广告推荐实验结果\label{fig:rec}}
 \end{figure}
 
-值得一提的是，如果我们增加序列贪心算法的调用次数，可能会获得更鲁棒的实验结果和更高的近似比，但目标函数值可能会下降。这是因为多次独立的贪心选择会增加触发收益递减现象的概率。在实际应用中，设计鲁棒算法时面临的一个关键挑战是如何在算法的鲁棒性和目标函数值最大化之间取得平衡。这需要我们根据具体应用场景和需求，权衡各种因素，以达到最佳的综合效果。
+值得一提的是，如果增加序列贪心算法的调用次数，可能会获得更鲁棒的实验结果和更高的近似比，但目标函数值可能会下降。这是因为多次独立的贪心选择会增加触发收益递减现象的概率。在实际应用中，设计鲁棒算法时面临的一个关键挑战是如何在算法的鲁棒性和目标函数值最大化之间取得平衡。这需要根据具体应用场景和需求，权衡各种因素，以达到最佳的综合效果。
 
 \begin{figure}[H]
     \centering
@@ -1446,9 +1458,9 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
     \caption{链路预测实验结果\label{fig:wik}}
 \end{figure}
 
-图 \ref{fig:wik} 分别几种算法在链路预测中的表现，分别从准确度得分、序列得分和目标函数值三个方面进行了比较。我们发现在移除$\tau$个元素后，鲁棒序列在所有情况下都优于所有比较对象。这些结果表明鲁棒算法在链路预测任务中是有效且鲁棒的。与广告推荐实验不同的是，OMegA算法在这项任务中未能展现出与鲁棒序列算法相当的性能。这主要归因于两个因素：首先，本任务中需要预测的路径通常较长；其次，不同路径之间的交叉部分相对较少，不如广告推荐实验中那样普遍。这些特点使得全局算法OMegA难以充分发挥其优势。而且我们可以在图 \ref{fig:wik-acc}，\ref{fig:wik-seq} 和 \ref{fig:wik-fun}中发现，当$k$变大时，OMegA算法的性能增长更快。这反过来证明了鲁棒序列算法更加通用、有效和鲁棒，能够适应不同的应用场景，而无需对特定环境做出假设。
+图 \ref{fig:wik} 分别几种算法在链路预测中的表现，分别从准确度得分、序列得分和目标函数值三个方面进行了比较。可以发现在移除$\tau$个元素后，鲁棒序列在所有情况下都优于所有比较对象。这些结果表明鲁棒算法在链路预测任务中是有效且鲁棒的。与广告推荐实验不同的是，OMegA算法在这项任务中未能展现出与鲁棒序列算法相当的性能。这主要归因于两个因素：首先，本任务中需要预测的路径通常较长；其次，不同路径之间的交叉部分相对较少，不如广告推荐实验中那样普遍。这些特点使得全局算法OMegA难以充分发挥其优势。而且可以在图 \ref{fig:wik-acc}，\ref{fig:wik-seq} 和 \ref{fig:wik-fun}中发现，当$k$变大时，OMegA算法的性能增长更快。这反过来证明了鲁棒序列算法更加通用、有效和鲁棒，能够适应不同的应用场景，而无需对特定环境做出假设。
 
-链接预测应用中的另一个不同之处是，鲁棒序列($\tau=0$)在准确度和序列分数方面几乎在所有情况下都优于序列贪心($\tau=0$)。这再次验证了直接实施贪心选择有时可能远离最优解。因此，我们认为探索如何通过增加独立贪心选择试验的次数，在算法的鲁棒性、效率和目标函数值最大化之间取得更好的平衡也是一个有趣的未来探索方向。
+链接预测应用中的另一个不同之处是，鲁棒序列($\tau=0$)在准确度和序列分数方面几乎在所有情况下都优于序列贪心($\tau=0$)。这再次验证了直接实施贪心选择有时可能远离最优解。因此，探索如何通过增加独立贪心选择试验的次数，在算法的鲁棒性、效率和目标函数值最大化之间取得更好的平衡也是一个有趣的未来探索方向。
 
 
 
@@ -1459,9 +1471,9 @@ $\Delta h_t^\mu$子模性得证。同理可得$\Delta h_t^\nu$也是子模的。
 
 多轮广告序列推荐实验在{\bfseries Amazon评论数据集}\cite{amazon24}上进行。该数据集主要记录了用户对已经购买的商品的评论信息。商品网络和用户网络的生成参考了Gomez-Rodriguez等人\cite{netgen}的工作。如果较多买过商品$i$的人还买过商品$j$，说明$i$和$j$有较大关联性，就在商品网络中加入一条由$i$到$j$的有向边，并对每一个商品都加入自环；如果两个用户多次购买过相同的商品，那么可以推断他们更有可能是朋友，就在他们之间增加一条有向边。
 
-在触发模型中，还需要对用户网络的每一条边进行赋权，简单地使每条边在$[0,1]$中生成一个随机权重$b_{u_1,u_2}$。为了传播的效果更好并体现用户区分度，对于每个用户网络，都选择度数较大的5个节点和度数较小的5个节点作为特殊用户组$U_S$。对于每一个商品$v$，我们在$\{0.01,0.02,0.03,0.04,0.05\}$中随机一个值作为$revenue(v)$。每个用户对于商品的接受程度不同，首先对每个特殊用户$u$和商品的每个自环$(v,v)$，都在$[0,1]$范围内随机生成一个$w(u,(v,v))$代表用户$u$对商品$v$的接受程度。然后对于每个特殊用户$u$和商品的每条非自环边$(v_1,v_2)$，都在$[0,1/w,(u,(v_2,v_2))-1]$范围内随机生成一个$w(u,(v_1,v_2))$代表用户$u$接受了$v_1$对$v_2$的接受概率的促进程度。
+在触发模型中，还需要对用户网络的每一条边进行赋权，简单地使每条边在$[0,1]$中生成一个随机权重$b_{u_1,u_2}$。为了传播的效果更好并体现用户区分度，对于每个用户网络，都选择度数较大的5个节点和度数较小的5个节点作为特殊用户组$U_S$。对于每一个商品$v$，在$\{0.01,0.02,0.03,0.04,0.05\}$中随机一个值作为$revenue(v)$。每个用户对于商品的接受程度不同，首先对每个特殊用户$u$和商品的每个自环$(v,v)$，都在$[0,1]$范围内随机生成一个$w(u,(v,v))$代表用户$u$对商品$v$的接受程度。然后对于每个特殊用户$u$和商品的每条非自环边$(v_1,v_2)$，都在$[0,1/w,(u,(v_2,v_2))-1]$范围内随机生成一个$w(u,(v_1,v_2))$代表用户$u$接受了$v_1$对$v_2$的接受概率的促进程度。
 
-Amazon评论数据集对于不同的商品类别分开统计。我们按照用户网络和广告网络的稠密程度以及节点与边的规模挑选不同类别，生成了4个不同大小的数据集，数据集的具体参数见表 \ref{tab:imdata}。
+Amazon评论数据集对于不同的商品类别分开统计。按照用户网络和广告网络的稠密程度以及节点与边的规模挑选不同类别，生成了4个不同大小的数据集，数据集的具体参数见表 \ref{tab:imdata}。
 
 \begin{table}[htbp]
 	\setlength{\tabcolsep}{2mm}{}
@@ -1482,7 +1494,7 @@ Amazon评论数据集对于不同的商品类别分开统计。我们按照用�
 
 实验设置$T=5$，$k=10$，即每次实验进行$5$轮，每一轮选择至多$10$个广告。对算法选出的序列进行$10000$次蒙特卡洛模拟，将收益结果的平均值作为评价标准，对于动态观测的情况，则以观测到的最终收益结果作为评价标准。
 
-算法中多轮反向影响力采样部分有两个参数$\varepsilon$和$\ell$，可以通过调整这两个参数来控制算法的准确度和运行效率。$\varepsilon$越小，$\ell$越大，算法在估计每条边的边际收益时就越准确，同时运行时间也会越长。观察算法的流程，可以发现调整参数$\varepsilon$和$\ell$的最终效果都只是改变了$\theta$的大小，因此分别设置$\theta=10,100,1000,10000,100000$运行边贪心算法，记录分析其多轮反向采样得到的目标函数估计值、对结果进行$10000$次蒙特卡洛模拟得到的期望收益以及运行时间。
+算法中多轮反向影响力采样部分有两个参数$\varepsilon$和$\ell$，可以通过调整这两个参数来控制算法的准确度和运行效率。因此在对比实验之前，先进行\textbf{参数敏感性实验}以确定合适的参数设置。根据算法的流程，$\varepsilon$越小，$\ell$越大，算法在估计每条边的边际收益时就越准确，同时运行时间也会越长。观察算法的流程，可以发现调整参数$\varepsilon$和$\ell$的最终效果都只是改变了$\theta$的大小分别设置$\theta=10,100,1000,10000,100000$运行边贪心算法，记录分析其多轮反向采样得到的目标函数估计值、对结果进行$10000$次蒙特卡洛模拟得到的期望收益以及运行时间。
 
 \begin{figure}[th]
     \centering
@@ -1600,15 +1612,15 @@ Amazon评论数据集对于不同的商品类别分开统计。我们按照用�
     \label{fig:adp}
 \end{figure}
 
-如图 \ref{fig:adp} 所示，动态结果与非动态的结果趋势大致相同。我们提出的动态边贪心算法在不同数据集上都展现了优势。动态场景下不同的是，每一轮推荐结束后用户都会对推荐的广告随机地做出确定性的选择，实际的观测结果可能会与期望值有较大的差距，因此在动态实验中的结果线条相比于静态结果的线条要更加曲折。但好在算法可以观察到这一结果，在下一轮的多轮反向影响力采样过程中，会将这些已确定的值修正，使得算法能在当前情况下选择期望收益最大的序列进行下一轮推荐，使整体的推荐收益得到保证。
+如图 \ref{fig:adp} 所示，动态结果与非动态的结果趋势大致相同。本文提出的动态边贪心算法在不同数据集上都展现了优势。动态场景下不同的是，每一轮推荐结束后用户都会对推荐的广告随机地做出确定性的选择，实际的观测结果可能会与期望值有较大的差距，因此在动态实验中的结果线条相比于静态结果的线条要更加曲折。但好在算法可以观察到这一结果，在下一轮的多轮反向影响力采样过程中，会将这些已确定的值修正，使得算法能在当前情况下选择期望收益最大的序列进行下一轮推荐，使整体的推荐收益得到保证。
 
 综上所述，对比实验证明了边贪心算法的有效性：能够有效地综合利用用户对广告的接受程度、广告之间的关联、用户网络的影响力传播等信息推荐多轮广告序列，在非动态和动态两种场景下，算法在几个的Amazon评论数据集上效果均较已有算法有明显优势。
 
 \subsection{效率实验}
 
-多轮社交广告序列影响最大化算法的计算时间主要用于评估广告序列的收益，即使用多轮反向影响力采样的部分。我们首次将用户网络和广告网络同时纳入多轮广告推荐模型中，这使得其他对比算法在估算广告序列的期望收益时，只能依赖于我们提出的多轮反向影响力采样方法。在动态观测的情况下，也可以通过修改已观测到的用户的反向影响力采样值来快速估算收益。为了体现多轮反向影响力对算法效率的提升，我们在评估广告序列收益这一点上与应用于影响力最大化问题中的蒙特卡洛模拟方法\cite{kempe2003maximizing}进行了对比。
+多轮社交广告序列影响最大化算法的计算时间主要用于评估广告序列的收益，即使用多轮反向影响力采样的部分。本文首次将用户网络和广告网络同时纳入多轮广告推荐模型中，这使得其他对比算法在估算广告序列的期望收益时，只能依赖于本文提出的多轮反向影响力采样方法。在动态观测的情况下，也可以通过修改已观测到的用户的反向影响力采样值来快速估算收益。为了体现多轮反向影响力对算法效率的提升，在评估广告序列收益这一点上与应用于影响力最大化问题中的蒙特卡洛模拟方法\cite{kempe2003maximizing}进行了对比。
 
-我们分别使用多轮反向影响力采样方法（mRIS）和蒙特卡洛模拟方法(MC)对边贪心输出的多轮广告序列进行价值评估，采样次数和蒙特卡洛模拟次数均设为$\theta={10,100,1000,10000,100000}$次。四个数据集上的评估结果和运行时间如表 \ref{tab:gif}，\ref{tab:sof}，\ref{tab:mag} 和 \ref{tab:vid} 所示。模拟次数越多，得到的值越趋于收敛，我们将$\theta=100000$时的MC估计值结果作为一个比较的标准值。观察到，在同等采样次数和模拟次数的情况下，mRIS的估计值和MC估计值的准确度基本相当。然而，mRIS的运行速度明显快于MC。mRIS需要先生成多轮反向可达集采样，然后再进行评估计算，两者加起来的时间为评估的总耗时。MC评估的用时基本上是mRIS生成时间的100倍，是mRIS评估时间的1000倍。因此，使用mRIS进行评估至少能比传统方法提升效率100倍，而且，在算法过程中，需要进行相当多次的评估。如果使用mRIS方法，多轮反向可达集是可以反复使用的，只需生成一次，每次评估只需花费评估时间。而MC方法每次都需要进行完整的模拟。
+分别使用多轮反向影响力采样方法（multi-round Reverse Influence Sampling, 简称mRIS）和蒙特卡洛模拟方法(Monte Carlos， 简称MC)对边贪心输出的多轮广告序列进行价值评估，采样次数和蒙特卡洛模拟次数均设为$\theta={10,100,1000,10000,100000}$次。四个数据集上的评估结果和运行时间如表 \ref{tab:gif}，\ref{tab:sof}，\ref{tab:mag} 和 \ref{tab:vid} 所示。模拟次数越多，得到的值越趋于收敛，因此将$\theta=100000$时的MC估计值结果作为一个比较的标准值。观察到，在同等采样次数和模拟次数的情况下，mRIS的估计值和MC估计值的准确度基本相当。然而，mRIS的运行速度明显快于MC。mRIS需要先生成多轮反向可达集采样，然后再进行评估计算，两者加起来的时间为评估的总耗时。MC评估的用时基本上是mRIS生成时间的100倍，是mRIS评估时间的1000倍。因此，使用mRIS进行评估至少能比传统方法提升效率100倍，而且，在算法过程中，需要进行相当多次的评估。如果使用mRIS方法，多轮反向可达集是可以反复使用的，只需生成一次，每次评估只需花费评估时间。而MC方法每次都需要进行完整的模拟。
 
 \begin{table}[ht]
     \centering
@@ -1698,9 +1710,9 @@ Amazon评论数据集对于不同的商品类别分开统计。我们按照用�
 
 本章分别介绍了鲁棒序列子模最大化算法实验和多轮社交广告序列影响最大化推荐算法实验。
 
-第 \ref{sec:5_1} 节展示了鲁棒序列子模最大化算法的实验设置和实验结果。分别在Amazon评论数据集和Wikispeedia数据集上进行了广告推荐实验和链路预测实验。采用了准确度得分、序列得分、目标函数值三种评价指标从多角度对实验结果进行评估。通过对比实验结果验证了我们提出的鲁棒序列子模最大化算法的有效性和鲁棒性。
+第 \ref{sec:5_1} 节展示了鲁棒序列子模最大化算法的实验设置和实验结果。分别在Amazon评论数据集和Wikispeedia数据集上进行了广告推荐实验和链路预测实验。采用了准确度得分、序列得分、目标函数值三种评价指标从多角度对实验结果进行评估。通过对比实验结果验证了本文提出的鲁棒序列子模最大化算法的有效性和鲁棒性。
 
-第 \ref{sec:5_2} 节展示了多轮社交广告序列影响最大化推荐算法实验的实验设置和实验结果。实验在Amazon评论数据集上进行，先通过参数实验综合考虑实验效果和时间，选择合适的实验参数。通过在非动态和动态设定下的与不同对比方法的比较验证了多轮社交广告序列影响最大化算法够有效地综合利用用户对广告的接受程度、广告之间的关联、用户网络的影响力传播等信息，体现了在推荐多轮广告序列的场景下的优势。此外，通过效率实验验证了我们提出的多轮反向影响力采样技术能够显著提升算法的效率。
+第 \ref{sec:5_2} 节展示了多轮社交广告序列影响最大化推荐算法实验的实验设置和实验结果。实验在Amazon评论数据集上进行，先通过参数实验综合考虑实验效果和时间，选择合适的实验参数。通过在非动态和动态设定下的与不同对比方法的比较验证了多轮社交广告序列影响最大化算法够有效地综合利用用户对广告的接受程度、广告之间的关联、用户网络的影响力传播等信息，体现了在推荐多轮广告序列的场景下的优势。此外，通过效率实验验证了本文出的多轮反向影响力采样技术能够显著提升算法的效率。
 
 \chapter{总结和展望}
 
@@ -1720,6 +1732,6 @@ Amazon评论数据集对于不同的商品类别分开统计。我们按照用�
 
 \section{未来展望}
 
-在鲁棒序列网络子模最大化算法的分析和实验中，我们发现序列贪心的局限性在于后续序列的选择和序列价值都围绕着部分核心节点。本文采用了两次独立的贪心方法来削弱这种情况，增强序列的稳定性。在$\tau=0$的部分实验中，发现这种两段式贪心即使在不移除元素的情况下，也有可能优于一次贪心的算法。这说明直接实施贪心选择有时可能会远离最优解，反而增加独立贪心选择的次数可能才是更优的方向，因此探索如何通过增加独立贪心选择的次数，得到价值和鲁棒性更佳的序列是一个有趣的未来探索方向。
+在鲁棒序列网络子模最大化算法的分析和实验中，可以发现序列贪心的局限性在于后续序列的选择和序列价值都围绕着部分核心节点。本文采用了两次独立的贪心方法来削弱这种情况，增强序列的稳定性。在$\tau=0$的部分实验中，发现这种两段式贪心即使在不移除元素的情况下，也有可能优于一次贪心的算法。这说明直接实施贪心选择有时可能会远离最优解，反而增加独立贪心选择的次数可能才是更优的方向，因此探索如何通过增加独立贪心选择的次数，得到价值和鲁棒性更佳的序列是一个有趣的未来探索方向。
 
 本文提出的多轮社交广告序列影响最大化推荐算法的复杂度瓶颈主要在于多轮反向影响力可达集的个数和广告网络的规模。每次选择了新的边加入集合之后，需要重新计算其他边的边际收益。实际上，因为这条新边而收益发生的变化的边应该是较少的，因此在这部分存在着大量的冗余计算。考虑通过启发式方法规避掉部分重复的计算，提高算法效率也是一个可行的方向。
